@@ -21,11 +21,56 @@ public class Tabuleiro {
 	
 	public List<Casa> calculaCaminhosValidos(Casa origem, int passos){
 		
-		// lógica da busca aqui
+		Set<Casa> resultado = new HashSet<>();
+		Set<Casa> visitadas = new HashSet<>();
 		
-		return new ArrayList<>();
+		dfs(origem, passos, visitadas, resultado);
+		
+		return new ArrayList<>(resultado);
+		
 	}
 	
+	public List<Casa> getVizinhos(Casa casa) {
+	    List<Casa> vizinhos = new ArrayList<>();
+
+	    int x = casa.getX();
+	    int y = casa.getY();
+
+	    // cima
+	    if (x > 0) vizinhos.add(grid[x - 1][y]);
+
+	    // baixo
+	    if (x < grid.length - 1) vizinhos.add(grid[x + 1][y]);
+
+	    // esquerda
+	    if (y > 0) vizinhos.add(grid[x][y - 1]);
+
+	    // direita
+	    if (y < grid[0].length - 1) vizinhos.add(grid[x][y + 1]);
+
+	    return vizinhos;
+	}
+	
+	private void dfs(Casa atual, int passos, Set<Casa> visitadas, Set<Casa> resultado) {
+		
+		
+	    if (passos == 0) {
+	        resultado.add(atual);
+	        return;
+	    }
+
+	    visitadas.add(atual);
+
+	    for (Casa vizinho : getVizinhos(atual)) {
+
+	    
+	        if (!visitadas.contains(vizinho) && !vizinho.estaOcupada()) {
+	            dfs(vizinho, passos - 1, visitadas, resultado);
+	        }
+	    }
+
+	    visitadas.remove(atual);
+	}
 	public void moverPeca(Peca peca, Casa destino) {
 		
 		if ( peca.getPosicaoAtual() != null) {
@@ -34,6 +79,10 @@ public class Tabuleiro {
 		
 		destino.setOcupante(peca); // ocupa a nova casa
 		peca.setPosicaoAtual(destino); // atualiza a peca
+	}
+	
+	public Casa getCasa(int x, int y) {
+	    return grid[x][y];
 	}
 	
 	// mostrar o tabuleiro

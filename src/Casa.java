@@ -24,7 +24,14 @@ public class Casa {
 		return ocupante != null;
 	}
 	
-	// get e set
+	public int getX() {
+		return this.x;
+	}
+	
+	public int getY() {
+		return this.y;
+	}
+	
 	public Peca getOcupante() {
 		return ocupante;
 	}
@@ -32,4 +39,5 @@ public class Casa {
 	public void setOcupante(Peca peca) {
 		this.ocupante = peca;
 	}
+	
 }

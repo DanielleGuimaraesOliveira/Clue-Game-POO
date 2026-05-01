@@ -24,6 +24,7 @@ public class GerenciadorDePartida {
     	envelope = criaEnvelope();
     	
         // 3. Distribuir restante para jogadores
+    	distribuiCartas();
         // 4. Posicionar peças no tabuleiro
     }
     
@@ -43,6 +44,16 @@ public class GerenciadorDePartida {
     private Carta sorteaPorTipo(TipoCarta tipo) {
         List<Carta> lista = baralho.filtrarPorTipo(tipo);
         return lista.get(random.nextInt(lista.size()));
+    }
+    
+    private void distribuiCartas() {
+    	int i = 0;
+    	
+    	while(!baralho.getCartas().isEmpty()) {
+    		Jogador jogador = jogadores.get(i % jogadores.size());
+    		jogador.recebeCartas(baralho.compraCarta());
+    		i++;
+    	}
     }
     
     public void proximoTurno() {

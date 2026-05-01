@@ -14,6 +14,10 @@ public class Jogador {
 		this.eliminado = false;
 	}
 	
+	public void recebeCartas(Carta carta) {
+		 mao.add(carta);
+	}
+	
 	public void rolarDados() {
 		// logica dos dados
 	}
