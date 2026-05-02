@@ -18,10 +18,6 @@ public class Jogador {
 		 mao.add(carta);
 	}
 	
-	public void rolarDados() {
-		// logica dos dados
-	}
-	
 	public Carta mostrarCarta(Carta palpite) {
 		// se o jogador tiver a carta, ele mostra
 		for (Carta c : mao) {
@@ -31,5 +27,9 @@ public class Jogador {
 		}
 		
 		return null;
+	}
+	
+	public PecaSuspeito getPersonagem() {
+		return personagem;
 	}
 }

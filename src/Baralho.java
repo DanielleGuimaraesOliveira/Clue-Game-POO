@@ -14,7 +14,7 @@ public class Baralho {
 	            "Professor Plum", "Sra. Peacock", "Sra. White"}, TipoCarta.SUSPEITO);
 	
 		adicionaCartas(new String[]{"Corda", "Cano de Chumbo", "Faca",
-	            "Chave Inglesa", "Castiçal", "Revólve"}, TipoCarta.ARMA);
+	            "Chave Inglesa", "Castiçal", "Revólver"}, TipoCarta.ARMA);
 		
 		adicionaCartas(new String[]{"Cozinha", "Salão de Baile", "Sala de Jantar",
 	            "Escritório", "Biblioteca", "Sala de Estar",

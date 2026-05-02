@@ -26,6 +26,21 @@ public class GerenciadorDePartida {
         // 3. Distribuir restante para jogadores
     	distribuiCartas();
         // 4. Posicionar peças no tabuleiro
+    	
+    	tabuleiro = new Tabuleiro(5, 5);
+    	
+        dados.add(new Dado());
+        dados.add(new Dado());
+        
+        posicionarPecas();
+        
+        jogadorAtual = jogadores.get(0);
+
+     
+    }
+    
+    public void adicionarJogador(Jogador jogador) {
+    	jogadores.add(jogador);
     }
     
     private Envelope criaEnvelope() {
@@ -56,12 +71,43 @@ public class GerenciadorDePartida {
     	}
     }
     
+    public int lancarDados() {
+        return dados.get(0).rolar() + dados.get(1).rolar();
+    }
+    
+    
+    private void posicionarPecas() {
+
+        int i = 0;
+
+        for (Jogador j : jogadores) {
+
+            Casa casaInicial = tabuleiro.getCasa(i, 0);
+
+            tabuleiro.moverPeca(j.getPersonagem(), casaInicial);
+
+            i++;
+        }
+    }
+    
     public void proximoTurno() {
-    	// passa a vez de jogar
+    	
+    	    int index = jogadores.indexOf(jogadorAtual);
+    	    jogadorAtual = jogadores.get((index + 1) % jogadores.size());
+
     }
 
     public void realizarPalpite(Carta suspeito, Carta arma, Carta comodo) {
     	// logica do palpite
+    }
+    
+    public List<Casa> mapearCasas(int passos) {
+        Casa origem = jogadorAtual.getPersonagem().getPosicaoAtual();
+        return tabuleiro.calculaCaminhosValidos(origem, passos);
+    }
+    
+    public void deslocarPiao(Casa destino) {
+        tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
     }
     
     public boolean realizarAcusacao(Carta suspeito, Carta arma, Carta comodo) {

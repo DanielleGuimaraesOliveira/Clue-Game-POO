@@ -40,4 +40,17 @@ public class Casa {
 		this.ocupante = peca;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+	    if (this == o) return true;
+	    if (!(o instanceof Casa)) return false;
+	    Casa c = (Casa) o;
+	    return x == c.x && y == c.y;
+	}
+
+	@Override
+	public int hashCode() {
+	    return java.util.Objects.hash(x, y);
+	}
+	
 }
