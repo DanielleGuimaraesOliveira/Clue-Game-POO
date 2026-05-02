@@ -1,5 +1,6 @@
+package model;
 
-public class Casa {
+class Casa {
 	
 	private int x;
 	private int y;

@@ -1,4 +1,5 @@
-public class Carta {
+package model;
+class Carta {
 	
 	private String nome;
 	private TipoCarta tipo;

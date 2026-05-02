@@ -1,6 +1,7 @@
+package model;
 import java.util.*;
 
-public class Jogador {
+class Jogador {
 	
 	private String nome;
 	private PecaSuspeito personagem;
@@ -31,5 +32,13 @@ public class Jogador {
 	
 	public PecaSuspeito getPersonagem() {
 		return personagem;
+	}
+	
+	public List<Carta> getMao() {
+		return mao;
+	}
+	
+	public boolean isEliminado() {
+	    return eliminado;
 	}
 }

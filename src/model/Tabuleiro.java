@@ -1,7 +1,8 @@
+package model;
 import java.util.*;
 
 
-public class Tabuleiro {
+class Tabuleiro {
 	
 	private Casa[][] grid;
 	private List<Comodo> comodos;

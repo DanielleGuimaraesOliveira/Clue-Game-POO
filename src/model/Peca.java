@@ -1,6 +1,7 @@
+package model;
 import java.util.*;
 
-public abstract class Peca {
+abstract class Peca {
 	private String nome;
 	private Casa posicaoAtual;
 	

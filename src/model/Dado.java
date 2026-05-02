@@ -1,6 +1,7 @@
+package model;
 import java.util.Random;
 
-public class Dado {
+class Dado {
 	private Random random;
 	
 	public Dado() {

@@ -1,6 +1,7 @@
+package model;
 import java.util.*;
 
-public class GerenciadorDePartida {
+class GerenciadorDePartida {
 	private List<Jogador> jogadores;
     private Jogador jogadorAtual;
     private Tabuleiro tabuleiro;
@@ -116,5 +117,12 @@ public class GerenciadorDePartida {
         return envelope.verificarAcusacao(suspeito, arma, comodo);
     }
     
+    public Jogador getJogadorAtual() {
+    	return jogadorAtual;
+    }
+    
+    public List<Jogador> getJogadores(){
+    	return jogadores;
+    }
     
 }

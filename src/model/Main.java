@@ -1,6 +1,7 @@
+package model;
 import java.util.List;
 
-public class Main {
+class Main {
 
 	public static void main(String[] args) {
 		

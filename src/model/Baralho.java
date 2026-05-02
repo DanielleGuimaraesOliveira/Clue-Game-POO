@@ -1,7 +1,8 @@
+package model;
 
 import java.util.*;
 
-public class Baralho {
+class Baralho {
 	private List<Carta> cartas;
 	
 	public Baralho() {
