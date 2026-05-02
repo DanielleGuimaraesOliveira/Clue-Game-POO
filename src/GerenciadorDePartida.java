@@ -39,26 +39,17 @@ public class GerenciadorDePartida {
      
     }
     
-    public void adicionarJogador(Jogador jogador) {
-    	jogadores.add(jogador);
-    }
-    
     private Envelope criaEnvelope() {
-
-        Carta assassino = sorteaPorTipo(TipoCarta.SUSPEITO);
-        Carta arma = sorteaPorTipo(TipoCarta.ARMA);
-        Carta local = sorteaPorTipo(TipoCarta.COMODO);
-
-        baralho.removeCarta(assassino);
-        baralho.removeCarta(arma);
-        baralho.removeCarta(local);
-
-        return new Envelope(assassino, arma, local);
-    }
-    
-    private Carta sorteaPorTipo(TipoCarta tipo) {
-        List<Carta> lista = baralho.filtrarPorTipo(tipo);
-        return lista.get(random.nextInt(lista.size()));
+    	
+    	Carta assassino = sorteaPorTipo(TipoCarta.SUSPEITO);
+    	Carta arma = sorteaPorTipo(TipoCarta.ARMA);
+    	Carta local = sorteaPorTipo(TipoCarta.COMODO);
+    	
+    	baralho.removeCarta(assassino);
+    	baralho.removeCarta(arma);
+    	baralho.removeCarta(local);
+    	
+    	return new Envelope(assassino, arma, local);
     }
     
     private void distribuiCartas() {
@@ -71,24 +62,35 @@ public class GerenciadorDePartida {
     	}
     }
     
+    private void posicionarPecas() {
+    	
+    	int i = 0;
+    	
+    	for (Jogador j : jogadores) {
+    		
+    		Casa casaInicial = tabuleiro.getCasa(i, 0);
+    		
+    		tabuleiro.moverPeca(j.getPersonagem(), casaInicial);
+    		
+    		i++;
+    	}
+    }
+    
+    
+    private Carta sorteaPorTipo(TipoCarta tipo) {
+    	List<Carta> lista = baralho.filtrarPorTipo(tipo);
+    	return lista.get(random.nextInt(lista.size()));
+    }
+    
+    public void adicionarJogador(Jogador jogador) {
+    	jogadores.add(jogador);
+    }
+    
     public int lancarDados() {
         return dados.get(0).rolar() + dados.get(1).rolar();
     }
     
     
-    private void posicionarPecas() {
-
-        int i = 0;
-
-        for (Jogador j : jogadores) {
-
-            Casa casaInicial = tabuleiro.getCasa(i, 0);
-
-            tabuleiro.moverPeca(j.getPersonagem(), casaInicial);
-
-            i++;
-        }
-    }
     
     public void proximoTurno() {
     	
