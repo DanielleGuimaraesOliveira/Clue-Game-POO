@@ -10,10 +10,10 @@ public class GerenciadorTest {
     private GerenciadorDePartida jogo;
 
     @Before
-    void setup() {
+    public void setup() {
         jogo = new GerenciadorDePartida();
 
-        jogo.adicionarJogador("Ana", "Scarlet");
+        jogo.adicionarJogador("Ana", "Srta. Scarlet");
         jogo.adicionarJogador("João", "Verde");
 
         jogo.iniciarPartida();
@@ -21,13 +21,13 @@ public class GerenciadorTest {
 
     
     @Test
-    void deveIniciarPartidaSemErro() {
+    public void deveIniciarPartidaSemErro() {
         assertNotNull(jogo);
     }
 
 
     @Test
-    void deveLancarDadosEntre2e12() {
+    public void deveLancarDadosEntre2e12() {
         int valor = jogo.lancarDados();
 
         assertTrue(valor >= 2 && valor <= 12);
@@ -35,7 +35,7 @@ public class GerenciadorTest {
 
     
     @Test
-    void deveRetornarCasasValidas() {
+    public void deveRetornarCasasValidas() {
         int passos = 2;
 
         List<Casa> casas = jogo.mapearCasas(passos);
@@ -46,7 +46,7 @@ public class GerenciadorTest {
 
    
     @Test
-    void deveMoverPeca() {
+    public void deveMoverPeca() {
         int passos = 1;
 
         List<Casa> casas = jogo.mapearCasas(passos);
@@ -65,14 +65,14 @@ public class GerenciadorTest {
     }
     
     @Test
-    void jogadoresDevemReceberCartas() {
+    public void jogadoresDevemReceberCartas() {
         for (Jogador j : jogo.getJogadores()) {
             assertFalse(j.getMao().isEmpty());
         }
     }
     
     @Test
-    void pecasDevemSerPosicionadas() {
+    public void pecasDevemSerPosicionadas() {
 
         for (Jogador j : jogo.getJogadores()) {
             assertNotNull(j.getPersonagem().getPosicaoAtual());
@@ -81,7 +81,7 @@ public class GerenciadorTest {
     }
     
     @Test 
-    void jogadoresDevemReceberBlocoDeNotas() {
+    public void jogadoresDevemReceberBlocoDeNotas() {
     	// verifica item 6 da regra
     	for (Jogador j : jogo.getJogadores()) {
     		assertTrue("O jogador deveria ter recebido o bloco de notas", j.isPossuiBlocoDeNotas());
@@ -89,7 +89,7 @@ public class GerenciadorTest {
     }
     
     @Test
-    void srtaScarletDeveSerPrimeiroJogador() {
+    public void srtaScarletDeveSerPrimeiroJogador() {
     	// verifica item 7 da regra
     	Jogador primeiro = jogo.getJogadorAtual();
     	assertEquals("A Srta. Scarlet deve ser a primeira  a jogar", "Srta. Scarlet", primeiro.getPersonagem().getNome());

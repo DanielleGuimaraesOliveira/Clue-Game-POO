@@ -16,7 +16,9 @@ class Main {
 		jogo.iniciarPartida();
 		
 		System.out.println("Jogo iniciado!");
-
+		
+		System.out.println("Posição do jogador: " + jogo.getPosicaoAtualFormatada());
+		
 		int passos = jogo.lancarDados();
 		System.out.println("Dados: " + passos);
 

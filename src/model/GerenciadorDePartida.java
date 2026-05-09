@@ -145,6 +145,14 @@ public class GerenciadorDePartida {
     	return casasFormatadas;
     }
     
+    public String getPosicaoAtualFormatada() {
+        // acessa o jogador e a peça
+        Casa atual = jogadorAtual.getPersonagem().getPosicaoAtual();
+        
+        // retorna apenas a String formatada para main
+        return "(" + atual.getX() + "," + atual.getY() + ")";
+    }
+    
     public void deslocarPiao(Casa destino) {
         tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
     }
