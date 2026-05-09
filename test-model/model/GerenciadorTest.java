@@ -1,21 +1,20 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 import java.util.List;
 
 public class GerenciadorTest {
 
     private GerenciadorDePartida jogo;
 
-    @BeforeEach
+    @Before
     void setup() {
         jogo = new GerenciadorDePartida();
 
-        jogo.adicionarJogador(new Jogador("Ana", new PecaSuspeito("Scarlet")));
-        jogo.adicionarJogador(new Jogador("João", new PecaSuspeito("Verde")));
+        jogo.adicionarJogador("Ana", "Scarlet");
+        jogo.adicionarJogador("João", "Verde");
 
         jogo.iniciarPartida();
     }
@@ -67,13 +66,6 @@ public class GerenciadorTest {
     
     @Test
     void jogadoresDevemReceberCartas() {
-        GerenciadorDePartida jogo = new GerenciadorDePartida();
-
-        jogo.adicionarJogador(new Jogador("A", new PecaSuspeito("X")));
-        jogo.adicionarJogador(new Jogador("B", new PecaSuspeito("Y")));
-
-        jogo.iniciarPartida();
-
         for (Jogador j : jogo.getJogadores()) {
             assertFalse(j.getMao().isEmpty());
         }
@@ -81,16 +73,25 @@ public class GerenciadorTest {
     
     @Test
     void pecasDevemSerPosicionadas() {
-        GerenciadorDePartida jogo = new GerenciadorDePartida();
-
-        jogo.adicionarJogador(new Jogador("A", new PecaSuspeito("X")));
-        jogo.adicionarJogador(new Jogador("B", new PecaSuspeito("Y")));
-
-        jogo.iniciarPartida();
 
         for (Jogador j : jogo.getJogadores()) {
             assertNotNull(j.getPersonagem().getPosicaoAtual());
         }
         
+    }
+    
+    @Test 
+    void jogadoresDevemReceberBlocoDeNotas() {
+    	// verifica item 6 da regra
+    	for (Jogador j : jogo.getJogadores()) {
+    		assertTrue("O jogador deveria ter recebido o bloco de notas", j.isPossuiBlocoDeNotas());
+    	}
+    }
+    
+    @Test
+    void srtaScarletDeveSerPrimeiroJogador() {
+    	// verifica item 7 da regra
+    	Jogador primeiro = jogo.getJogadorAtual();
+    	assertEquals("A Srta. Scarlet deve ser a primeira  a jogar", "Srta. Scarlet", primeiro.getPersonagem().getNome());
     }
 }
