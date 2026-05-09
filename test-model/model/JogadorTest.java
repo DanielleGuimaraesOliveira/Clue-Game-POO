@@ -7,7 +7,7 @@ public class JogadorTest {
 
     
     @Test
-    void deveReceberCarta() {
+    public void deveReceberCarta() {
         Jogador jogador = new Jogador("Ana", new PecaSuspeito("Srta. Scarlet"));
         Carta carta = new Carta("Faca", TipoCarta.ARMA);
 
@@ -18,7 +18,7 @@ public class JogadorTest {
 
   
     @Test
-    void deveMostrarCartaSePossuir() {
+    public void deveMostrarCartaSePossuir() {
         Jogador jogador = new Jogador("Ana", new PecaSuspeito("Srta. Scarlet"));
 
         Carta carta = new Carta("Faca", TipoCarta.ARMA);
@@ -32,7 +32,7 @@ public class JogadorTest {
 
 
     @Test
-    void naoDeveMostrarCartaSeNaoPossuir() {
+    public void naoDeveMostrarCartaSeNaoPossuir() {
         Jogador jogador = new Jogador("Ana", new PecaSuspeito("Srta. Scarlet"));
 
         jogador.recebeCartas(new Carta("Corda", TipoCarta.ARMA));
@@ -44,7 +44,7 @@ public class JogadorTest {
 
 
     @Test
-    void jogadorNaoComecaEliminado() {
+    public void jogadorNaoComecaEliminado() {
         Jogador jogador = new Jogador("Ana", new PecaSuspeito("Srta. Scarlet"));
 
         assertFalse(jogador.isEliminado());

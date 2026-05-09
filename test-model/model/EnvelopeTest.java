@@ -7,7 +7,7 @@ public class EnvelopeTest {
 
  
     @Test
-    void deveRetornarTrueParaAcusacaoCorreta() {
+    public void deveRetornarTrueParaAcusacaoCorreta() {
         Carta suspeito = new Carta("Sr. Verde", TipoCarta.SUSPEITO);
         Carta arma = new Carta("Faca", TipoCarta.ARMA);
         Carta local = new Carta("Cozinha", TipoCarta.COMODO);
@@ -21,7 +21,7 @@ public class EnvelopeTest {
 
 
     @Test
-    void deveRetornarFalseParaSuspeitoErrado() {
+    public void deveRetornarFalseParaSuspeitoErrado() {
         Envelope envelope = new Envelope(
                 new Carta("Sr. Verde", TipoCarta.SUSPEITO),
                 new Carta("Faca", TipoCarta.ARMA),
@@ -39,7 +39,7 @@ public class EnvelopeTest {
 
 
     @Test
-    void deveRetornarFalseParaArmaErrada() {
+    public void deveRetornarFalseParaArmaErrada() {
         Envelope envelope = new Envelope(
                 new Carta("Sr. Verde", TipoCarta.SUSPEITO),
                 new Carta("Faca", TipoCarta.ARMA),
@@ -57,7 +57,7 @@ public class EnvelopeTest {
 
 
     @Test
-    void deveRetornarFalseParaLocalErrado() {
+    public void deveRetornarFalseParaLocalErrado() {
         Envelope envelope = new Envelope(
                 new Carta("Sr. Verde", TipoCarta.SUSPEITO),
                 new Carta("Faca", TipoCarta.ARMA),

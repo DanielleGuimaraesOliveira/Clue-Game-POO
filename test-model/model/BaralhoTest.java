@@ -8,7 +8,7 @@ public class BaralhoTest {
 
 
     @Test
-    void deveInicializarComCartas() {
+    public void deveInicializarComCartas() {
         Baralho baralho = new Baralho();
 
         assertFalse(baralho.getCartas().isEmpty());
@@ -16,7 +16,7 @@ public class BaralhoTest {
 
 
     @Test
-    void deveRemoverCartaAoComprar() {
+    public void deveRemoverCartaAoComprar() {
         Baralho baralho = new Baralho();
 
         int tamanhoInicial = baralho.getCartas().size();
@@ -29,7 +29,7 @@ public class BaralhoTest {
 
  
     @Test
-    void deveFiltrarPorTipo() {
+    public void deveFiltrarPorTipo() {
         Baralho baralho = new Baralho();
 
         List<Carta> suspeitos = baralho.filtrarPorTipo(TipoCarta.SUSPEITO);
@@ -43,7 +43,7 @@ public class BaralhoTest {
 
    
     @Test
-    void embaralharNaoDeveAlterarQuantidade() {
+    public void embaralharNaoDeveAlterarQuantidade() {
         Baralho baralho = new Baralho();
 
         int tamanhoAntes = baralho.getCartas().size();
@@ -57,7 +57,7 @@ public class BaralhoTest {
 
 
     @Test
-    void deveRemoverCartaEspecifica() {
+    public void deveRemoverCartaEspecifica() {
         Baralho baralho = new Baralho();
 
         Carta carta = baralho.getCartas().get(0);
