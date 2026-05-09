@@ -1,6 +1,7 @@
+package model;
 import java.util.*;
 
-public class Jogador {
+class Jogador {
 	
 	private String nome;
 	private PecaSuspeito personagem;
@@ -14,8 +15,8 @@ public class Jogador {
 		this.eliminado = false;
 	}
 	
-	public void rolarDados() {
-		// logica dos dados
+	public void recebeCartas(Carta carta) {
+		 mao.add(carta);
 	}
 	
 	public Carta mostrarCarta(Carta palpite) {
@@ -27,5 +28,17 @@ public class Jogador {
 		}
 		
 		return null;
+	}
+	
+	public PecaSuspeito getPersonagem() {
+		return personagem;
+	}
+	
+	public List<Carta> getMao() {
+		return mao;
+	}
+	
+	public boolean isEliminado() {
+	    return eliminado;
 	}
 }

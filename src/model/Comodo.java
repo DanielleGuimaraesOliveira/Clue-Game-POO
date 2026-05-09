@@ -1,6 +1,7 @@
+package model;
 import java.util.*;
 
-public class Comodo {
+class Comodo {
 
 	private String nome;
 	private List<Casa> portas;

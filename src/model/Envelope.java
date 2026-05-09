@@ -1,4 +1,6 @@
-public class Envelope {
+package model;
+
+class Envelope {
 	
 	private Carta assassino;
 	private Carta arma;

@@ -1,0 +1,128 @@
+package model;
+import java.util.*;
+
+class GerenciadorDePartida {
+	private List<Jogador> jogadores;
+    private Jogador jogadorAtual;
+    private Tabuleiro tabuleiro;
+    private Envelope envelope;
+    private Baralho baralho;
+    private List<Dado> dados;
+    
+    private Random random = new Random();
+    
+    public GerenciadorDePartida() {
+    	this.jogadores = new ArrayList<>();
+    	this.dados = new ArrayList<>();
+    }
+    
+    public void iniciarPartida() {
+        // 1. Criar Baralho
+    	baralho = new Baralho();
+    	baralho.embaralhar();
+    	
+        // 2. Sortear cartas do Envelope (Crime)
+    	envelope = criaEnvelope();
+    	
+        // 3. Distribuir restante para jogadores
+    	distribuiCartas();
+        // 4. Posicionar peças no tabuleiro
+    	
+    	tabuleiro = new Tabuleiro(5, 5);
+    	
+        dados.add(new Dado());
+        dados.add(new Dado());
+        
+        posicionarPecas();
+        
+        jogadorAtual = jogadores.get(0);
+
+     
+    }
+    
+    private Envelope criaEnvelope() {
+    	
+    	Carta assassino = sorteaPorTipo(TipoCarta.SUSPEITO);
+    	Carta arma = sorteaPorTipo(TipoCarta.ARMA);
+    	Carta local = sorteaPorTipo(TipoCarta.COMODO);
+    	
+    	baralho.removeCarta(assassino);
+    	baralho.removeCarta(arma);
+    	baralho.removeCarta(local);
+    	
+    	return new Envelope(assassino, arma, local);
+    }
+    
+    private void distribuiCartas() {
+    	int i = 0;
+    	
+    	while(!baralho.getCartas().isEmpty()) {
+    		Jogador jogador = jogadores.get(i % jogadores.size());
+    		jogador.recebeCartas(baralho.compraCarta());
+    		i++;
+    	}
+    }
+    
+    private void posicionarPecas() {
+    	
+    	int i = 0;
+    	
+    	for (Jogador j : jogadores) {
+    		
+    		Casa casaInicial = tabuleiro.getCasa(i, 0);
+    		
+    		tabuleiro.moverPeca(j.getPersonagem(), casaInicial);
+    		
+    		i++;
+    	}
+    }
+    
+    
+    private Carta sorteaPorTipo(TipoCarta tipo) {
+    	List<Carta> lista = baralho.filtrarPorTipo(tipo);
+    	return lista.get(random.nextInt(lista.size()));
+    }
+    
+    public void adicionarJogador(Jogador jogador) {
+    	jogadores.add(jogador);
+    }
+    
+    public int lancarDados() {
+        return dados.get(0).rolar() + dados.get(1).rolar();
+    }
+    
+    
+    
+    public void proximoTurno() {
+    	
+    	    int index = jogadores.indexOf(jogadorAtual);
+    	    jogadorAtual = jogadores.get((index + 1) % jogadores.size());
+
+    }
+
+    public void realizarPalpite(Carta suspeito, Carta arma, Carta comodo) {
+    	// logica do palpite
+    }
+    
+    public List<Casa> mapearCasas(int passos) {
+        Casa origem = jogadorAtual.getPersonagem().getPosicaoAtual();
+        return tabuleiro.calculaCaminhosValidos(origem, passos);
+    }
+    
+    public void deslocarPiao(Casa destino) {
+        tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
+    }
+    
+    public boolean realizarAcusacao(Carta suspeito, Carta arma, Carta comodo) {
+        return envelope.verificarAcusacao(suspeito, arma, comodo);
+    }
+    
+    public Jogador getJogadorAtual() {
+    	return jogadorAtual;
+    }
+    
+    public List<Jogador> getJogadores(){
+    	return jogadores;
+    }
+    
+}
