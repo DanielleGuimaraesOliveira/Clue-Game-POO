@@ -7,12 +7,14 @@ class Jogador {
 	private PecaSuspeito personagem;
 	private List<Carta> mao;
 	private boolean eliminado;
+	private boolean possuiBlocoDeNotas; 
 	
 	public Jogador(String nome, PecaSuspeito personagem) {
 		this.nome = nome;
 		this.personagem = personagem;
 		this.mao = new ArrayList<>();
 		this.eliminado = false;
+		this.possuiBlocoDeNotas = false;
 	}
 	
 	public void recebeCartas(Carta carta) {
@@ -40,5 +42,13 @@ class Jogador {
 	
 	public boolean isEliminado() {
 	    return eliminado;
+	}
+	
+	public void receberBlocoDeNotas() {
+		this.possuiBlocoDeNotas = true;
+	}
+	
+	public boolean isPossuiBlocoDeNotas() {
+		return possuiBlocoDeNotas;
 	}
 }

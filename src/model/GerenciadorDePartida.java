@@ -1,7 +1,7 @@
 package model;
 import java.util.*;
 
-class GerenciadorDePartida {
+public class GerenciadorDePartida {
 	private List<Jogador> jogadores;
     private Jogador jogadorAtual;
     private Tabuleiro tabuleiro;
@@ -26,8 +26,8 @@ class GerenciadorDePartida {
     	
         // 3. Distribuir restante para jogadores
     	distribuiCartas();
-        // 4. Posicionar peças no tabuleiro
     	
+        // 4. Posicionar peças no tabuleiro
     	tabuleiro = new Tabuleiro(5, 5);
     	
         dados.add(new Dado());
@@ -35,9 +35,30 @@ class GerenciadorDePartida {
         
         posicionarPecas();
         
-        jogadorAtual = jogadores.get(0);
-
-     
+        
+        distribuirBlocoDeNotas();
+        definirPrimeiroJogador();
+    }
+    
+    private void distribuirBlocoDeNotas() {
+    	for (Jogador j : jogadores) {
+    		j.receberBlocoDeNotas();
+    	}
+    }
+    
+    private void definirPrimeiroJogador() {
+    	jogadorAtual = null;
+    	
+    	for (Jogador j : jogadores) {
+    		if (j.getPersonagem().getNome().equals("Srta. Scarlet")) {
+    			jogadorAtual = j;
+    			break;
+    		}
+    	}
+    	
+    	if (jogadorAtual == null && !jogadores.isEmpty()) {
+    		jogadorAtual = jogadores.get(0);
+    	}
     }
     
     private Envelope criaEnvelope() {
@@ -83,8 +104,11 @@ class GerenciadorDePartida {
     	return lista.get(random.nextInt(lista.size()));
     }
     
-    public void adicionarJogador(Jogador jogador) {
-    	jogadores.add(jogador);
+    public void adicionarJogador(String nome, String nomePersonagem) {
+    	PecaSuspeito peca = new PecaSuspeito(nomePersonagem);
+    	Jogador novoJogador = new Jogador(nome, peca);
+    	
+    	jogadores.add(novoJogador);
     }
     
     public int lancarDados() {
@@ -109,6 +133,18 @@ class GerenciadorDePartida {
         return tabuleiro.calculaCaminhosValidos(origem, passos);
     }
     
+    public List<String> mapearCasaFormatadas(int passos){
+    	List<Casa> casasValidas = mapearCasas(passos);
+    	
+    	// converte para string no formato (x, y)
+    	List<String> casasFormatadas = new ArrayList<>();
+    	for (Casa c : casasValidas) {
+    		casasFormatadas.add("(" + c.getX() + "," + c.getY() + ")");
+    	}
+    	
+    	return casasFormatadas;
+    }
+    
     public void deslocarPiao(Casa destino) {
         tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
     }
@@ -124,5 +160,6 @@ class GerenciadorDePartida {
     public List<Jogador> getJogadores(){
     	return jogadores;
     }
+    
     
 }
