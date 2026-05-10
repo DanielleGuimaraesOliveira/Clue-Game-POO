@@ -28,6 +28,12 @@ class Main {
 		for (String c : casas) {
 		    System.out.println(c);
 		}
+
+		String destino = casas.get(0); 
+		
+		jogo.deslocarPiao(destino);
+
+		System.out.println("Jogador se moveu para: " + jogo.getPosicaoAtualFormatada());
 	}
 
 }

@@ -153,10 +153,25 @@ public class GerenciadorDePartida {
         return "(" + atual.getX() + "," + atual.getY() + ")";
     }
     
-    public void deslocarPiao(Casa destino) {
-        tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
+
+    public void deslocarPiao(String destino) {
+        Casa casaDestino = transformaStringParaCasa(destino);
+        tabuleiro.moverPeca(jogadorAtual.getPersonagem(), casaDestino);
     }
     
+    private Casa transformaStringParaCasa(String casa){
+        casa = casa.replace("(", "").replace(")", "");
+
+        String[] partes = casa.split(",");
+
+        int x = Integer.parseInt(partes[0]);
+        int y = Integer.parseInt(partes[1]);
+
+        Casa casaFormatada = tabuleiro.getCasa(x, y);
+        
+        return casaFormatada;
+    }
+
     public boolean realizarAcusacao(Carta suspeito, Carta arma, Carta comodo) {
         return envelope.verificarAcusacao(suspeito, arma, comodo);
     }

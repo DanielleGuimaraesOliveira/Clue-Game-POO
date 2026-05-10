@@ -49,9 +49,9 @@ public class GerenciadorTest {
     public void deveMoverPeca() {
         int passos = 1;
 
-        List<Casa> casas = jogo.mapearCasas(passos);
+        List<String> casas = jogo.mapearCasaFormatadas(passos);
 
-        Casa destino = casas.get(0);
+        String destino = casas.get(0);
 
         PecaSuspeito peca = jogo.getJogadorAtual().getPersonagem();
         Casa antes = peca.getPosicaoAtual();
