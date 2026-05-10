@@ -61,7 +61,9 @@ public class GerenciadorTest {
         Casa depois = peca.getPosicaoAtual();
 
         assertNotEquals(antes, depois);
-        assertEquals(destino, depois);
+        assertEquals(
+        destino,
+        "(" + depois.getX() + "," + depois.getY() + ")");
     }
     
     @Test
