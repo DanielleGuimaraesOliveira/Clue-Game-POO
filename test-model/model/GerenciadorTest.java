@@ -11,7 +11,8 @@ public class GerenciadorTest {
 
     @Before
     public void setup() {
-        jogo = new GerenciadorDePartida();
+        jogo = GerenciadorDePartida.getInstance();
+        jogo.iniciarPartida();
 
         jogo.adicionarJogador("Ana", "Srta. Scarlet");
         jogo.adicionarJogador("João", "Verde");
