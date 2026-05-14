@@ -3,61 +3,65 @@ package view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.URL;
 
 public class JanelaInicial extends JFrame {
 
+    private JButton btnNovo = new JButton("Novo Jogo");
+    private JButton btnContinuar = new JButton("Continuar");
+
     public JanelaInicial() {
+
         initComponents();
     }
 
+    public void setAcaoNovoJogo(ActionListener ouvinte) {
+
+        btnNovo.addActionListener(ouvinte);
+    }
+
+    public void setAcaoContinuar(ActionListener ouvinte) {
+
+        btnContinuar.addActionListener(ouvinte);
+    }
+
     private void initComponents() {
+
         setTitle("Clue - Início");
-        setSize(800, 600); 
+        setSize(800, 600);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
 
         Image img = null;
 
         try {
-            img = ImageIO.read(getClass().getResource("/view/imagens/clue_inicio.png"));
+
+            img = ImageIO.read(
+                getClass().getResource(
+                    "/view/imagens/clue_inicio.png"
+                )
+            );
+
         } catch (IOException e) {
-            System.err.println("Erro: Não foi possível carregar a imagem.");
+
+            System.err.println(
+                "Erro: Não foi possível carregar a imagem."
+            );
         }
-        
-        PainelDeFundo center = new PainelDeFundo(img);
-        center.setLayout(null);
 
-        JButton btnNovo = new JButton("Novo Jogo");
-        JButton btnContinuar = new JButton("Continuar");
+        PainelDeFundo painelPrincipal =
+                new PainelDeFundo(img);
 
-        btnNovo.setBounds(80, 190, 100, 25);
-        btnContinuar.setBounds(80, 240, 100, 25);
+        painelPrincipal.setLayout(null);
 
-        center.add(btnNovo);
-        center.add(btnContinuar);
+        btnNovo.setBounds(80, 190, 140, 30);
+        btnContinuar.setBounds(80, 240, 140, 30);
 
-        add(center, BorderLayout.CENTER);
+        painelPrincipal.add(btnNovo);
+        painelPrincipal.add(btnContinuar);
 
-        btnNovo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JanelaJogo janela = new JanelaJogo(null);
-                janela.setLocationRelativeTo(null);
-                janela.setVisible(true);
-                dispose();
-            }
-        });
-
-        btnContinuar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JanelaJogo janela = new JanelaJogo(null);
-                janela.setLocationRelativeTo(null);
-                janela.setVisible(true);
-                dispose();
-            }
-        });
+        add(painelPrincipal, BorderLayout.CENTER);
     }
-
 }

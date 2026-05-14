@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 import model.GerenciadorDePartida;
 
-//No pacote view
+
 public class JanelaJogo extends JFrame {
  private GerenciadorDePartida gerenciador;
 
@@ -12,7 +12,7 @@ public class JanelaJogo extends JFrame {
      this.gerenciador = gerenciador;
      
 
-     setSize(1200, 800); 
+     setSize(800, 800); 
      
      
  }
