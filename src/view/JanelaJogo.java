@@ -1,15 +1,19 @@
 package view;
 
-public class JanelaJogo extends javax.swing.JFrame {
+import javax.swing.JFrame;
 
-    public JanelaJogo() {
-        iniciaComponentes();
-    }
+import model.GerenciadorDePartida;
 
-    private void iniciaComponentes() {
-        setTitle("Clue Game");
-        setSize(1200, 800);
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    }
-    
+//No pacote view
+public class JanelaJogo extends JFrame {
+ private GerenciadorDePartida gerenciador;
+
+ public JanelaJogo(GerenciadorDePartida gerenciador) {
+     this.gerenciador = gerenciador;
+     
+
+     setSize(1200, 800); 
+     
+     
+ }
 }
