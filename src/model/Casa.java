@@ -5,20 +5,18 @@ class Casa {
 	private int x;
 	private int y;
 	
-	private boolean ehPorta;
+	private String tipo; // rcebe o caracter do arquivo txt
 	private Peca ocupante;
 	
-	public Casa( int x, int y, boolean ehPorta) {
+	public Casa( int x, int y,String tipo) {
 		this.x = x;
 		this.y = y;
-		this.ehPorta = ehPorta;
+		this.tipo = tipo;
 	}
 	
-	// sobre carga de constructor
-	public Casa(int x, int y) {
-		this.x = x;
-		this.y = y;
-		this.ehPorta = false;
+	// Get e Set
+	public String getTipo() {
+		return this.tipo;
 	}
 	
 	public boolean estaOcupada() {
@@ -39,6 +37,12 @@ class Casa {
 	
 	public void setOcupante(Peca peca) {
 		this.ocupante = peca;
+	}
+	
+	// Regra de negócio
+	public boolean isCaminhavel() {
+		// a peca só pode andar nos corredores ("1") e portas ("p")
+		return tipo.equals("1") || tipo.equals("p");
 	}
 	
 	@Override
