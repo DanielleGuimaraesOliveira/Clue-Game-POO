@@ -1,39 +1,24 @@
-import java.util.List;
+import javax.swing.SwingUtilities;
+
 import model.GerenciadorDePartida;
+import view.GerenciadorInterface;
+
 
 class Main {
 
 	public static void main(String[] args) {
+		GerenciadorDePartida gerenciadorPartida = GerenciadorDePartida.getInstance();
 		
-		GerenciadorDePartida jogo = new GerenciadorDePartida();
+		 SwingUtilities.invokeLater(new Runnable() {
 
-		// Jogador j1 = new Jogador("Ana", new PecaSuspeito("Srta. Scarlet"));
-		// Jogador j2 = new Jogador("João", new PecaSuspeito("Sr. Verde"));
+	            @Override
+	            public void run() {
 
-		jogo.adicionarJogador("Ana", "Srta. Scarlet");
-		jogo.adicionarJogador("João","Sr. Verde");
+	                GerenciadorInterface.iniciar(gerenciadorPartida);
 
-		jogo.iniciarPartida();
+	            }
+	        });
 		
-		System.out.println("Jogo iniciado!");
-		
-		System.out.println("Posição do jogador: " + jogo.getPosicaoAtualFormatada());
-		
-		int passos = jogo.lancarDados();
-		System.out.println("Dados: " + passos);
-
-		List<String> casas = jogo.mapearCasaFormatadas(passos);
-
-		System.out.println("Casas possíveis:");
-		for (String c : casas) {
-		    System.out.println(c);
-		}
-
-		String destino = casas.get(0); 
-		
-		jogo.deslocarPiao(destino);
-
-		System.out.println("Jogador se moveu para: " + jogo.getPosicaoAtualFormatada());
 	}
 
 }

@@ -2,6 +2,7 @@ package model;
 import java.util.*;
 
 public class GerenciadorDePartida {
+    private static GerenciadorDePartida instancia;
 	private List<Jogador> jogadores;
     private Jogador jogadorAtual;
     private Tabuleiro tabuleiro;
@@ -11,11 +12,16 @@ public class GerenciadorDePartida {
     
     private Random random = new Random();
     
-    public GerenciadorDePartida() {
+    private GerenciadorDePartida() {
     	this.jogadores = new ArrayList<>();
     	this.dados = new ArrayList<>();
     }
     
+    public static synchronized GerenciadorDePartida getInstance() {
+         if (instancia == null) instancia = new GerenciadorDePartida();
+        return instancia; 
+    }
+
     public void iniciarPartida() {
         // 1. Criar Baralho
     	baralho = new Baralho();
@@ -75,6 +81,9 @@ public class GerenciadorDePartida {
     }
     
     private void distribuiCartas() {
+         if (jogadores.isEmpty()) {
+        throw new IllegalStateException("Nenhum jogador para distribuir cartas.");
+    }
     	int i = 0;
     	
     	while(!baralho.getCartas().isEmpty()) {
