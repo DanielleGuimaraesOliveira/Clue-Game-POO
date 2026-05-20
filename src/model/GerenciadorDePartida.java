@@ -34,7 +34,7 @@ public class GerenciadorDePartida {
     	distribuiCartas();
     	
         // 4. Posicionar peças no tabuleiro
-    	tabuleiro = new Tabuleiro(5, 5);
+    	tabuleiro = new Tabuleiro();
     	
         dados.add(new Dado());
         dados.add(new Dado());
@@ -95,15 +95,25 @@ public class GerenciadorDePartida {
     
     private void posicionarPecas() {
     	
-    	int i = 0;
-    	
     	for (Jogador j : jogadores) {
+    		boolean posicionado = false;
     		
-    		Casa casaInicial = tabuleiro.getCasa(i, 0);
-    		
-    		tabuleiro.moverPeca(j.getPersonagem(), casaInicial);
-    		
-    		i++;
+    		// O algoritmo varre o tabuleiro procurando um lugar seguro para nascer
+            for (int y = 0; y < 25 && !posicionado; y++) {
+                for (int x = 0; x < 24 && !posicionado; x++) {
+                    
+                    Casa casaTeste = tabuleiro.getCasa(x, y);
+                    
+                    // Se a casa existe, é um corredor ("1") e ninguém pisou nela ainda:
+                    if (casaTeste != null && casaTeste.getTipo().equals("1") && !casaTeste.estaOcupada()) {
+                        
+                        // Posiciona a peça!
+                        tabuleiro.moverPeca(j.getPersonagem(), casaTeste);
+                        posicionado = true; // Para o loop e vai para o próximo jogador
+                        
+                    }
+                }
+            }
     	}
     }
     
@@ -123,8 +133,7 @@ public class GerenciadorDePartida {
     public int lancarDados() {
         return dados.get(0).rolar() + dados.get(1).rolar();
     }
-    
-    
+     
     
     public void proximoTurno() {
     	
@@ -186,6 +195,37 @@ public class GerenciadorDePartida {
     public boolean realizarAcusacao(Carta suspeito, Carta arma, Carta comodo) {
         return envelope.verificarAcusacao(suspeito, arma, comodo);
     }
+    
+    // método chamado pela interface gráfica
+    public void processaClickTela(int xLogico, int yLogico, int valorDados) {
+    	
+    	if (tabuleiro == null || jogadorAtual == null) {
+    		return;
+    	}
+    	
+    	// pega a casa do click 
+    	Casa destino = tabuleiro.getCasa(xLogico, yLogico);
+    	if (destino == null) {
+    		return; // clicou fora do tabuleiro
+    	}   	
+    	    	
+    	// chama o DFS para saber as casas que pode ir
+    	List<Casa> casasPossiveis = mapearCasas(valorDados);
+    	
+    	// valida se o destino está na lista das casas permitidas
+    	if (casasPossiveis.contains(destino)) {
+    		
+    		// verifica se é corredor ou porta
+    		if (destino.isCaminhavel()) {
+    			
+    			// move a peça
+    			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
+    			System.out.println("Movimento para: " + xLogico + ", " + yLogico);
+    		}
+    	}
+    }
+    
+    // get e set
     
     public Jogador getJogadorAtual() {
     	return jogadorAtual;

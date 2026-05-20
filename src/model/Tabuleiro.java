@@ -27,7 +27,7 @@ class Tabuleiro {
 			int y = 0; //linha
 			while (leitor.hasNextLine() && y < altura) {
 				String linhaTxt = leitor.nextLine();
-				String[] celulas = linhaTxt.split(" "); 
+				String[] celulas = linhaTxt.trim().split("\\s+");
 				
 				for (int x = 0; x < celulas.length; x++) {
 					String tipoStr = celulas[x];
@@ -66,10 +66,10 @@ class Tabuleiro {
 
 	    // Usando a checagem de limites da matriz
 	    
-	    if (y > 0) vizinhos.add(grid[y - 1][x]);               // cima
-	    if (y < altura - 1) vizinhos.add(grid[y + 1][x]);      // baixo
-	    if (x > 0) vizinhos.add(grid[y][x - 1]);               // esquerda
-	    if (x < largura - 1) vizinhos.add(grid[y][x + 1]);     // direita
+	    if (y > 0) vizinhos.add(grid[y - 1][x]); // cima
+	    if (y < altura - 1) vizinhos.add(grid[y + 1][x]); // baixo
+	    if (x > 0) vizinhos.add(grid[y][x - 1]); // esquerda
+	    if (x < largura - 1) vizinhos.add(grid[y][x + 1]); // direita
 	    
 	    return vizinhos;
 	}

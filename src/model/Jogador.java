@@ -1,7 +1,8 @@
 package model;
 import java.util.*;
 
-class Jogador {
+// io encapsulamento continua perfeito, pois os atributos continuam private, sendo acessados apenas via get e set
+public class Jogador {
 	
 	private String nome;
 	private PecaSuspeito personagem;

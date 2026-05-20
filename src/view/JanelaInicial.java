@@ -29,7 +29,7 @@ public class JanelaInicial extends JFrame {
     private void initComponents() {
 
         setTitle("Clue - Início");
-        setSize(800, 600);
+        setSize(800, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -51,8 +51,7 @@ public class JanelaInicial extends JFrame {
             );
         }
 
-        PainelDeFundo painelPrincipal =
-                new PainelDeFundo(img);
+        PainelDeFundo painelPrincipal = new PainelDeFundo(img);
 
         painelPrincipal.setLayout(null);
 
