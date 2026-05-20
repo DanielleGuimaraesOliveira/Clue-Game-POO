@@ -145,6 +145,13 @@ public class GerenciadorDePartida {
     	return casasFormatadas;
     }
     
+
+    public void deslocarPiao(String destino) {
+        Casa casaDestino = transformaStringParaCasa(destino);
+        tabuleiro.moverPeca(jogadorAtual.getPersonagem(), casaDestino);
+    }
+    
+
     public String getPosicaoAtualFormatada() {
         // acessa o jogador e a peça
         Casa atual = jogadorAtual.getPersonagem().getPosicaoAtual();
@@ -153,11 +160,6 @@ public class GerenciadorDePartida {
         return "(" + atual.getX() + "," + atual.getY() + ")";
     }
     
-
-    public void deslocarPiao(String destino) {
-        Casa casaDestino = transformaStringParaCasa(destino);
-        tabuleiro.moverPeca(jogadorAtual.getPersonagem(), casaDestino);
-    }
     
     private Casa transformaStringParaCasa(String casa){
         casa = casa.replace("(", "").replace(")", "");
