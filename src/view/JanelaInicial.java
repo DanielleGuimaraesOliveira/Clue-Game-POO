@@ -40,7 +40,7 @@ public class JanelaInicial extends JFrame {
 
             img = ImageIO.read(
                 getClass().getResource(
-                    "/view/imagens/PlanosDeFundo/clue_inicio.png"
+                    "/assets/img/PlanosDeFundo/clue_inicio.png"             		
                 )
             );
 
