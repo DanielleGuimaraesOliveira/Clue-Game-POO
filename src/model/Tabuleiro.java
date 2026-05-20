@@ -1,29 +1,50 @@
 package model;
 import java.util.*;
+import java.io.InputStream;
 
 
 class Tabuleiro {
+	// private Map<String, Casa> grid;
 	
-	// substituir pelo HashMap
-	// private Casa[][] grid;
-	
-	private Map<String, Casa> grid;
+	private Casa[][] grid; // voltando para a matriz
+	private int largura = 24;
+	private int altura = 25;
 	
 	private List<Comodo> comodos;
-	private int largura;
-	private int altura;
+
+	public Tabuleiro() {
+		this.grid = new Casa[altura][largura]; // inicializando o mapa	
+		carregarMapaTxt();
+	}
 	
-	public Tabuleiro( int largura, int altura) {
-		this.largura = largura;
-		this.altura = altura;
-		this.grid = new HashMap<>(); // inicializando o mapa
+	private void carregarMapaTxt() {
 		
-		// iniciar o grid populando o HashMap
-		for (int i = 0; i < largura; i++) {		
-			for (int j = 0; j < altura; j++) {
-				String chave = i + "," + j;
-				grid.put(chave, new Casa(i, j));
+		try {
+			// lendo a orquivo do pacote assets
+			InputStream leitorMapa = getClass().getResourceAsStream("/assets/mapa.txt");
+			Scanner leitor = new Scanner(leitorMapa);
+			
+			int y = 0; //linha
+			while (leitor.hasNextLine() && y < altura) {
+				String linhaTxt = leitor.nextLine();
+				String[] celulas = linhaTxt.split(" "); 
+				
+				for (int x = 0; x < celulas.length; x++) {
+					String tipoStr = celulas[x];
+					
+					// criando a Casa passando x, y e o TIPO lido no arquivo
+					grid[y][x] = new Casa(x, y, tipoStr);
+				}
+				y++;
 			}
+			
+			leitor.close();
+			System.out.println("Mapa carregado com sucesso");
+		}
+		
+		catch( Exception e) {
+			System.out.println("Err ao carregar o mapa");
+			e.printStackTrace();
 		}
 	}
 	
@@ -34,8 +55,7 @@ class Tabuleiro {
 		
 		dfs(origem, passos, visitadas, resultado);
 		
-		return new ArrayList<>(resultado);
-		
+		return new ArrayList<>(resultado);	
 	}
 	
 	public List<Casa> getVizinhos(Casa casa) {
@@ -44,27 +64,19 @@ class Tabuleiro {
 	    int x = casa.getX();
 	    int y = casa.getY();
 
-	    // Usando o containsKey do HashMap para verificar se o vizinho existe
+	    // Usando a checagem de limites da matriz
 	    
-	    // cima
-	    if (grid.containsKey((x - 1) + "," + y)) vizinhos.add(grid.get((x - 1) + "," + y));
+	    if (y > 0) vizinhos.add(grid[y - 1][x]);               // cima
+	    if (y < altura - 1) vizinhos.add(grid[y + 1][x]);      // baixo
+	    if (x > 0) vizinhos.add(grid[y][x - 1]);               // esquerda
+	    if (x < largura - 1) vizinhos.add(grid[y][x + 1]);     // direita
 	    
-	    // baixo
-	    if (grid.containsKey((x + 1) + "," + y)) vizinhos.add(grid.get((x + 1) + "," + y));
-	    
-	    // esquerda
-	    if (grid.containsKey(x + "," + (y - 1))) vizinhos.add(grid.get(x + "," + (y - 1)));
-	    
-	    // direita
-	    if (grid.containsKey(x + "," + (y + 1))) vizinhos.add(grid.get(x + "," + (y + 1)));
-
 	    return vizinhos;
 	}
 	
 	
 	private void dfs(Casa atual, int passos, Set<Casa> visitadas, Set<Casa> resultado) {
-		
-		
+			
 	    if (passos == 0) {
 	        resultado.add(atual);
 	        return;
@@ -74,9 +86,10 @@ class Tabuleiro {
 
 	    for (Casa vizinho : getVizinhos(atual)) {
 
-	    
-	        if (!visitadas.contains(vizinho) && !vizinho.estaOcupada()) {
-	            dfs(vizinho, passos - 1, visitadas, resultado);
+	    	// além de não está ocupada, precisa ser caminhvel
+	        if (!visitadas.contains(vizinho) && !vizinho.estaOcupada() && vizinho.isCaminhavel()) {
+	        	
+	        	dfs(vizinho, passos - 1, visitadas, resultado);
 	        }
 	    }
 
@@ -95,7 +108,7 @@ class Tabuleiro {
 	}
 	
 	public Casa getCasa(int x, int y) {
-	    return grid.get(x + "," + y);
+	    return grid[y][x];
 	}
 	
 	// mostrar o tabuleiro
