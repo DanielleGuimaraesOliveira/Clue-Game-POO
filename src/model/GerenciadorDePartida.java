@@ -130,8 +130,12 @@ public class GerenciadorDePartida {
     	jogadores.add(novoJogador);
     }
     
-    public int lancarDados() {
-        return dados.get(0).rolar() + dados.get(1).rolar();
+    public int[] lancarDados() {
+        int vlrDado1 = dados.get(0).rolar();
+        int vlrDado2 = dados.get(1).rolar();
+    	
+     // devolve os dois valores separados para a View poder desenhar as imagens dos dados
+        return new int[]{vlrDado1, vlrDado2}; 
     }
      
     
