@@ -40,6 +40,15 @@ public class PainelDeFundo extends JPanel {
         		// pega o valor dos dados do ComboBox da janelaJogo
         		int valorDados = janelaPai.getValorSimuladoDados();
         		
+        		// se for 0, o jogador está tentando andar sem rolar os dados!
+        		if (valorDados == 0) {
+        			System.out.println("Movimento bloqueado! Você precisa rolar os dados antes.");
+        			return; // aborta o clique, não faz nada
+        		}
+        		
+        		// guarda quem é o jogador antes do clique para sabermos se o turno passou
+        		model.Jogador jogadorAntesDoClique = GerenciadorDePartida.getInstance().getJogadorAtual();
+        		
         		// Singleton processa jogada
         		// -> entrou num cômodo?
         		boolean entrouComodo = GerenciadorDePartida.getInstance().processaClickTela(xLogico, yLogico, valorDados);
@@ -54,8 +63,22 @@ public class PainelDeFundo extends JPanel {
         			JanelaPalpite popUp = new JanelaPalpite(janelaPai);
         			popUp.setVisible(true); // trava até o jogador "sair" da tela palpite
         			
+        			janelaPai.resetaDadosEPassaTurno();
+        			
         			// repinta para atualizar quem é o jogador da vez
         		    repaint();
+        		}
+        		
+        		else {
+        			// verifica se o jogador atual mudou no Gerenciador (significa que o movimento foi válido)
+        			model.Jogador jogadorDepoisDoClique = GerenciadorDePartida.getInstance().getJogadorAtual();
+        			
+        			if (jogadorAntesDoClique != jogadorDepoisDoClique) {
+        				// Se mudou o jogador, limpa os passos e libera o botão de dados para o próximo!
+        				janelaPai.resetaDadosEPassaTurno();
+        			} else {
+        				System.out.println("ℹ️ Você clicou em uma casa inválida. Tente novamente usando seus " + valorDados + " passos.");
+        			}
         		}
         	}
         });

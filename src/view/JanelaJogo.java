@@ -140,6 +140,8 @@ public class JanelaJogo extends JFrame {
                 // atualiza o rótulo de texto na barra lateral
                 lblTextoPassos.setText("Você tirou " + valorDados + " passos!");
                 
+                atualizaInterfaceNovoTurno();
+                
                 System.out.println("🎲 O Model sorteou: " + d1 + " e " + d2 + " (Total: " + valorDados + ")");
             }
         });
@@ -199,6 +201,27 @@ public class JanelaJogo extends JFrame {
     }
 	
 
-	 
+	// método para resetar os dados e preparar pro próximo jogador
+    public void resetaDadosEPassaTurno() {
+    	this.valorDados = 0; // Apaga os passos do jogador anterior
+        atualizaInterfaceNovoTurno();
+    }
+    
+    // método que atualiza os textos da tela e ativa/desativa o botão de dados
+    public void atualizaInterfaceNovoTurno() {
+        // atualiza o texto com o nome do personagem do jogador da vez
+        String jogadorDaVez = gerenciador.getJogadorAtual().getPersonagem().getNome();
+        lblTurno.setText("Turno de: " + jogadorDaVez);
+        
+        // se os dados foram zerados, significa que é um novo turno e o jogador PRECISA rolar
+        if (this.valorDados == 0) {
+            btnRolarDados.setEnabled(true); // ativa o botão de rolar
+            lblTextoPassos.setText("Aguardando rolagem...");
+        } 
+        else {
+            // se o valor for maior que 0, ele já rolou nesta rodada, então bloqueia o botão!
+            btnRolarDados.setEnabled(false); 
+        }
+    }
 	
 }
