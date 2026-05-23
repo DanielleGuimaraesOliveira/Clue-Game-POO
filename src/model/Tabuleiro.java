@@ -77,9 +77,16 @@ class Tabuleiro {
 	
 	private void dfs(Casa atual, int passos, Set<Casa> visitadas, Set<Casa> resultado) {
 			
+		// 1) se os passos acabaram
 	    if (passos == 0) {
 	        resultado.add(atual);
 	        return;
+	    }
+	    
+	    // 2) se parou na porta (entra no cômodo)
+	    if (atual.getTipo().equals("p")) {
+	    	resultado.add(atual);
+	    	return;
 	    }
 
 	    visitadas.add(atual);

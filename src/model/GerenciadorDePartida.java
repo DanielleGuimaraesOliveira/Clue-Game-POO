@@ -196,34 +196,50 @@ public class GerenciadorDePartida {
         return envelope.verificarAcusacao(suspeito, arma, comodo);
     }
     
+    
+    /*______________________________________________________*/
+    
+    
     // método chamado pela interface gráfica
-    public void processaClickTela(int xLogico, int yLogico, int valorDados) {
+    public boolean processaClickTela(int xLogico, int yLogico, int valorDados) {
     	
     	if (tabuleiro == null || jogadorAtual == null) {
-    		return;
+    		return false;
     	}
     	
     	// pega a casa do click 
     	Casa destino = tabuleiro.getCasa(xLogico, yLogico);
     	if (destino == null) {
-    		return; // clicou fora do tabuleiro
+    		return false; // clicou fora do tabuleiro
     	}   	
     	    	
     	// chama o DFS para saber as casas que pode ir
     	List<Casa> casasPossiveis = mapearCasas(valorDados);
     	
-    	// valida se o destino está na lista das casas permitidas
-    	if (casasPossiveis.contains(destino)) {
+    	// valida se o destino está na lista das casas permitidas 
+    	if (casasPossiveis.contains(destino) && destino.isCaminhavel()) {
+   
+			// move a peça para  corredor ou porta	
+			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
+			System.out.println("Movimento para: " + xLogico + ", " + yLogico + " - tipo: " + destino.getTipo());
     		
-    		// verifica se é corredor ou porta
-    		if (destino.isCaminhavel()) {
-    			
-    			// move a peça
-    			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
-    			System.out.println("Movimento para: " + xLogico + ", " + yLogico);
-    		}
+			if (destino.getTipo().equals("p")){
+				
+				// o turno só passa quando fecha a janela de palpite
+				return true;
+			}
+			else {
+				proximoTurno();
+				System.out.println("turno muda para: " + jogadorAtual.getPersonagem().getNome() + " Debug: gerenciadorPartida l:233");
+				
+				return false;
+			}
     	}
+    	
+    	return false; // click inválido
     }
+    
+    
     
     // get e set
     

@@ -41,10 +41,22 @@ public class PainelDeFundo extends JPanel {
         		int valorDados = janelaPai.getValorSimuladoDados();
         		
         		// Singleton processa jogada
-        		GerenciadorDePartida.getInstance().processaClickTela(xLogico, yLogico, valorDados);
+        		// -> entrou num cômodo?
+        		boolean entrouComodo = GerenciadorDePartida.getInstance().processaClickTela(xLogico, yLogico, valorDados);
         		
         		// atualiza a tela para desenhar a peça no novo lugar
         		repaint();
+        		
+        		// se entrou no cômodo, abre a tela de palpite
+        		if (entrouComodo) {
+        			
+        			// cria a janela de palpite passando a JanelaJogo original como "Pai
+        			JanelaPalpite popUp = new JanelaPalpite(janelaPai);
+        			popUp.setVisible(true); // trava até o jogador "sair" da tela palpite
+        			
+        			// repinta para atualizar quem é o jogador da vez
+        		    repaint();
+        		}
         	}
         });
     }
@@ -64,6 +76,13 @@ public class PainelDeFundo extends JPanel {
         int larguraCasa = getWidth()/ 24;
 		int alturaCasa = getHeight()/ 25;
 		
+		// melhorando o peao na tela
+		int tamanhoPiao = (int) (Math.min(larguraCasa, alturaCasa) * 0.7);
+		
+		// margem pra centralização
+		int margemX = (larguraCasa - tamanhoPiao) / 2;
+        int margemY = (alturaCasa - tamanhoPiao) / 2;
+		
 		// busca todos os jogadores
 		if (GerenciadorDePartida.getInstance().getJogadores() != null) {
 		            
@@ -73,16 +92,24 @@ public class PainelDeFundo extends JPanel {
                 model.Casa posicao = j.getPersonagem().getPosicaoAtual();
                 
                 if (posicao != null) {
-                    // 3. Multiplica X e Y para achar os pixels exatos na tela
-                    int xPixel = posicao.getX() * larguraCasa;
-                    int yPixel = posicao.getY() * alturaCasa;
+                    // Multiplica X e Y para achar os pixels exatos na tela
+                    int xPixelBase = posicao.getX() * larguraCasa;
+                    int yPixelBase = posicao.getY() * alturaCasa;
+                    
+                    // Soma as margens calculadas para empurrar o desenho para o CENTRO exato
+                    int xFinal = xPixelBase + margemX + 10 + 2;
+                    int yFinal = yPixelBase + margemY + 10 + 2;
                     
                     // DESENHANDO A PEÇA
-                    // (Troque isso pelo g2d.drawImage(imagemPiao, ...) no futuro!)
-                    g2d.setColor(java.awt.Color.RED); 
+                    // trocar isso pelo g2d.drawImage(imagemPiao, ...))
+                    if (j.getPersonagem().getNome().equals("Miss Scarlet")) {
+                        g2d.setColor(java.awt.Color.RED);
+                    } else {
+                        g2d.setColor(java.awt.Color.YELLOW); // Coronel Mustard
+                    }
                     
-                    // Desenha um círculo um pouquinho menor que o quadrado para caber direitinho
-                    g2d.fillOval(xPixel + 2, yPixel + 2, larguraCasa - 4, alturaCasa - 4);
+                    // Desenha o círculo preenchido perfeitamente centralizado
+                    g2d.fillOval(xFinal, yFinal, tamanhoPiao, tamanhoPiao);
                 }
             }
 		}
