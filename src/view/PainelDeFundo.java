@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.util.*;
+
 import model.GerenciadorDePartida;
 
 public class PainelDeFundo extends JPanel {
@@ -77,7 +79,7 @@ public class PainelDeFundo extends JPanel {
         				// Se mudou o jogador, limpa os passos e libera o botão de dados para o próximo!
         				janelaPai.resetaDadosEPassaTurno();
         			} else {
-        				System.out.println("ℹ️ Você clicou em uma casa inválida. Tente novamente usando seus " + valorDados + " passos.");
+        				System.out.println("você clicou em uma casa inválida. Tente novamente usando seus " + valorDados + " passos.");
         			}
         		}
         	}
@@ -90,14 +92,44 @@ public class PainelDeFundo extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         
+        // calcula as dimensões da grade
+        int larguraCasa = getWidth() / 24;
+        int alturaCasa = getHeight() / 25;
+        
         // 1° camada - tabuleiro (fundo)
         if (imagem != null) {           
             g2d.drawImage(imagem, 0, 0, getWidth(), getHeight(), this);
         }
         
+        // se janelaPai não for nula (evitar erro na tela inicial)
+        if (janelaPai != null) {
+        	// marcador de casas válidas!!!
+            int vlrDadosNaTela = janelaPai.getValorSimuladoDados();
+            
+            // só desenha se o jogador rolou os dados
+            if (vlrDadosNaTela > 0 && GerenciadorDePartida.getInstance().getJogadorAtual() != null) {
+            	
+            	// pega a lista das casa possíveis
+            	List<model.Casa> casasPossiveis = GerenciadorDePartida.getInstance().mapearCasas(vlrDadosNaTela);
+            	
+            	for (model.Casa c : casasPossiveis) {
+                    int px = c.getX() * larguraCasa;
+                    int py = c.getY() * alturaCasa;
+                    
+                    // pinta um quadrado verde semi-transparente (RGBA)
+                    g2d.setColor(new java.awt.Color(0, 255, 0, 100)); 
+                    g2d.fillRect(px, py, larguraCasa, alturaCasa);
+                    
+                    // faz uma bordinha verde mais forte para ficar elegante
+                    g2d.setColor(new java.awt.Color(0, 200, 0));
+                    g2d.drawRect(px, py, larguraCasa - 1, alturaCasa - 1);
+                }
+            }
+        }
+        
+        
+        
         // 2° camada - peças
-        int larguraCasa = getWidth()/ 24;
-		int alturaCasa = getHeight()/ 25;
 		
 		// melhorando o peao na tela
 		int tamanhoPiao = (int) (Math.min(larguraCasa, alturaCasa) * 0.7);

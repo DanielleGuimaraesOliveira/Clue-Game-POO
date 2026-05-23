@@ -55,6 +55,8 @@ class Tabuleiro {
 		
 		dfs(origem, passos, visitadas, resultado);
 		
+		resultado.remove(origem);
+		
 		return new ArrayList<>(resultado);	
 	}
 	
@@ -85,8 +87,8 @@ class Tabuleiro {
 	    
 	    // 2) se parou na porta (entra no cômodo)
 	    if (atual.getTipo().equals("p")) {
-	    	resultado.add(atual);
-	    	return;
+	    	resultado.add(atual); // adiciona a porta como opção de click
+	    	//return;
 	    }
 
 	    visitadas.add(atual);
