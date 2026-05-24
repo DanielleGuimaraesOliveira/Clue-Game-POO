@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,8 +35,10 @@ public class JanelaJogo extends JFrame {
     private JLabel lblImagemDado2;
     private JButton btnRolarDados;
     private JLabel lblTextoPassos;
+    
     private JComboBox<Integer> comboDado1;
     private JComboBox<Integer> comboDado2;
+    private JCheckBox checkModoTeste;
     
     private int valorDados = 0; // Armazena a soma total para o PainelDeFundo usar
 
@@ -87,12 +90,13 @@ public class JanelaJogo extends JFrame {
 	 // método privado para organizar a criação da barra lateral 
 	 private JPanel criaMenuLateral() {
 		 JPanel painel = new JPanel();
+		 
 		 painel.setPreferredSize(new Dimension(250, 0)); // trava a largura do menu lateral
 		 painel.setBackground(new Color(240, 240, 240));
 		 painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // margem interna
 		 
 		 // GridLayout para empilhar os itens verticalmente
-		 painel.setLayout(new GridLayout(7, 1, 10, 10)); // 8 linhas, 1 coluna, espaçamento de 10px
+		 painel.setLayout(new GridLayout(9, 1, 10, 10)); // 8 linhas, 1 coluna, espaçamento de 10px
 		 
 		 // Turno
 		 lblTurno = new JLabel("Turno de: " + gerenciador.getJogadorAtual().getPersonagem().getNome(), SwingConstants.CENTER);
@@ -104,6 +108,20 @@ public class JanelaJogo extends JFrame {
         comboDado1 = new JComboBox<>(facesDados);
         comboDado2 = new JComboBox<>(facesDados);
         
+        // checkbox para ativar e desativar o modo de teste dos dados
+        checkModoTeste = new JCheckBox("Modo Teste");
+        checkModoTeste.setOpaque(false);
+        
+        // colocndo no subpainel
+        JPanel painelTesteDados = new JPanel();
+        painelTesteDados.add(new JLabel("D1: "));
+        painelTesteDados.add(comboDado1);
+        painelTesteDados.add(new JLabel("D2: "));
+        painelTesteDados.add(comboDado2);
+        painelTesteDados.add(checkModoTeste);
+        
+        painel.add(painelTesteDados);
+        
         lblImagemDado1 = new JLabel(carregarImagemDado(1), SwingConstants.CENTER);
         lblImagemDado2 = new JLabel(carregarImagemDado(1), SwingConstants.CENTER);
         
@@ -112,6 +130,7 @@ public class JanelaJogo extends JFrame {
         painelDadosLadoALado.setBackground(new Color(240, 240, 240));
         painelDadosLadoALado.add(lblImagemDado1);
         painelDadosLadoALado.add(lblImagemDado2);
+        
         painel.add(painelDadosLadoALado);
         
         btnRolarDados = new JButton("🎲 Rolar Dados");
@@ -124,12 +143,24 @@ public class JanelaJogo extends JFrame {
         btnRolarDados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] resultadoDados = gerenciador.lancarDados();
                 
-                // pega o valor de cada dado
-                int d1 = resultadoDados[0];
-                int d2 = resultadoDados[1];
-                
+            	int d1, d2;
+            	
+            	if (checkModoTeste.isSelected()) {
+            		// pega o numero dos JComboBoxes
+            		d1 = (Integer) comboDado1.getSelectedItem();
+            		d2 = (Integer) comboDado2.getSelectedItem();
+            		System.out.println("[MODO TESTE] Valores forçados: " + d1 + " e " + d2);
+            	}
+            	else {
+            		// uso o valor do random dos dados
+            		int[] resultadoDados = gerenciador.lancarDados();
+                    
+                    // pega o valor de cada dado
+                    d1 = resultadoDados[0];
+                    d2 = resultadoDados[1];
+            	}
+            	           
                 // salva na variável usada no DFS
                 valorDados = d1 + d2;
                 
@@ -142,25 +173,45 @@ public class JanelaJogo extends JFrame {
                 
                 atualizaInterfaceNovoTurno();
                 
-                System.out.println("🎲 O Model sorteou: " + d1 + " e " + d2 + " (Total: " + valorDados + ")");
+                System.out.println("O Model sorteou: " + d1 + " e " + d2 + " (Total: " + valorDados + ")");
             }
         });
         
         painel.add(btnRolarDados);
         painel.add(lblTextoPassos);
         
-        /*
-        painel.add(new JLabel("Resultado do Dado 1:"));
-        painel.add(comboDado1);
-        
-        painel.add(new JLabel("Resultado do Dado 2:"));
-        painel.add(comboDado2);
-        */
         
         // Botões
         JButton btnAcusacao = new JButton("Fazer Acusação Final");
         JButton btnSalvar = new JButton("Salvar Partida");
+        JButton btnPassagem = new JButton("Usar Passagem Secreta");
         
+        btnPassagem.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		// se o jogador já rolou os dados, não pode usar a passagem secreta
+        		if (valorDados > 0) {
+        			return;
+        		}
+        		
+        		// tenta fazer o "teletransporte"
+        		boolean sucesso = gerenciador.usaPassagemSecreta();
+        		
+        		if (sucesso) {
+        			//atualiza o mapa para a peça aparecer no outro cômodo
+        			painelTabuleiro.repaint();
+        			
+        			// abre a janela de palpite (da outro comodo)
+        			JanelaPalpite popUp = new JanelaPalpite(JanelaJogo.this);
+        			popUp.setVisible(true);
+        			
+        			// gerenciador.proximoTurno(); // passa o turno no Model
+        			resetaDadosEPassaTurno(); // atualiza a interface 
+        		}
+        	}
+        });
+           	
         
 	     // Exemplo de ação do botão de salvar (Sempre sem lambda!)
         btnSalvar.addActionListener(new ActionListener() {
@@ -174,6 +225,7 @@ public class JanelaJogo extends JFrame {
         //painel.add(new JLabel("")); // um espaço vazio para afastar os botões
         painel.add(btnAcusacao);
         painel.add(btnSalvar);
+        painel.add(btnPassagem);
         
         return painel;
 	 }
