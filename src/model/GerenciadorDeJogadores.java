@@ -1,0 +1,53 @@
+package model;
+import java.util.*;
+
+public class GerenciadorDeJogadores {
+    private List<Jogador> jogadores;
+    private Jogador jogadorAtual;
+
+    public GerenciadorDeJogadores() {
+    	this.jogadores = new ArrayList<>();
+    }
+
+    public void distribuirBlocoDeNotas() {
+    	for (Jogador j : jogadores) {
+    		j.receberBlocoDeNotas();
+    	}
+    }
+
+    public void definirPrimeiroJogador() {
+    	jogadorAtual = null;
+    	
+    	for (Jogador j : jogadores) {
+    		if (j.getPersonagem().getNome().equals("Srta. Scarlet")) {
+    			jogadorAtual = j;
+    			break;
+    		}
+    	}
+    	
+    	if (jogadorAtual == null && !jogadores.isEmpty()) {
+    		jogadorAtual = jogadores.get(0);
+    	}
+    }
+
+    public void adicionarJogador(String nome, String nomePersonagem) {
+    	PecaSuspeito peca = new PecaSuspeito(nomePersonagem);
+    	Jogador novoJogador = new Jogador(nome, peca);
+    	
+    	jogadores.add(novoJogador);
+    }
+
+    public void proximoTurno() {
+    	int index = jogadores.indexOf(jogadorAtual);
+    	jogadorAtual = jogadores.get((index + 1) % jogadores.size());
+    }
+
+    // get e set
+    public Jogador getJogadorAtual() {
+    	return jogadorAtual;
+    }
+
+    public List<Jogador> getJogadores(){
+    	return jogadores;
+    }
+}
