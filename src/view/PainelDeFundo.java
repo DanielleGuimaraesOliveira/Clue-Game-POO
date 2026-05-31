@@ -10,8 +10,9 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 
 import model.GerenciadorDePartida;
+import model.Observador;
 
-public class PainelDeFundo extends JPanel {
+public class PainelDeFundo extends JPanel implements Observador {
     
 	private Image imagem;
 	private JanelaJogo janelaPai;
@@ -169,4 +170,9 @@ public class PainelDeFundo extends JPanel {
             }
 		}
     }
+
+	@Override
+	public void atualizar(GerenciadorDePartida partida) {
+	    repaint();
+	}
 }
