@@ -10,6 +10,10 @@ public class GerenciadorDePartida {
     private GerenciadorDeTabuleiro gerTabuleiro;
     
     private List<Dado> dados;
+    private List<Observador> observadores;
+    private int ultimoDado1;
+    private int ultimoDado2;
+    private int valorDados;
     
     private GerenciadorDePartida() {
         this.gerJogadores = new GerenciadorDeJogadores();
@@ -17,6 +21,7 @@ public class GerenciadorDePartida {
         this.gerTabuleiro = new GerenciadorDeTabuleiro();
         
     	this.dados = new ArrayList<>();
+	    this.observadores = new ArrayList<>();
     }
 
     void reiniciarPartida() {
@@ -24,6 +29,9 @@ public class GerenciadorDePartida {
         this.gerCartas = new GerenciadorDeCartas();
         this.gerTabuleiro = new GerenciadorDeTabuleiro();
         this.dados = new ArrayList<>();
+        this.ultimoDado1 = 0;
+        this.ultimoDado2 = 0;
+        this.valorDados = 0;
     }
     
     public static synchronized GerenciadorDePartida getInstance() {
@@ -52,6 +60,8 @@ public class GerenciadorDePartida {
         
         gerJogadores.distribuirBlocoDeNotas();
         gerJogadores.definirPrimeiroJogador();
+
+        notificarObservadores();
     }
     
     public void adicionarJogador(String nome, String nomePersonagem) {
@@ -59,15 +69,34 @@ public class GerenciadorDePartida {
     }
     
     public int[] lancarDados() {
-        int vlrDado1 = dados.get(0).rolar();
-        int vlrDado2 = dados.get(1).rolar();
+        ultimoDado1 = dados.get(0).rolar();
+        ultimoDado2 = dados.get(1).rolar();
+
+	    valorDados = ultimoDado1 + ultimoDado2;
+
+	    notificarObservadores();
     	
         // devolve os dois valores separados para a View poder desenhar as imagens dos dados
-        return new int[]{vlrDado1, vlrDado2}; 
+        return new int[]{ultimoDado1, ultimoDado2}; 
+    }
+
+    public void definirResultadoDados(int dado1, int dado2) {
+        this.ultimoDado1 = dado1;
+        this.ultimoDado2 = dado2;
+        this.valorDados = dado1 + dado2;
+        notificarObservadores();
+    }
+
+    public void zerarDadosRolados() {
+        this.ultimoDado1 = 0;
+        this.ultimoDado2 = 0;
+        this.valorDados = 0;
+        notificarObservadores();
     }
      
     public void proximoTurno() {
     	gerJogadores.proximoTurno();
+	    notificarObservadores();
     }
 
     public void realizarPalpite(Carta suspeito, Carta arma, Carta comodo) {
@@ -102,6 +131,7 @@ public class GerenciadorDePartida {
         int status = gerTabuleiro.processaClickTelaInterno(gerJogadores.getJogadorAtual(), xLogico, yLogico, valorDados);
         
         if (status == 1) {
+	        notificarObservadores();
             return true; // Entrou no cômodo
         } else if (status == 2) {
             proximoTurno(); // Moveu no corredor, gerencia o turno aqui!
@@ -114,7 +144,27 @@ public class GerenciadorDePartida {
     
     // Passagem secreta
     public boolean usaPassagemSecreta() {
-    	return gerTabuleiro.usaPassagemSecreta(gerJogadores.getJogadorAtual());
+	    boolean sucesso = gerTabuleiro.usaPassagemSecreta(gerJogadores.getJogadorAtual());
+	    if (sucesso) {
+	        notificarObservadores();
+	    }
+	    return sucesso;
+    }
+
+    public void registrarObservador(Observador observador) {
+        if (observador != null && !observadores.contains(observador)) {
+            observadores.add(observador);
+        }
+    }
+
+    public void removerObservador(Observador observador) {
+        observadores.remove(observador);
+    }
+
+    private void notificarObservadores() {
+        for (Observador observador : new ArrayList<>(observadores)) {
+            observador.atualizar(this);
+        }
     }
     
     // get e set
@@ -124,6 +174,18 @@ public class GerenciadorDePartida {
     
     public List<Jogador> getJogadores(){
     	return gerJogadores.getJogadores();
+    }
+
+    public int getValorDados() {
+        return valorDados;
+    }
+
+    public int getUltimoDado1() {
+        return ultimoDado1;
+    }
+
+    public int getUltimoDado2() {
+        return ultimoDado2;
     }
 }
 
