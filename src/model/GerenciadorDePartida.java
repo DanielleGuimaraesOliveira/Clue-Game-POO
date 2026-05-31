@@ -18,6 +18,13 @@ public class GerenciadorDePartida {
         
     	this.dados = new ArrayList<>();
     }
+
+    void reiniciarPartida() {
+        this.gerJogadores = new GerenciadorDeJogadores();
+        this.gerCartas = new GerenciadorDeCartas();
+        this.gerTabuleiro = new GerenciadorDeTabuleiro();
+        this.dados = new ArrayList<>();
+    }
     
     public static synchronized GerenciadorDePartida getInstance() {
          if (instancia == null) instancia = new GerenciadorDePartida();
@@ -35,8 +42,11 @@ public class GerenciadorDePartida {
         // 4. Posicionar peças no tabuleiro
     	gerTabuleiro.iniciarTabuleiro();
     	
-        dados.add(new Dado());
-        dados.add(new Dado());
+        // evita duplicar dados se iniciarPartida() for chamado várias vezes
+        if (dados.isEmpty()) {
+            dados.add(new Dado());
+            dados.add(new Dado());
+        }
         
         gerTabuleiro.posicionarPecas(gerJogadores.getJogadores());
         
