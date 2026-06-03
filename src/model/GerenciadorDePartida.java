@@ -292,6 +292,29 @@ public class GerenciadorDePartida {
         notificarObservadores();
     }
 
+    
+    public java.util.List<String> getTodosNomesCartas() {
+        return gerCartas.getTodosNomesCartas();
+    }
+
+    public java.util.Map<String, Boolean> obterBlocoJogadorAtual() {
+        Jogador j = gerJogadores.getJogadorAtual();
+        if (j == null) return new java.util.HashMap<>();
+        return j.getBlocoDeNotasInterno().getTodasMarcas();
+    }
+
+    public void marcarCartaNoBlocoJogadorAtual(String nomeCarta, boolean valor) {
+        Jogador j = gerJogadores.getJogadorAtual();
+        if (j == null) return;
+        j.getBlocoDeNotasInterno().marcar(nomeCarta, valor);
+    }
+
+    public void garantirBlocoParaJogadorAtual() {
+        Jogador j = gerJogadores.getJogadorAtual();
+        if (j == null) return;
+        j.receberBlocoDeNotas();
+    }
+
 	private String chaveJogador(int indice, String sufixo) {
 		return "jogadores." + indice + "." + sufixo;
     }
