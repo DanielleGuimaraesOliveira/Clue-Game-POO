@@ -129,6 +129,7 @@ public class JanelaJogo extends JFrame implements Observador {
 
         JButton btnAcusacao = new JButton("Fazer Acusação Final");
         JButton btnSalvar = new JButton("Salvar Partida");
+        JButton btnBloco = new JButton("Bloco de Anotações");
         JButton btnPassagem = new JButton("Usar Passagem Secreta");
 
         btnPassagem.addActionListener(new ActionListener() {
@@ -154,8 +155,17 @@ public class JanelaJogo extends JFrame implements Observador {
             }
         });
 
+        btnBloco.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JanelaBlocoNotas bloco = new JanelaBlocoNotas(JanelaJogo.this, controlador);
+                bloco.setVisible(true);
+            }
+        });
+
         painel.add(btnAcusacao);
         painel.add(btnSalvar);
+        painel.add(btnBloco);
         painel.add(btnPassagem);
 
         return painel;
