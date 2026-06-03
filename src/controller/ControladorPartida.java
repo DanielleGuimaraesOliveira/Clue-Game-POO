@@ -19,7 +19,7 @@ public class ControladorPartida {
         this.gerenciador.registrarObservador(new model.Observador() {
             @Override
             public void atualizar() {
-
+        
                 for (model.Observador o : new java.util.ArrayList<>(observadores)) {
                     o.atualizar();
                 }
@@ -111,5 +111,21 @@ public class ControladorPartida {
 
     public void carregarPartida(String caminhoArquivo) throws IOException {
         gerenciador.carregarPartida(caminhoArquivo);
+    }
+
+    public java.util.List<String> getTodosNomesCartas() {
+        return gerenciador.getTodosNomesCartas();
+    }
+
+    public java.util.Map<String, Boolean> obterBlocoJogadorAtual() {
+        return gerenciador.obterBlocoJogadorAtual();
+    }
+
+    public void marcarCartaNoBlocoAtual(String nomeCarta, boolean valor) {
+        gerenciador.marcarCartaNoBlocoJogadorAtual(nomeCarta, valor);
+    }
+
+    public void garantirBlocoParaJogadorAtual() {
+        gerenciador.garantirBlocoParaJogadorAtual();
     }
 }
