@@ -78,7 +78,6 @@ public class GerenciadorDeTabuleiro {
         Casa casaDestino = transformaStringParaCasa(destino);
         tabuleiro.moverPeca(jogadorAtual.getPersonagem(), casaDestino);
     }
-
     public String getPosicaoAtualFormatada(Jogador jogadorAtual) {
         // acessa o jogador e a peça
         Casa atual = jogadorAtual.getPersonagem().getPosicaoAtual();
