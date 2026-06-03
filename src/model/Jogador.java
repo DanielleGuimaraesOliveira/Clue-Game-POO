@@ -13,6 +13,7 @@ class Jogador implements IJogador {
 	private List<Carta> mao;
 	private boolean eliminado;
 	private boolean possuiBlocoDeNotas; 
+	private BlocoDeNotas blocoDeNotas;
 	
 	public Jogador(String nome, PecaSuspeito personagem) {
 		this.nome = nome;
@@ -69,6 +70,7 @@ class Jogador implements IJogador {
 	
 	public void receberBlocoDeNotas() {
 		this.possuiBlocoDeNotas = true;
+		if (this.blocoDeNotas == null) this.blocoDeNotas = new BlocoDeNotas();
 	}
 
 	public void setPossuiBlocoDeNotas(boolean possuiBlocoDeNotas) {
@@ -81,5 +83,11 @@ class Jogador implements IJogador {
 	
 	public boolean isPossuiBlocoDeNotas() {
 		return possuiBlocoDeNotas;
+	}
+
+	// package-private access for GerenciadorDePartida to manage bloco
+	BlocoDeNotas getBlocoDeNotasInterno() {
+		if (blocoDeNotas == null) blocoDeNotas = new BlocoDeNotas();
+		return blocoDeNotas;
 	}
 }
