@@ -1,5 +1,10 @@
 package model;
+import java.io.*;
 import java.util.*;
+
+import Interfaces.ICarta;
+import Interfaces.ICasa;
+import Interfaces.IJogador;
 
 public class GerenciadorDePartida {
     private static GerenciadorDePartida instancia;
@@ -24,7 +29,13 @@ public class GerenciadorDePartida {
 	    this.observadores = new ArrayList<>();
     }
 
-    void reiniciarPartida() {
+	private void inicializarObservadoresSeNecessario() {
+		if (observadores == null) {
+			observadores = new ArrayList<>();
+		}
+	}
+
+    public void reiniciarPartida() {
         this.gerJogadores = new GerenciadorDeJogadores();
         this.gerCartas = new GerenciadorDeCartas();
         this.gerTabuleiro = new GerenciadorDeTabuleiro();
@@ -32,6 +43,7 @@ public class GerenciadorDePartida {
         this.ultimoDado1 = 0;
         this.ultimoDado2 = 0;
         this.valorDados = 0;
+		this.observadores = new ArrayList<>();
     }
     
     public static synchronized GerenciadorDePartida getInstance() {
@@ -99,12 +111,16 @@ public class GerenciadorDePartida {
 	    notificarObservadores();
     }
 
-    public void realizarPalpite(Carta suspeito, Carta arma, Carta comodo) {
-    	gerCartas.realizarPalpite(suspeito, arma, comodo);
+    public String realizarPalpite(String suspeito, String arma, String comodo) {
+        return gerCartas.responderPalpite(gerJogadores.getJogadorAtual(), gerJogadores.getJogadores(), suspeito, arma, comodo);
     }
     
-    public List<Casa> mapearCasas(int passos) {
-        return gerTabuleiro.mapearCasas(gerJogadores.getJogadorAtual(), passos);
+    public List<ICasa> mapearCasas(int passos) {
+        List<ICasa> resultados = new ArrayList<>();
+        for (Casa c : gerTabuleiro.mapearCasas(gerJogadores.getJogadorAtual(), passos)) {
+            resultados.add(c);
+        }
+        return resultados;
     }
     
     public List<String> mapearCasaFormatadas(int passos){
@@ -119,7 +135,7 @@ public class GerenciadorDePartida {
         return gerTabuleiro.getPosicaoAtualFormatada(gerJogadores.getJogadorAtual());
     }
 
-    public boolean realizarAcusacao(Carta suspeito, Carta arma, Carta comodo) {
+    public boolean realizarAcusacao(ICarta suspeito, ICarta arma, ICarta comodo) {
         return gerCartas.realizarAcusacao(suspeito, arma, comodo);
     }
     
@@ -152,6 +168,7 @@ public class GerenciadorDePartida {
     }
 
     public void registrarObservador(Observador observador) {
+        inicializarObservadoresSeNecessario();
         if (observador != null && !observadores.contains(observador)) {
             observadores.add(observador);
         }
@@ -162,18 +179,132 @@ public class GerenciadorDePartida {
     }
 
     private void notificarObservadores() {
+        inicializarObservadoresSeNecessario();
         for (Observador observador : new ArrayList<>(observadores)) {
-            observador.atualizar(this);
+            observador.atualizar();
         }
+    }
+
+    public void salvarPartida(String caminhoArquivo) throws IOException {
+        Properties propriedades = new Properties();
+
+        propriedades.setProperty("valorDados", String.valueOf(valorDados));
+        propriedades.setProperty("ultimoDado1", String.valueOf(ultimoDado1));
+        propriedades.setProperty("ultimoDado2", String.valueOf(ultimoDado2));
+
+        Jogador jogadorAtual = gerJogadores.getJogadorAtual();
+        propriedades.setProperty("jogadorAtual", jogadorAtual != null ? jogadorAtual.getPersonagem().getNome() : "");
+
+        String[] envelope = gerCartas.exportarEnvelope();
+        propriedades.setProperty("envelope.assassino", envelope[0] != null ? envelope[0] : "");
+        propriedades.setProperty("envelope.arma", envelope[1] != null ? envelope[1] : "");
+        propriedades.setProperty("envelope.local", envelope[2] != null ? envelope[2] : "");
+
+        List<Jogador> jogadores = gerJogadores.getJogadores();
+        propriedades.setProperty("jogadores.qtd", String.valueOf(jogadores.size()));
+
+        for (int i = 0; i < jogadores.size(); i++) {
+            Jogador jogador = jogadores.get(i);
+            propriedades.setProperty(chaveJogador(i, "nome"), jogador.getNome());
+            propriedades.setProperty(chaveJogador(i, "personagem"), jogador.getPersonagem().getNome());
+            propriedades.setProperty(chaveJogador(i, "eliminado"), String.valueOf(jogador.isEliminado()));
+            propriedades.setProperty(chaveJogador(i, "blocoNotas"), String.valueOf(jogador.isPossuiBlocoDeNotas()));
+
+            Casa posicao = jogador.getPersonagem().getPosicaoAtual();
+            propriedades.setProperty(chaveJogador(i, "posicao"), posicao != null ? posicao.getX() + "," + posicao.getY() : "");
+
+            java.util.List<ICarta> mao = jogador.getMao();
+            propriedades.setProperty(chaveJogador(i, "mao.qtd"), String.valueOf(mao.size()));
+            for (int j = 0; j < mao.size(); j++) {
+                ICarta carta = mao.get(j);
+                propriedades.setProperty(chaveJogador(i, "mao." + j + ".nome"), carta.getNome());
+                propriedades.setProperty(chaveJogador(i, "mao." + j + ".tipo"), carta.getTipo().name());
+            }
+        }
+
+        try (Writer writer = new BufferedWriter(new FileWriter(caminhoArquivo))) {
+            propriedades.store(writer, "Partida salva");
+        }
+    }
+
+    public void carregarPartida(String caminhoArquivo) throws IOException {
+        Properties propriedades = new Properties();
+
+        try (Reader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
+            propriedades.load(reader);
+        }
+
+        this.gerJogadores = new GerenciadorDeJogadores();
+        this.gerCartas = new GerenciadorDeCartas();
+        this.gerTabuleiro = new GerenciadorDeTabuleiro();
+        this.dados = new ArrayList<>();
+
+        if (dados.isEmpty()) {
+            dados.add(new Dado());
+            dados.add(new Dado());
+        }
+
+        this.valorDados = Integer.parseInt(propriedades.getProperty("valorDados", "0"));
+        this.ultimoDado1 = Integer.parseInt(propriedades.getProperty("ultimoDado1", "0"));
+        this.ultimoDado2 = Integer.parseInt(propriedades.getProperty("ultimoDado2", "0"));
+
+        gerTabuleiro.iniciarTabuleiro();
+        gerCartas.definirEnvelope(
+            propriedades.getProperty("envelope.assassino", ""),
+            propriedades.getProperty("envelope.arma", ""),
+            propriedades.getProperty("envelope.local", "")
+        );
+
+        int quantidadeJogadores = Integer.parseInt(propriedades.getProperty("jogadores.qtd", "0"));
+        for (int i = 0; i < quantidadeJogadores; i++) {
+            String nome = propriedades.getProperty(chaveJogador(i, "nome"), "");
+            String personagem = propriedades.getProperty(chaveJogador(i, "personagem"), "");
+            gerJogadores.adicionarJogador(nome, personagem);
+
+            Jogador jogador = gerJogadores.getJogadores().get(i);
+            jogador.setEliminado(Boolean.parseBoolean(propriedades.getProperty(chaveJogador(i, "eliminado"), "false")));
+            jogador.setPossuiBlocoDeNotas(Boolean.parseBoolean(propriedades.getProperty(chaveJogador(i, "blocoNotas"), "false")));
+
+            int quantidadeCartas = Integer.parseInt(propriedades.getProperty(chaveJogador(i, "mao.qtd"), "0"));
+            for (int j = 0; j < quantidadeCartas; j++) {
+                String nomeCarta = propriedades.getProperty(chaveJogador(i, "mao." + j + ".nome"), "");
+                String tipoCarta = propriedades.getProperty(chaveJogador(i, "mao." + j + ".tipo"), TipoCarta.SUSPEITO.name());
+                jogador.recebeCartas(new Carta(nomeCarta, TipoCarta.valueOf(tipoCarta)));
+            }
+
+            String posicao = propriedades.getProperty(chaveJogador(i, "posicao"), "");
+            if (!posicao.isEmpty()) {
+                String[] partes = posicao.split(",");
+                int x = Integer.parseInt(partes[0]);
+                int y = Integer.parseInt(partes[1]);
+                gerTabuleiro.reposicionarJogador(jogador, x, y);
+            }
+        }
+
+        String nomeJogadorAtual = propriedades.getProperty("jogadorAtual", "");
+        Jogador jogadorAtual = gerJogadores.buscarJogadorPorNome(nomeJogadorAtual);
+        if (jogadorAtual != null) {
+            gerJogadores.definirJogadorAtual(jogadorAtual);
+        } else {
+            gerJogadores.definirPrimeiroJogador();
+        }
+
+        notificarObservadores();
+    }
+
+	private String chaveJogador(int indice, String sufixo) {
+		return "jogadores." + indice + "." + sufixo;
     }
     
     // get e set
-    public Jogador getJogadorAtual() {
+    public IJogador getJogadorAtual() {
     	return gerJogadores.getJogadorAtual();
     }
     
-    public List<Jogador> getJogadores(){
-    	return gerJogadores.getJogadores();
+    public List<IJogador> getJogadores(){
+    	List<IJogador> resultados = new ArrayList<>();
+    	for (Jogador j : gerJogadores.getJogadores()) resultados.add(j);
+    	return resultados;
     }
 
     public int getValorDados() {
