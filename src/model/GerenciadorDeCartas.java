@@ -78,7 +78,8 @@ public class GerenciadorDeCartas {
     	return lista.get(random.nextInt(lista.size()));
     }
 
-
+    // Nota: a lógica de resposta ao palpite está em `responderPalpite(...)`.
+    // O método `realizarPalpite(Carta...)` anterior foi removido por ser redundante.
 
     public ICarta responderPalpite(Jogador jogadorAtual, List<Jogador> jogadores, ICarta suspeito, ICarta arma, ICarta comodo) {
         if (jogadorAtual == null || jogadores == null || jogadores.isEmpty()) {
@@ -141,5 +142,14 @@ public class GerenciadorDeCartas {
             envelope.getArma().getNome(),
             envelope.getLocal().getNome()
         };
+    }
+
+    // retorna todos os nomes de cartas do jogo (suspeitos, armas, cômodos)
+    public java.util.List<String> getTodosNomesCartas() {
+        java.util.List<String> nomes = new java.util.ArrayList<>();
+        nomes.addAll(Arrays.asList("Sr. Verde", "Srta. Scarlet", "Coronel Mustard", "Professor Plum", "Sra. Peacock", "Sra. White"));
+        nomes.addAll(Arrays.asList("Corda", "Cano de Chumbo", "Faca", "Chave Inglesa", "Castiçal", "Revólver"));
+        nomes.addAll(Arrays.asList("Cozinha", "Salão de Baile", "Sala de Jantar", "Escritório", "Biblioteca", "Sala de Estar", "Jardim de Inverno", "Hall", "Sala de Música"));
+        return nomes;
     }
 }
