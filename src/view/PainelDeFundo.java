@@ -1,6 +1,10 @@
 package view;
 
 import javax.swing.JPanel;
+
+import Interfaces.ICasa;
+import Interfaces.IJogador;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -9,22 +13,25 @@ import java.awt.event.MouseEvent;
 
 import java.util.*;
 
-import model.GerenciadorDePartida;
+import controller.ControladorPartida;
 import model.Observador;
+
 
 public class PainelDeFundo extends JPanel implements Observador {
     
 	private Image imagem;
 	private JanelaJogo janelaPai;
+	private ControladorPartida controlador;
 	
 	public PainelDeFundo(Image imagem) {
 		this.imagem = imagem;
 	}
 	
 	// Sobrecarga de constructor (JanelaJogo)
-    public PainelDeFundo(Image imagem, JanelaJogo janelaPai) {
-        this.imagem = imagem;
-        this.janelaPai = janelaPai;
+	public PainelDeFundo(Image imagem, ControladorPartida controlador, JanelaJogo janelaPai) {
+		this.imagem = imagem;
+		this.controlador = controlador;
+		this.janelaPai = janelaPai;
         
         // tratamento de eventos (sem lambda)
         this.addMouseListener(new MouseAdapter() {
@@ -40,8 +47,8 @@ public class PainelDeFundo extends JPanel implements Observador {
         		int xLogico = e.getX() / larguraCasa;
         		int yLogico = e.getY() / alturaCasa;
         		
-        		// pega o valor dos dados do ComboBox da janelaJogo
-        		int valorDados = janelaPai.getValorSimuladoDados();
+				// pega o valor dos dados do controlador
+				int valorDados = controlador.getValorDados();
         		
         		// se for 0, o jogador está tentando andar sem rolar os dados!
         		if (valorDados == 0) {
@@ -49,12 +56,12 @@ public class PainelDeFundo extends JPanel implements Observador {
         			return; // aborta o clique, não faz nada
         		}
         		
-        		// guarda quem é o jogador antes do clique para sabermos se o turno passou
-        		model.Jogador jogadorAntesDoClique = GerenciadorDePartida.getInstance().getJogadorAtual();
-        		
-        		// Singleton processa jogada
-        		// -> entrou num cômodo?
-        		boolean entrouComodo = GerenciadorDePartida.getInstance().processaClickTela(xLogico, yLogico, valorDados);
+				// guarda quem é o jogador antes do clique para sabermos se o turno passou
+				IJogador jogadorAntesDoClique = controlador.getJogadorAtual();
+
+				// Controller processa jogada
+				// -> entrou num cômodo?
+				boolean entrouComodo = controlador.processaClickTela(xLogico, yLogico, valorDados);
         		
         		// atualiza a tela para desenhar a peça no novo lugar
         		repaint();
@@ -63,7 +70,7 @@ public class PainelDeFundo extends JPanel implements Observador {
         		if (entrouComodo) {
         			
         			// cria a janela de palpite passando a JanelaJogo original como "Pai
-        			JanelaPalpite popUp = new JanelaPalpite(janelaPai);
+					JanelaPalpite popUp = new JanelaPalpite(janelaPai, controlador);
         			popUp.setVisible(true); // trava até o jogador "sair" da tela palpite
         			
         			janelaPai.resetaDadosEPassaTurno();
@@ -73,8 +80,8 @@ public class PainelDeFundo extends JPanel implements Observador {
         		}
         		
         		else {
-        			// verifica se o jogador atual mudou no Gerenciador (significa que o movimento foi válido)
-        			model.Jogador jogadorDepoisDoClique = GerenciadorDePartida.getInstance().getJogadorAtual();
+					// verifica se o jogador atual mudou no Gerenciador (significa que o movimento foi válido)
+					IJogador jogadorDepoisDoClique = controlador.getJogadorAtual();
         			
         			if (jogadorAntesDoClique != jogadorDepoisDoClique) {
         				// Se mudou o jogador, limpa os passos e libera o botão de dados para o próximo!
@@ -103,17 +110,17 @@ public class PainelDeFundo extends JPanel implements Observador {
         }
         
         // se janelaPai não for nula (evitar erro na tela inicial)
-        if (janelaPai != null) {
-        	// marcador de casas válidas!!!
-            int vlrDadosNaTela = janelaPai.getValorSimuladoDados();
+		if (janelaPai != null && controlador != null) {
+			    // marcador de casas válidas!!!
+			    int vlrDadosNaTela = janelaPai.getValorSimuladoDados();
             
-            // só desenha se o jogador rolou os dados
-            if (vlrDadosNaTela > 0 && GerenciadorDePartida.getInstance().getJogadorAtual() != null) {
-            	
-            	// pega a lista das casa possíveis
-            	List<model.Casa> casasPossiveis = GerenciadorDePartida.getInstance().mapearCasas(vlrDadosNaTela);
-            	
-            	for (model.Casa c : casasPossiveis) {
+			    // só desenha se o jogador rolou os dados
+			    if (vlrDadosNaTela > 0 && controlador.getJogadorAtual() != null) {
+             
+					// pega a lista das casa possíveis (interface pública ICasa)
+					List<ICasa> casasPossiveis = controlador.mapearCasas(vlrDadosNaTela);
+
+					for (ICasa c : casasPossiveis) {
                     int px = c.getX() * larguraCasa;
                     int py = c.getY() * alturaCasa;
                     
@@ -131,7 +138,7 @@ public class PainelDeFundo extends JPanel implements Observador {
         
         
         // 2° camada - peças
-		
+
 		// melhorando o peao na tela
 		int tamanhoPiao = (int) (Math.min(larguraCasa, alturaCasa) * 0.7);
 		
@@ -139,13 +146,13 @@ public class PainelDeFundo extends JPanel implements Observador {
 		int margemX = (larguraCasa - tamanhoPiao) / 2;
         int margemY = (alturaCasa - tamanhoPiao) / 2;
 		
-		// busca todos os jogadores
-		if (GerenciadorDePartida.getInstance().getJogadores() != null) {
-		            
-            for (model.Jogador j : GerenciadorDePartida.getInstance().getJogadores()) {
+		// busca todos os jogadores (interface pública IJogador)
+		if (controlador != null && controlador.getJogadores() != null) {
+                    
+			for (IJogador j : controlador.getJogadores()) {
                 
                 // Pega onde ele está no mapa lógico
-                model.Casa posicao = j.getPersonagem().getPosicaoAtual();
+				ICasa posicao = j.getPosicaoAtual();
                 
                 if (posicao != null) {
                     // Multiplica X e Y para achar os pixels exatos na tela
@@ -158,7 +165,7 @@ public class PainelDeFundo extends JPanel implements Observador {
                     
                     // DESENHANDO A PEÇA
                     // trocar isso pelo g2d.drawImage(imagemPiao, ...))
-                    if (j.getPersonagem().getNome().equals("Miss Scarlet")) {
+					if (j.getPersonagem().getNome().equals("Miss Scarlet")) {
                         g2d.setColor(java.awt.Color.RED);
                     } else {
                         g2d.setColor(java.awt.Color.YELLOW); // Coronel Mustard
@@ -172,7 +179,7 @@ public class PainelDeFundo extends JPanel implements Observador {
     }
 
 	@Override
-	public void atualizar(GerenciadorDePartida partida) {
-	    repaint();
+	public void atualizar() {
+		repaint();
 	}
 }

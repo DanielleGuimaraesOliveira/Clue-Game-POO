@@ -20,12 +20,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import model.GerenciadorDePartida;
 import model.Observador;
+import controller.ControladorPartida;
 
 public class JanelaJogo extends JFrame implements Observador {
-
-    private final GerenciadorDePartida gerenciador;
+    private final ControladorPartida controlador;
     private PainelDeFundo painelTabuleiro;
 
     private JLabel lblTurno;
@@ -38,21 +37,15 @@ public class JanelaJogo extends JFrame implements Observador {
     private JComboBox<Integer> comboDado2;
     private JCheckBox checkModoTeste;
 
-    public JanelaJogo(GerenciadorDePartida gerenciador) {
-        this.gerenciador = gerenciador;
-
-        if (this.gerenciador.getJogadores().isEmpty()) {
-            this.gerenciador.adicionarJogador("Dani", "Miss Scarlet");
-            this.gerenciador.adicionarJogador("Judy", "Coronel Mustard");
-            this.gerenciador.iniciarPartida();
-        }
+    public JanelaJogo(ControladorPartida controlador) {
+        this.controlador = controlador;
 
         setTitle("Clue Tabuleiro | Dani e Judy");
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        gerenciador.registrarObservador(this);
+        controlador.registrarObservador(this);
 
         Image imagemMapa = null;
         try {
@@ -61,8 +54,8 @@ public class JanelaJogo extends JFrame implements Observador {
             System.out.println("Erro ao carregar imagem do tabuleiro");
         }
 
-        painelTabuleiro = new PainelDeFundo(imagemMapa, this);
-        gerenciador.registrarObservador(painelTabuleiro);
+        painelTabuleiro = new PainelDeFundo(imagemMapa, controlador, this);
+        controlador.registrarObservador(painelTabuleiro);
 
         add(painelTabuleiro, BorderLayout.CENTER);
         add(criaMenuLateral(), BorderLayout.EAST);
@@ -79,7 +72,7 @@ public class JanelaJogo extends JFrame implements Observador {
         painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         painel.setLayout(new GridLayout(9, 1, 10, 10));
 
-        lblTurno = new JLabel("Turno de: " + gerenciador.getJogadorAtual().getPersonagem().getNome(), SwingConstants.CENTER);
+        lblTurno = new JLabel("Turno de: " + (controlador.getJogadorAtual() != null ? controlador.getJogadorAtual().getPersonagem().getNome() : "---"), SwingConstants.CENTER);
         lblTurno.setFont(new Font("Arial", Font.BOLD, 16));
         painel.add(lblTurno);
 
@@ -119,9 +112,9 @@ public class JanelaJogo extends JFrame implements Observador {
                 if (checkModoTeste.isSelected()) {
                     d1 = (Integer) comboDado1.getSelectedItem();
                     d2 = (Integer) comboDado2.getSelectedItem();
-                    gerenciador.definirResultadoDados(d1, d2);
+                    controlador.definirResultadoDados(d1, d2);
                 } else {
-                    int[] resultadoDados = gerenciador.lancarDados();
+                    int[] resultadoDados = controlador.lancarDados();
                     d1 = resultadoDados[0];
                     d2 = resultadoDados[1];
                 }
@@ -141,13 +134,13 @@ public class JanelaJogo extends JFrame implements Observador {
         btnPassagem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (gerenciador.getValorDados() > 0) {
+                if (controlador.getValorDados() > 0) {
                     return;
                 }
 
-                if (gerenciador.usaPassagemSecreta()) {
+                if (controlador.usaPassagemSecreta()) {
                     painelTabuleiro.repaint();
-                    JanelaPalpite popUp = new JanelaPalpite(JanelaJogo.this);
+                    JanelaPalpite popUp = new JanelaPalpite(JanelaJogo.this, controlador);
                     popUp.setVisible(true);
                     resetaDadosEPassaTurno();
                 }
@@ -171,7 +164,7 @@ public class JanelaJogo extends JFrame implements Observador {
     private void atualizarDadosNaTela(int d1, int d2) {
         lblImagemDado1.setIcon(carregarImagemDado(d1));
         lblImagemDado2.setIcon(carregarImagemDado(d2));
-        lblTextoPassos.setText("Você tirou " + gerenciador.getValorDados() + " passos!");
+        lblTextoPassos.setText("Você tirou " + controlador.getValorDados() + " passos!");
     }
 
     private ImageIcon carregarImagemDado(int valorFace) {
@@ -186,20 +179,20 @@ public class JanelaJogo extends JFrame implements Observador {
     }
 
     public int getValorSimuladoDados() {
-        return gerenciador.getValorDados();
+        return controlador.getValorDados();
     }
 
     public void resetaDadosEPassaTurno() {
-        gerenciador.zerarDadosRolados();
+        controlador.zerarDadosRolados();
         atualizaInterfaceNovoTurno();
     }
 
     public void atualizaInterfaceNovoTurno() {
-        if (gerenciador.getJogadorAtual() != null) {
-            lblTurno.setText("Turno de: " + gerenciador.getJogadorAtual().getPersonagem().getNome());
+        if (controlador.getJogadorAtual() != null) {
+            lblTurno.setText("Turno de: " + controlador.getJogadorAtual().getPersonagem().getNome());
         }
 
-        if (gerenciador.getValorDados() == 0) {
+        if (controlador.getValorDados() == 0) {
             btnRolarDados.setEnabled(true);
             lblTextoPassos.setText("Aguardando rolagem...");
         } else {
@@ -208,7 +201,7 @@ public class JanelaJogo extends JFrame implements Observador {
     }
 
     @Override
-    public void atualizar(GerenciadorDePartida partida) {
+    public void atualizar() {
         atualizaInterfaceNovoTurno();
         if (painelTabuleiro != null) {
             painelTabuleiro.repaint();
