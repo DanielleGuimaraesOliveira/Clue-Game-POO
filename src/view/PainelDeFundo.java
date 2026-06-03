@@ -117,7 +117,7 @@ public class PainelDeFundo extends JPanel implements Observador {
 			    // só desenha se o jogador rolou os dados
 			    if (vlrDadosNaTela > 0 && controlador.getJogadorAtual() != null) {
              
-					// pega a lista das casa possíveis (interface pública ICasa)
+					// pega a lista das casa possíveis
 					List<ICasa> casasPossiveis = controlador.mapearCasas(vlrDadosNaTela);
 
 					for (ICasa c : casasPossiveis) {
@@ -146,7 +146,7 @@ public class PainelDeFundo extends JPanel implements Observador {
 		int margemX = (larguraCasa - tamanhoPiao) / 2;
         int margemY = (alturaCasa - tamanhoPiao) / 2;
 		
-		// busca todos os jogadores (interface pública IJogador)
+		// busca todos os jogadores 
 		if (controlador != null && controlador.getJogadores() != null) {
                     
 			for (IJogador j : controlador.getJogadores()) {
