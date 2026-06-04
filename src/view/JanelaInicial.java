@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class JanelaInicial extends JFrame {
+class JanelaInicial extends JFrame {
 
     private JButton btnNovo = new JButton("Novo Jogo");
     private JButton btnContinuar = new JButton("Continuar");
