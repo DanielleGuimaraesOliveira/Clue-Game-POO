@@ -2,18 +2,15 @@ package view;
 
 import javax.swing.JFrame;
 
-import model.GerenciadorDePartida;
+import controller.ControladorPartida;
 
 
 public class JanelaPersonagens extends JFrame {
- private GerenciadorDePartida gerenciador;
+ private ControladorPartida controlador;
 
- public JanelaPersonagens(GerenciadorDePartida gerenciador) {
-     this.gerenciador = gerenciador;
-     
+ public JanelaPersonagens(ControladorPartida controlador) {
+     this.controlador = controlador;
 
-     setSize(1500, 800); 
-     
-     
+     setSize(1500, 800);
  }
 }

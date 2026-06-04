@@ -78,6 +78,17 @@ public class GerenciadorDeTabuleiro {
         Casa casaDestino = transformaStringParaCasa(destino);
         tabuleiro.moverPeca(jogadorAtual.getPersonagem(), casaDestino);
     }
+    
+
+	public void reposicionarJogador(Jogador jogadorAtual, int x, int y) {
+		Casa destino = tabuleiro.getCasa(x, y);
+		if (jogadorAtual != null && destino != null) {
+			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
+		}
+	}
+	
+
+
     public String getPosicaoAtualFormatada(Jogador jogadorAtual) {
         // acessa o jogador e a peça
         Casa atual = jogadorAtual.getPersonagem().getPosicaoAtual();
