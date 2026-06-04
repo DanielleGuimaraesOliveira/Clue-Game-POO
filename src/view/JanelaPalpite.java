@@ -76,6 +76,15 @@ public class JanelaPalpite extends JDialog {
 				} else {
 					lblResultado.setText("Carta mostrada: " + resultado);
 				}
+				
+				comboSuspeito.setEnabled(false);
+				comboArma.setEnabled(false);
+				comboComodo.setEnabled(false);
+				
+		        btnResolver.setEnabled(false);
+
+
+		        btnSair.setEnabled(true);
 			}
 		});
 
