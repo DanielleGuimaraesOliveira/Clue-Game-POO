@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -151,7 +152,12 @@ public class JanelaJogo extends JFrame implements Observador {
         btnSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Botão salvar clicado!");
+                try {
+					controlador.salvarPartida("src/salvamentos/jogo_anterior");
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
             }
         });
 
