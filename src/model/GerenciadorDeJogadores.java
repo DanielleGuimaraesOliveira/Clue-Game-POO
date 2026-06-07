@@ -1,6 +1,8 @@
 package model;
 import java.util.*;
 
+import Interfaces.ICarta;
+
 public class GerenciadorDeJogadores {
     private List<Jogador> jogadores;
     private Jogador jogadorAtual;
@@ -55,6 +57,15 @@ public class GerenciadorDeJogadores {
 			}
 		}
 		return null;
+	}
+	
+	public List<ICarta> getCartasJogadorAtual() {
+
+	    if (jogadorAtual == null) {
+	        return new ArrayList<>();
+	    }
+
+	    return jogadorAtual.getMao();
 	}
 
     // get e set
