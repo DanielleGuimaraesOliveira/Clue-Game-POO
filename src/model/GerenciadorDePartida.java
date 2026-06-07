@@ -333,6 +333,14 @@ public class GerenciadorDePartida {
     public int getValorDados() {
         return valorDados;
     }
+    
+    public List<ICarta> getCartasJogadorAtual() {
+        return gerJogadores.getCartasJogadorAtual();
+    }
+
+    public String getIdentificadorVisual(ICarta carta) {
+        return gerCartas.getIdentificadorVisual(carta);
+    }
 
     public int getUltimoDado1() {
         return ultimoDado1;
