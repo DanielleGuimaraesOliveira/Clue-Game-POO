@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Interfaces.ICarta;
 import Interfaces.ICasa;
 import Interfaces.IJogador;
 import model.GerenciadorDePartida;
@@ -128,4 +129,15 @@ public class ControladorPartida {
     public void garantirBlocoParaJogadorAtual() {
         gerenciador.garantirBlocoParaJogadorAtual();
     }
+    
+    public List<ICarta> getCartasJogadorAtual() {
+        return gerenciador.getCartasJogadorAtual();
+    }
+    
+    public String getIdentificadorVisual(ICarta carta) {
+        return gerenciador.getIdentificadorVisual(carta);
+    }
+    
+    
 }
+
