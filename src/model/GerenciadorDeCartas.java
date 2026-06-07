@@ -21,31 +21,34 @@ public class GerenciadorDeCartas {
     }
 
     private void inicializarIdentificadoresVisuais() {
-        identificadoresVisuais.put("Sr. Verde", "sr_verde");
-        identificadoresVisuais.put("Srta. Scarlet", "srta_scarlet");
-        identificadoresVisuais.put("Coronel Mustard", "coronel_mustard");
-        identificadoresVisuais.put("Professor Plum", "professor_plum");
-        identificadoresVisuais.put("Sra. Peacock", "sra_peacock");
-        identificadoresVisuais.put("Sra. White", "sra_white");
 
-        identificadoresVisuais.put("Corda", "corda");
-        identificadoresVisuais.put("Cano de Chumbo", "cano_de_chumbo");
-        identificadoresVisuais.put("Faca", "faca");
-        identificadoresVisuais.put("Chave Inglesa", "chave_inglesa");
-        identificadoresVisuais.put("Castiçal", "castical");
-        identificadoresVisuais.put("Revólver", "revolver");
+        // SUSPEITOS
+        identificadoresVisuais.put("Sr. Verde", "/assets/img/Suspeitos/Green.jpg");
+        identificadoresVisuais.put("Srta. Scarlet", "/assets/img/Suspeitos/Scarlet.jpg");
+        identificadoresVisuais.put("Coronel Mustard", "/assets/img/Suspeitos/Mustard.jpg");
+        identificadoresVisuais.put("Professor Plum", "/assets/img/Suspeitos/Plum.jpg");
+        identificadoresVisuais.put("Sra. Peacock", "/assets/img/Suspeitos/Peacock.jpg");
+        identificadoresVisuais.put("Sra. White", "/assets/img/Suspeitos/White.jpg");
 
-        identificadoresVisuais.put("Cozinha", "cozinha");
-        identificadoresVisuais.put("Salão de Baile", "salao_baile");
-        identificadoresVisuais.put("Sala de Jantar", "sala_jantar");
-        identificadoresVisuais.put("Escritório", "escritorio");
-        identificadoresVisuais.put("Biblioteca", "biblioteca");
-        identificadoresVisuais.put("Sala de Estar", "sala_estar");
-        identificadoresVisuais.put("Jardim de Inverno", "jardim_inverno");
-        identificadoresVisuais.put("Hall", "hall");
-        identificadoresVisuais.put("Sala de Música", "sala_musica");
+        // ARMAS
+        identificadoresVisuais.put("Corda", "/assets/img/Armas/Corda.jpg");
+        identificadoresVisuais.put("Cano de Chumbo", "/assets/img/Armas/Cano.jpg");
+        identificadoresVisuais.put("Faca", "/assets/img/Armas/Faca.jpg");
+        identificadoresVisuais.put("Chave Inglesa", "/assets/img/Armas/ChaveInglesa.jpg");
+        identificadoresVisuais.put("Castiçal", "/assets/img/Armas/Castical.jpg");
+        identificadoresVisuais.put("Revólver", "/assets/img/Armas/Revolver.jpg");
+
+        // CÔMODOS
+        identificadoresVisuais.put("Biblioteca", "/assets/img/Comodos/Biblioteca.jpg");
+        identificadoresVisuais.put("Cozinha", "/assets/img/Comodos/Cozinha.jpg");
+        identificadoresVisuais.put("Entrada", "/assets/img/Comodos/Entrada.jpg");
+        identificadoresVisuais.put("Escritório", "/assets/img/Comodos/Escritorio.jpg");
+        identificadoresVisuais.put("Jardim de Inverno", "/assets/img/Comodos/JardimInverno.jpg");
+        identificadoresVisuais.put("Sala de Estar", "/assets/img/Comodos/SalaDeEstar.jpg");
+        identificadoresVisuais.put("Sala de Jantar", "/assets/img/Comodos/SalaDeJantar.jpg");
+        identificadoresVisuais.put("Salão de Música", "/assets/img/Comodos/SalaDeMusica.jpg");
+        identificadoresVisuais.put("Salão de Jogos", "/assets/img/Comodos/SalaoDeJogos.jpg");
     }
-
     private Envelope criaEnvelope() {
     	
     	Carta assassino = sorteaPorTipo(TipoCarta.SUSPEITO);
