@@ -71,10 +71,15 @@ public class JanelaJogo extends JFrame implements Observador {
         painel.setPreferredSize(new Dimension(250, 0));
         painel.setBackground(new Color(240, 240, 240));
         painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        painel.setLayout(new GridLayout(9, 1, 10, 10));
+        painel.setLayout(new javax.swing.BoxLayout(painel, javax.swing.BoxLayout.Y_AXIS ));
+        
+        painel.add(javax.swing.Box.createVerticalGlue());
+        Dimension tamanhoBotao = new Dimension(180, 40);
 
         lblTurno = new JLabel("Turno de: " + (controlador.getJogadorAtual() != null ? controlador.getJogadorAtual().getPersonagem().getNome() : "---"), SwingConstants.CENTER);
         lblTurno.setFont(new Font("Arial", Font.BOLD, 16));
+        lblTurno.setAlignmentX(CENTER_ALIGNMENT);
+        
         painel.add(lblTurno);
 
         Integer[] facesDados = {1, 2, 3, 4, 5, 6};
@@ -90,20 +95,42 @@ public class JanelaJogo extends JFrame implements Observador {
         painelTesteDados.add(comboDado2);
         painelTesteDados.add(checkModoTeste);
         painel.add(painelTesteDados);
-
+        
+ 
         lblImagemDado1 = new JLabel(carregarImagemDado(1), SwingConstants.CENTER);
         lblImagemDado2 = new JLabel(carregarImagemDado(1), SwingConstants.CENTER);
 
-        JPanel painelDadosLadoALado = new JPanel();
+        JPanel painelDadosLadoALado = new JPanel(new java.awt.FlowLayout( java.awt.FlowLayout.CENTER, 0, 0 ));
         painelDadosLadoALado.setBackground(new Color(240, 240, 240));
         painelDadosLadoALado.add(lblImagemDado1);
         painelDadosLadoALado.add(lblImagemDado2);
-        painel.add(painelDadosLadoALado);
+
 
         btnRolarDados = new JButton("🎲 Rolar Dados");
         lblTextoPassos = new JLabel("Aguardando rolagem...", SwingConstants.CENTER);
         lblTextoPassos.setFont(new Font("Arial", Font.ITALIC, 13));
+        
+        JPanel painelAreaDados = new JPanel();
+        painelAreaDados.setOpaque(false);
+        painelAreaDados.setLayout(new javax.swing.BoxLayout(painelAreaDados, javax.swing.BoxLayout.Y_AXIS ));
 
+        painelDadosLadoALado.setAlignmentX(CENTER_ALIGNMENT);
+        
+        btnRolarDados.setAlignmentX(CENTER_ALIGNMENT);
+        lblTextoPassos.setAlignmentX(CENTER_ALIGNMENT);
+
+        painelAreaDados.add(painelDadosLadoALado);
+        painelAreaDados.add(btnRolarDados);
+        painelAreaDados.add(javax.swing.Box.createVerticalStrut(4));
+        painelAreaDados.add(lblTextoPassos);
+        painelAreaDados.setAlignmentX(CENTER_ALIGNMENT);
+        
+        btnRolarDados.setPreferredSize(tamanhoBotao);
+        btnRolarDados.setMaximumSize(tamanhoBotao);
+        btnRolarDados.setAlignmentX(CENTER_ALIGNMENT);
+        
+        painel.add(painelAreaDados);
+        
         btnRolarDados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,14 +152,34 @@ public class JanelaJogo extends JFrame implements Observador {
             }
         });
 
-        painel.add(btnRolarDados);
-        painel.add(lblTextoPassos);
-
         JButton btnAcusacao = new JButton("Fazer Acusação Final");
         JButton btnSalvar = new JButton("Salvar Partida");
         JButton btnBloco = new JButton("Bloco de Anotações");
         JButton btnPassagem = new JButton("Usar Passagem Secreta");
+        JButton btnMostrarCartas = new JButton("Mostrar Cartas");
+        
+        painel.add(javax.swing.Box.createVerticalStrut(40));
+ 
+        btnSalvar.setPreferredSize(tamanhoBotao);
+        btnSalvar.setMaximumSize(tamanhoBotao);
+        btnSalvar.setAlignmentX(CENTER_ALIGNMENT);
 
+        btnBloco.setPreferredSize(tamanhoBotao);
+        btnBloco.setMaximumSize(tamanhoBotao);
+        btnBloco.setAlignmentX(CENTER_ALIGNMENT);
+        
+        btnPassagem.setPreferredSize(tamanhoBotao);
+        btnPassagem.setMaximumSize(tamanhoBotao);
+        btnPassagem.setAlignmentX(CENTER_ALIGNMENT);
+        
+        btnAcusacao.setPreferredSize(tamanhoBotao);
+        btnAcusacao.setMaximumSize(tamanhoBotao);
+        btnAcusacao.setAlignmentX(CENTER_ALIGNMENT);
+        
+        btnMostrarCartas.setPreferredSize(tamanhoBotao);
+        btnMostrarCartas.setMaximumSize(tamanhoBotao);
+        btnMostrarCartas.setAlignmentX(CENTER_ALIGNMENT);
+        
         btnPassagem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -168,12 +215,25 @@ public class JanelaJogo extends JFrame implements Observador {
                 bloco.setVisible(true);
             }
         });
+        
+        btnMostrarCartas.addActionListener(
+        	    new ActionListener() {
+        	        @Override
+        	        public void actionPerformed(ActionEvent e) {
+        	            JanelaCartas janelaCarta = new JanelaCartas( JanelaJogo.this, controlador);
+        	            janelaCarta.setVisible(true);
+        	        }
+        	    }
+        	);
 
         painel.add(btnAcusacao);
         painel.add(btnSalvar);
         painel.add(btnBloco);
         painel.add(btnPassagem);
+        painel.add(btnMostrarCartas);
 
+        painel.add(javax.swing.Box.createVerticalGlue());
+        
         return painel;
     }
 
@@ -186,7 +246,7 @@ public class JanelaJogo extends JFrame implements Observador {
     private ImageIcon carregarImagemDado(int valorFace) {
         try {
             Image img = ImageIO.read(getClass().getResource("/assets/img/Dados/dado" + valorFace + ".jpg"));
-            Image imgRedimensionada = img.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+            Image imgRedimensionada = img.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
             return new ImageIcon(imgRedimensionada);
         } catch (Exception e) {
             System.out.println("Erro ao carregar a imagem: /assets/img/Dados/dado" + valorFace + ".jpg");
