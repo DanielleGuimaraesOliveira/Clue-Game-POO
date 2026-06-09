@@ -26,7 +26,7 @@ import controller.ControladorPartida;
 
 public class JanelaJogo extends JFrame implements Observador {
     private final ControladorPartida controlador;
-    private PainelDeFundo painelTabuleiro;
+    private PainelTabuleiro painelTabuleiro;
 
     private JLabel lblTurno;
     private JLabel lblImagemDado1;
@@ -55,7 +55,7 @@ public class JanelaJogo extends JFrame implements Observador {
             System.out.println("Erro ao carregar imagem do tabuleiro");
         }
 
-        painelTabuleiro = new PainelDeFundo(imagemMapa, controlador, this);
+        painelTabuleiro = new PainelTabuleiro(imagemMapa, controlador, this);
         controlador.registrarObservador(painelTabuleiro);
 
         add(painelTabuleiro, BorderLayout.CENTER);

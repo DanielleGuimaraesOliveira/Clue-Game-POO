@@ -50,7 +50,7 @@ public class JanelaPersonagens extends JFrame {
             );
         }
 
-        PainelDeFundo painel = new PainelDeFundo(img);
+        ImagemDeFundo painel = new ImagemDeFundo(img);
         painel.setLayout(null);
 
         personagens = new LinkedHashMap<>();
@@ -71,7 +71,7 @@ public class JanelaPersonagens extends JFrame {
         add(painel, BorderLayout.CENTER);
     }
 
-    private void adicionarCheckBox(PainelDeFundo painel, String nome, int x, int y ) {
+    private void adicionarCheckBox(ImagemDeFundo painel, String nome, int x, int y ) {
         JCheckBox check = new JCheckBox(nome);
 
         check.setBounds(x, y, 140, 25);

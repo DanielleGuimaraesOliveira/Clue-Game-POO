@@ -51,7 +51,7 @@ class JanelaInicial extends JFrame {
             );
         }
 
-        PainelDeFundo painelPrincipal = new PainelDeFundo(img);
+        ImagemDeFundo painelPrincipal = new ImagemDeFundo(img);
 
         painelPrincipal.setLayout(null);
 
