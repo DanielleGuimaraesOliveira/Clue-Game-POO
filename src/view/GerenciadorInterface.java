@@ -23,19 +23,30 @@ public class GerenciadorInterface {
         });
 
         inicial.setAcaoContinuar(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // se não houver jogadores, inicializa partida via controlador
-                if (controlador.getJogadores().isEmpty()) {
-                    controlador.adicionarJogador("Dani", "Miss Scarlet");
-                    controlador.adicionarJogador("Judy", "Coronel Mustard");
-                    controlador.iniciarPartida();
-                }
-                JanelaJogo jogo = new JanelaJogo(controlador);
-                jogo.setVisible(true);
+                try {
 
-                inicial.dispose();
+                    controlador.carregarPartida("src/salvamentos/jogo_anterior");
+
+                    JanelaJogo jogo =
+                        new JanelaJogo(controlador);
+
+                    jogo.setVisible(true);
+
+                    inicial.dispose();
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+
+                    javax.swing.JOptionPane.showMessageDialog(
+                        null,
+                        "Erro ao carregar partida!"
+                    );
+                }
             }
         });
 
