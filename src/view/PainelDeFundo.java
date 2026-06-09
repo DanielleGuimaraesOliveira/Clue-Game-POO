@@ -95,6 +95,27 @@ public class PainelDeFundo extends JPanel implements Observador {
     }
     
 
+	private java.awt.Color getCorJogador(String nome) {
+
+	    Map<String, java.awt.Color> cores = new HashMap<>();
+
+	    cores.put("Srta. Scarlet", java.awt.Color.RED);
+	    cores.put("Coronel Mustard", java.awt.Color.YELLOW);
+	    cores.put("Sra. White", java.awt.Color.WHITE);
+	    cores.put("Rev. Green", java.awt.Color.GREEN);
+	    cores.put("Sra. Peacock", java.awt.Color.BLUE);
+
+	    cores.put(
+	        "Prof. Plum",
+	        new java.awt.Color(128, 0, 128)
+	    );
+
+	    return cores.getOrDefault(
+	        nome,
+	        java.awt.Color.BLACK
+	    );
+	}
+	
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -165,11 +186,11 @@ public class PainelDeFundo extends JPanel implements Observador {
                     
                     // DESENHANDO A PEÇA
                     // trocar isso pelo g2d.drawImage(imagemPiao, ...))
-					if (j.getPersonagem().getNome().equals("Srta. Scarlet")) {
-                        g2d.setColor(java.awt.Color.RED);
-                    } else {
-                        g2d.setColor(java.awt.Color.YELLOW); // Coronel Mustard
-                    }
+                    g2d.setColor(
+                    	    getCorJogador(
+                    	        j.getPersonagem().getNome()
+                    	    )
+                    	);
                     
                     // Desenha o círculo preenchido perfeitamente centralizado
                     g2d.fillOval(xFinal, yFinal, tamanhoPiao, tamanhoPiao);
