@@ -165,7 +165,7 @@ public class PainelDeFundo extends JPanel implements Observador {
                     
                     // DESENHANDO A PEÇA
                     // trocar isso pelo g2d.drawImage(imagemPiao, ...))
-					if (j.getPersonagem().getNome().equals("Miss Scarlet")) {
+					if (j.getPersonagem().getNome().equals("Srta. Scarlet")) {
                         g2d.setColor(java.awt.Color.RED);
                     } else {
                         g2d.setColor(java.awt.Color.YELLOW); // Coronel Mustard

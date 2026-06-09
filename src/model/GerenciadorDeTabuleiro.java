@@ -7,28 +7,49 @@ public class GerenciadorDeTabuleiro {
     public void iniciarTabuleiro() {
         tabuleiro = new Tabuleiro();
     }
-
     public void posicionarPecas(List<Jogador> jogadores) {
-    	for (Jogador j : jogadores) {
-    		boolean posicionado = false;
-    		
-    		// O algoritmo varre o tabuleiro procurando um lugar seguro para nascer
-            for (int y = 0; y < 25 && !posicionado; y++) {
-                for (int x = 0; x < 24 && !posicionado; x++) {
-                    
-                    Casa casaTeste = tabuleiro.getCasa(x, y);
-                    
-                    // Se a casa existe, é um corredor ("1") e ninguém pisou nela ainda:
-                    if (casaTeste != null && casaTeste.getTipo().equals("1") && !casaTeste.estaOcupada()) {
-                        
-                        // Posiciona a peça!
-                        tabuleiro.moverPeca(j.getPersonagem(), casaTeste);
-                        posicionado = true; // Para o loop e vai para o próximo jogador
-                        
-                    }
-                }
+
+        for (Jogador j : jogadores) {
+
+            String nome = j.getPersonagem().getNome();
+
+            Casa destino = null;
+
+            switch (nome) {
+
+                case "Srta. Scarlet":
+                    destino = tabuleiro.getCasa(7, 24);
+                    break;
+
+                case "Coronel Mustard":
+                    destino = tabuleiro.getCasa(0, 17);
+                    break;
+
+                case "Sra. White":
+                    destino = tabuleiro.getCasa(9, 0);
+                    break;
+
+                case "Rev. Green":
+                    destino = tabuleiro.getCasa(14, 0);
+                    break;
+
+                case "Sra. Peacock":
+                    destino = tabuleiro.getCasa(23, 6);
+                    break;
+
+                case "Prof. Plum":
+                    destino = tabuleiro.getCasa(23, 19);
+                    break;
             }
-    	}
+
+            if (destino != null) {
+
+                tabuleiro.moverPeca(
+                    j.getPersonagem(),
+                    destino
+                );
+            }
+        }
     }
 
     public List<Casa> mapearCasas(Jogador jogadorAtual, int passos) {
