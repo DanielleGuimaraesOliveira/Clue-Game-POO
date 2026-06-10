@@ -42,7 +42,7 @@ public class JanelaJogo extends JFrame implements Observador {
         this.controlador = controlador;
 
         setTitle("Clue Tabuleiro | Dani e Judy");
-        setSize(1200, 800);
+        setSize(860, 665);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 

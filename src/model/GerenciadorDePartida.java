@@ -142,20 +142,43 @@ public class GerenciadorDePartida {
     /*______________________________________________________*/
     
     // método chamado pela interface gráfica
-    public boolean processaClickTela(int xLogico, int yLogico, int valorDados) {
-        
-        int status = gerTabuleiro.processaClickTelaInterno(gerJogadores.getJogadorAtual(), xLogico, yLogico, valorDados);
-        
+ // método chamado pela interface gráfica
+    public int processaClickTela(
+        int xLogico,
+        int yLogico,
+        int valorDados
+    ) {
+
+        int status =
+            gerTabuleiro.processaClickTelaInterno(
+                gerJogadores.getJogadorAtual(),
+                xLogico,
+                yLogico,
+                valorDados
+            );
+
         if (status == 1) {
-	        notificarObservadores();
-            return true; // Entrou no cômodo
-        } else if (status == 2) {
-            proximoTurno(); // Moveu no corredor, gerencia o turno aqui!
-            System.out.println("turno muda para: " + gerJogadores.getJogadorAtual().getPersonagem().getNome() + " Debug: gerenciadorPartida l:233");
-            return false;
+
+            notificarObservadores();
+
+            return 1; // entrou no cômodo
         }
-        
-    	return false; // click inválido
+
+        else if (status == 2) {
+
+            proximoTurno();
+
+            System.out.println(
+                "turno muda para: " +
+                gerJogadores.getJogadorAtual()
+                    .getPersonagem()
+                    .getNome()
+            );
+
+            return 2; // moveu normal
+        }
+
+        return 0; // inválido
     }
     
     // Passagem secreta

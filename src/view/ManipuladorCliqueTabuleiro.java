@@ -26,17 +26,23 @@ import controller.ControladorPartida;
     @Override
     public void mouseClicked(MouseEvent e) {
 
-        int larguraCasa =
-            painel.getWidth() / 24;
+        int OFFSET_X = 14;
+        int OFFSET_Y = 12;
 
-        int alturaCasa =
-            painel.getHeight() / 25;
+        int TAMANHO_CASA = 24;
 
         int xLogico =
-            e.getX() / larguraCasa;
+            (e.getX() - OFFSET_X) / TAMANHO_CASA;
 
         int yLogico =
-            e.getY() / alturaCasa;
+            (e.getY() - OFFSET_Y) / TAMANHO_CASA;
+
+        System.out.println(
+            "CLICK -> pixel(" +
+            e.getX() + "," + e.getY() +
+            ") lógico(" +
+            xLogico + "," + yLogico + ")"
+        );
 
         int valorDados =
             controlador.getValorDados();
@@ -50,10 +56,7 @@ import controller.ControladorPartida;
             return;
         }
 
-        IJogador jogadorAntes =
-            controlador.getJogadorAtual();
-
-        boolean entrouComodo =
+        int resultado =
             controlador.processaClickTela(
                 xLogico,
                 yLogico,
@@ -62,7 +65,7 @@ import controller.ControladorPartida;
 
         painel.repaint();
 
-        if (entrouComodo) {
+        if (resultado == 1) {
 
             JanelaPalpite popup =
                 new JanelaPalpite(
@@ -75,22 +78,18 @@ import controller.ControladorPartida;
             janelaPai.resetaDadosEPassaTurno();
 
             painel.repaint();
+        }
 
-        } else {
+        else if (resultado == 2) {
 
-            IJogador jogadorDepois =
-                controlador.getJogadorAtual();
+            janelaPai.resetaDadosEPassaTurno();
+        }
 
-            if (jogadorAntes != jogadorDepois) {
+        else {
 
-                janelaPai.resetaDadosEPassaTurno();
-
-            } else {
-
-                System.out.println(
-                    "Casa inválida!"
-                );
-            }
+            System.out.println(
+                "Casa inválida."
+            );
         }
     }
-}
+ }

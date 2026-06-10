@@ -52,7 +52,7 @@ public class ControladorPartida {
         gerenciador.proximoTurno();
     }
 
-    public boolean processaClickTela(int xLogico, int yLogico, int valorDados) {
+    public int processaClickTela(int xLogico, int yLogico, int valorDados) {
         return gerenciador.processaClickTela(xLogico, yLogico, valorDados);
     }
 
