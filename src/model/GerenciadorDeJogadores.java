@@ -1,6 +1,8 @@
 package model;
 import java.util.*;
 
+import Interfaces.ICarta;
+
 public class GerenciadorDeJogadores {
     private List<Jogador> jogadores;
     private Jogador jogadorAtual;
@@ -41,6 +43,30 @@ public class GerenciadorDeJogadores {
     	int index = jogadores.indexOf(jogadorAtual);
     	jogadorAtual = jogadores.get((index + 1) % jogadores.size());
     }
+
+	public void definirJogadorAtual(Jogador jogador) {
+		if (jogadores.contains(jogador)) {
+			this.jogadorAtual = jogador;
+		}
+	}
+
+	public Jogador buscarJogadorPorNome(String nome) {
+		for (Jogador jogador : jogadores) {
+			if (jogador.getPersonagem().getNome().equals(nome)) {
+				return jogador;
+			}
+		}
+		return null;
+	}
+	
+	public List<ICarta> getCartasJogadorAtual() {
+
+	    if (jogadorAtual == null) {
+	        return new ArrayList<>();
+	    }
+
+	    return jogadorAtual.getMao();
+	}
 
     // get e set
     public Jogador getJogadorAtual() {

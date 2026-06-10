@@ -9,7 +9,7 @@ public class TabuleiroTest {
 
     @Test
     public void deveRetornarCasasValidas() {
-        Tabuleiro tabuleiro = new Tabuleiro(5, 5);
+        Tabuleiro tabuleiro = new Tabuleiro();
         Casa origem = tabuleiro.getCasa(2, 2);
 
         List<Casa> casas = tabuleiro.calculaCaminhosValidos(origem, 2);
@@ -21,7 +21,7 @@ public class TabuleiroTest {
     
     @Test
     public void deveRespeitarNumeroDePassos() {
-        Tabuleiro tabuleiro = new Tabuleiro(5, 5);
+        Tabuleiro tabuleiro = new Tabuleiro();
         Casa origem = tabuleiro.getCasa(2, 2);
 
         List<Casa> casas = tabuleiro.calculaCaminhosValidos(origem, 1);
@@ -32,7 +32,7 @@ public class TabuleiroTest {
 
     @Test
     public void naoDevePassarPorCasaOcupada() {
-        Tabuleiro tabuleiro = new Tabuleiro(5, 5);
+        Tabuleiro tabuleiro = new Tabuleiro();
         Casa origem = tabuleiro.getCasa(2, 2);
 
         Casa bloqueada = tabuleiro.getCasa(2, 3);
@@ -46,7 +46,7 @@ public class TabuleiroTest {
 
     @Test
     public void deveMoverPecaCorretamente() {
-        Tabuleiro tabuleiro = new Tabuleiro(5, 5);
+        Tabuleiro tabuleiro = new Tabuleiro();
 
         PecaSuspeito peca = new PecaSuspeito("Teste");
 
@@ -64,7 +64,7 @@ public class TabuleiroTest {
 
     @Test
     public void origemPermaneceSeNaoMover() {
-        Tabuleiro tabuleiro = new Tabuleiro(5, 5);
+        Tabuleiro tabuleiro = new Tabuleiro();
 
         Casa origem = tabuleiro.getCasa(2, 2);
 

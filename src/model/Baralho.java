@@ -17,9 +17,9 @@ class Baralho {
 		adicionaCartas(new String[]{"Corda", "Cano de Chumbo", "Faca",
 	            "Chave Inglesa", "Castiçal", "Revólver"}, TipoCarta.ARMA);
 		
-		adicionaCartas(new String[]{"Cozinha", "Salão de Baile", "Sala de Jantar",
+		adicionaCartas(new String[]{"Cozinha", "Salão de Música", "Sala de Jantar",
 	            "Escritório", "Biblioteca", "Sala de Estar",
-	            "Jardim de Inverno", "Hall", "Sala de Música"}, TipoCarta.COMODO);
+	            "Jardim de Inverno", "Entrada", "Salão de Jogos"}, TipoCarta.COMODO);
 	}
 	
 	private void adicionaCartas(String[] nomes, TipoCarta tipo) {

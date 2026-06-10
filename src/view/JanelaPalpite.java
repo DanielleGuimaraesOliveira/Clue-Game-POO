@@ -1,49 +1,114 @@
 package view;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import model.GerenciadorDePartida;
 
-/*
-	JDialog é uma "janela-filha" que pode travar a tela de trás (comportamento Modal) 
-	para o jogador não conseguir clicar em mais nada no tabuleiro até terminar o palpite.
- */
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import controller.ControladorPartida;
 
 public class JanelaPalpite extends JDialog {
-	
-	public JanelaPalpite (JFrame janelaPai) {
-		// O "true" no final significa que ela é MODAL (bloqueia o clique no tabuleiro)
-        super(janelaPai, "Fazer Palpite", true);
-        
-        setSize(400, 200);
-        setLocationRelativeTo(janelaPai); // Nasce bem no meio do tabuleiro
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 50));
-        
-        JLabel lblMensagem = new JLabel("Você entrou no cômodo! Prepare seu palpite.");
-        JButton btnSair = new JButton("Sair (Passar Turno)");
-        
-        // Ação do botão (usando Classe Anônima, sem Lambda!)
-        btnSair.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // futuramente aqui pegará a Arma e Suspeito escolhidos...
-                
-                // passa a vez para o próximo jogador
-                GerenciadorDePartida.getInstance().proximoTurno();
-                System.out.println("Agora é a vez de: " + GerenciadorDePartida.getInstance().getJogadorAtual().getPersonagem().getNome());
-                
-                // destrói essa janelinha e volta pro tabuleiro
-                dispose(); 
-            }
-        });
-        
-        add(lblMensagem);
-        add(btnSair);
-        
+
+	private boolean palpiteResolvido;
+
+	public JanelaPalpite(JFrame janelaPai, ControladorPartida controlador) {
+		super(janelaPai, "Fazer Palpite", true);
+
+		setSize(520, 240);
+		setLocationRelativeTo(janelaPai);
+		setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+		String[] suspeitos = {
+			"Sr. Verde",
+			"Srta. Scarlet",
+			"Coronel Mustard",
+			"Professor Plum",
+			"Sra. Peacock",
+			"Sra. White"
+		};
+
+		String[] armas = {
+			"Corda",
+			"Cano de Chumbo",
+			"Faca",
+			"Chave Inglesa",
+			"Castiçal",
+			"Revólver"
+		};
+
+		String[] comodos = {
+			"Cozinha",
+			"Salão de Baile",
+			"Sala de Jantar",
+			"Escritório",
+			"Biblioteca",
+			"Sala de Estar",
+			"Jardim de Inverno",
+			"Hall",
+			"Sala de Música"
+		};
+
+		JComboBox<String> comboSuspeito = new JComboBox<>(suspeitos);
+		JComboBox<String> comboArma = new JComboBox<>(armas);
+		JComboBox<String> comboComodo = new JComboBox<>(comodos);
+
+		JLabel lblResultado = new JLabel("Escolha uma combinação e confirme o palpite.");
+		JButton btnResolver = new JButton("Verificar Palpite");
+		JButton btnSair = new JButton("Sair e Passar Turno");
+
+		btnResolver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String resultado = controlador.realizarPalpite(
+					(String) comboSuspeito.getSelectedItem(),
+					(String) comboArma.getSelectedItem(),
+					(String) comboComodo.getSelectedItem()
+				);
+
+				if (resultado == null) {
+					lblResultado.setText("Nenhum jogador mostrou carta.");
+				} else {
+					lblResultado.setText("Carta mostrada: " + resultado);
+				}
+				
+				comboSuspeito.setEnabled(false);
+				comboArma.setEnabled(false);
+				comboComodo.setEnabled(false);
+				
+		        btnResolver.setEnabled(false);
+
+
+		        btnSair.setEnabled(true);
+			}
+		});
+
+		btnSair.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controlador.proximoTurno();
+				palpiteResolvido = true;
+				dispose();
+			}
+		});
+
+		add(new JLabel("Suspeito:"));
+		add(comboSuspeito);
+		add(new JLabel("Arma:"));
+		add(comboArma);
+		add(new JLabel("Cômodo:"));
+		add(comboComodo);
+		add(lblResultado);
+		add(btnResolver);
+		add(btnSair);
+	}
+
+	public boolean isPalpiteResolvido() {
+		return palpiteResolvido;
 	}
 }

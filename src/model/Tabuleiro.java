@@ -117,7 +117,9 @@ class Tabuleiro {
 	}
 	
 	public Casa getCasa(int x, int y) {
-	    return grid[y][x];
+		// retorna null se estiver fora dos limites para evitar exceção
+		if (x < 0 || x >= largura || y < 0 || y >= altura) return null;
+		return grid[y][x];
 	}
 	
 	// mostrar o tabuleiro

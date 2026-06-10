@@ -1,5 +1,5 @@
 package model;
 
-enum TipoCarta {
+public enum TipoCarta {
 	SUSPEITO, ARMA, COMODO
 }

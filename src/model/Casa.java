@@ -1,6 +1,8 @@
 package model;
 
-public class Casa {
+import Interfaces.ICasa;
+
+class Casa implements ICasa {
 	
 	private int x;
 	private int y;

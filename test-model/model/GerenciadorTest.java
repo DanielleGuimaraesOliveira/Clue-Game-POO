@@ -12,8 +12,7 @@ public class GerenciadorTest {
     @Before
     public void setup() {
         jogo = GerenciadorDePartida.getInstance();
-        jogo.iniciarPartida();
-
+        jogo.reiniciarPartida();
         jogo.adicionarJogador("Ana", "Srta. Scarlet");
         jogo.adicionarJogador("João", "Verde");
 
@@ -29,9 +28,11 @@ public class GerenciadorTest {
 
     @Test
     public void deveLancarDadosEntre2e12() {
-        int valor = jogo.lancarDados();
+        int[] valores = jogo.lancarDados();
 
-        assertTrue(valor >= 2 && valor <= 12);
+        assertEquals(2, valores.length);
+        assertTrue(valores[0] >= 1 && valores[0] <= 6);
+        assertTrue(valores[1] >= 1 && valores[1] <= 6);
     }
 
     

@@ -18,4 +18,17 @@ class Envelope {
 				this.arma.getNome().equals(arma.getNome()) &&
 				this.local.getNome().equals(local.getNome());
 	}
+
+	
+	public Carta getAssassino() {
+		return assassino;
+	}
+
+	public Carta getArma() {
+		return arma;
+	}
+
+	public Carta getLocal() {
+		return local;
+	}
 }

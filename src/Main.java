@@ -2,6 +2,7 @@ import javax.swing.SwingUtilities;
 
 import model.GerenciadorDePartida;
 import view.GerenciadorInterface;
+import controller.ControladorPartida;
 
 
 class Main {
@@ -14,7 +15,8 @@ class Main {
 	            @Override
 	            public void run() {
 
-	                GerenciadorInterface.iniciar(gerenciadorPartida);
+					ControladorPartida controlador = new ControladorPartida(gerenciadorPartida);
+					GerenciadorInterface.iniciar(controlador);
 
 	            }
 	        });

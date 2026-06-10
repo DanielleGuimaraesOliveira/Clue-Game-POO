@@ -1,5 +1,4 @@
 package model;
-import java.util.*;
 
 abstract class Peca {
 	private String nome;

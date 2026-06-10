@@ -3,20 +3,19 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import model.GerenciadorDePartida;
+import controller.ControladorPartida;
 
 
 public class GerenciadorInterface {
 
-    public static void iniciar(GerenciadorDePartida gerenciadorPartida) {
+    public static void iniciar(ControladorPartida controlador) {
 
         JanelaInicial inicial = new JanelaInicial();
 
         inicial.setAcaoNovoJogo(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                JanelaPersonagens personagens = new JanelaPersonagens(gerenciadorPartida);
+                JanelaPersonagens personagens = new JanelaPersonagens(controlador);
                 personagens.setVisible(true);
 
                 inicial.dispose();
@@ -24,13 +23,30 @@ public class GerenciadorInterface {
         });
 
         inicial.setAcaoContinuar(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JanelaJogo jogo = new JanelaJogo(gerenciadorPartida);
-                jogo.setVisible(true);
+                try {
 
-                inicial.dispose();
+                    controlador.carregarPartida("src/salvamentos/jogo_anterior");
+
+                    JanelaJogo jogo =
+                        new JanelaJogo(controlador);
+
+                    jogo.setVisible(true);
+
+                    inicial.dispose();
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+
+                    javax.swing.JOptionPane.showMessageDialog(
+                        null,
+                        "Erro ao carregar partida!"
+                    );
+                }
             }
         });
 
