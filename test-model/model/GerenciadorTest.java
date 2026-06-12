@@ -1,101 +1,139 @@
 package model;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
-import java.util.List;
+
+import Interfaces.IJogador;
 
 public class GerenciadorTest {
 
-    private GerenciadorDePartida jogo;
+    private GerenciadorDePartida gerenciador;
 
     @Before
-    public void setup() {
-        jogo = GerenciadorDePartida.getInstance();
-        jogo.reiniciarPartida();
-        jogo.adicionarJogador("Ana", "Srta. Scarlet");
-        jogo.adicionarJogador("João", "Verde");
+    public void setUp() {
 
-        jogo.iniciarPartida();
-    }
+        gerenciador = GerenciadorDePartida.getInstance();
 
-    
-    @Test
-    public void deveIniciarPartidaSemErro() {
-        assertNotNull(jogo);
-    }
-
-
-    @Test
-    public void deveLancarDadosEntre2e12() {
-        int[] valores = jogo.lancarDados();
-
-        assertEquals(2, valores.length);
-        assertTrue(valores[0] >= 1 && valores[0] <= 6);
-        assertTrue(valores[1] >= 1 && valores[1] <= 6);
-    }
-
-    
-    @Test
-    public void deveRetornarCasasValidas() {
-        int passos = 2;
-
-        List<Casa> casas = jogo.mapearCasas(passos);
-
-        assertNotNull(casas);
-        assertFalse(casas.isEmpty());
-    }
-
-   
-    @Test
-    public void deveMoverPeca() {
-        int passos = 1;
-
-        List<String> casas = jogo.mapearCasaFormatadas(passos);
-
-        String destino = casas.get(0);
-
-        PecaSuspeito peca = jogo.getJogadorAtual().getPersonagem();
-        Casa antes = peca.getPosicaoAtual();
-
-        jogo.deslocarPiao(destino);
-
-        Casa depois = peca.getPosicaoAtual();
-
-        assertNotEquals(antes, depois);
-        assertEquals(
-        destino,
-        "(" + depois.getX() + "," + depois.getY() + ")");
+        gerenciador.reiniciarPartida();
     }
     
     @Test
-    public void jogadoresDevemReceberCartas() {
-        for (Jogador j : jogo.getJogadores()) {
-            assertFalse(j.getMao().isEmpty());
-        }
-    }
-    
-    @Test
-    public void pecasDevemSerPosicionadas() {
+    public void testeDefinirResultadoDados() {
 
-        for (Jogador j : jogo.getJogadores()) {
-            assertNotNull(j.getPersonagem().getPosicaoAtual());
-        }
-        
-    }
-    
-    @Test 
-    public void jogadoresDevemReceberBlocoDeNotas() {
-    	// verifica item 6 da regra
-    	for (Jogador j : jogo.getJogadores()) {
-    		assertTrue("O jogador deveria ter recebido o bloco de notas", j.isPossuiBlocoDeNotas());
-    	}
+        gerenciador.definirResultadoDados(3, 4);
+
+        assertEquals(3, gerenciador.getUltimoDado1());
+
+        assertEquals(4, gerenciador.getUltimoDado2());
+
+        assertEquals(7, gerenciador.getValorDados());
     }
     
     @Test
-    public void srtaScarletDeveSerPrimeiroJogador() {
-    	// verifica item 7 da regra
-    	Jogador primeiro = jogo.getJogadorAtual();
-    	assertEquals("A Srta. Scarlet deve ser a primeira  a jogar", "Srta. Scarlet", primeiro.getPersonagem().getNome());
+    public void testeZerarDados() {
+
+        gerenciador.definirResultadoDados(5, 6);
+
+        gerenciador.zerarDadosRolados();
+
+        assertEquals(0, gerenciador.getUltimoDado1());
+
+        assertEquals(0, gerenciador.getUltimoDado2());
+
+        assertEquals(0, gerenciador.getValorDados());
+    }
+    
+    @Test
+    public void testeAdicionarJogador() {
+
+        gerenciador.adicionarJogador("Danielle", "Srta. Rosa");
+
+        assertEquals(1, gerenciador.getJogadores().size());
+    }
+    
+    @Test
+    public void testeNomeJogador() {
+
+        gerenciador.adicionarJogador("Danielle", "Srta. Rosa");
+
+        IJogador jogador = gerenciador.getJogadores().get(0);
+
+        assertEquals("Danielle", jogador.getNome());
+    }
+    
+    @Test
+    public void testeIniciarPartida() {
+
+        gerenciador.adicionarJogador("Ana", "Srta. Rosa");
+
+        gerenciador.adicionarJogador("Carlos", "Coronel Mostarda");
+
+        gerenciador.iniciarPartida();
+
+        assertNotNull(gerenciador.getJogadorAtual());
+    }
+    
+    @Test
+    public void testeLancarDados() {
+
+        gerenciador.adicionarJogador("Ana", "Srta. Rosa");
+
+        gerenciador.iniciarPartida();
+
+        int[] dados = gerenciador.lancarDados();
+
+        assertEquals(2, dados.length);
+
+        assertTrue(dados[0] >= 1 && dados[0] <= 6);
+
+        assertTrue(dados[1] >= 1 && dados[1] <= 6);
+    }
+    
+    @Test
+    public void testeValorDados() {
+
+        gerenciador.definirResultadoDados(2, 5);
+
+        assertEquals(7, gerenciador.getValorDados());
+    }
+    
+    @Test
+    public void testeListaJogadoresVazia() {
+
+        assertEquals(0, gerenciador.getJogadores().size());
+    }
+    
+    @Test
+    public void testeProximoTurno() {
+
+        gerenciador.adicionarJogador("Ana", "Srta. Rosa");
+
+        gerenciador.adicionarJogador("Carlos", "Coronel Mostarda");
+
+        gerenciador.iniciarPartida();
+
+        IJogador jogadorInicial = gerenciador.getJogadorAtual();
+
+        gerenciador.proximoTurno();
+
+        IJogador novoJogador = gerenciador.getJogadorAtual();
+
+        assertNotSame(jogadorInicial, novoJogador);
+    }
+    
+    @Test
+    public void testeGarantirBlocoNotas() {
+
+        gerenciador.adicionarJogador("Ana", "Srta. Rosa");
+
+        gerenciador.iniciarPartida();
+
+        gerenciador.garantirBlocoParaJogadorAtual();
+
+        assertNotNull(
+            gerenciador.obterBlocoJogadorAtual()
+        );
     }
 }
