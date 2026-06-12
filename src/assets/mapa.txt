@@ -6,7 +6,7 @@ c	c	c	c	c	c	1	1	m	m	m	m	m	m	m	m	1	1	w	w	w	w	w	w
 c	c	c	c	c	c	1	p	m	m	m	m	m	m	m	m	p	1	p	w	w	w	w	0
 0	c	c	c	c	c	1	1	m	m	m	m	m	m	m	m	1	1	1	1	1	1	1	1
 1	1	1	1	p	1	1	1	m	m	m	m	m	m	m	m	1	1	1	1	1	1	1	0
-0	1	1	1	1	1	1	1	1	p	1	1	1	1	p	1	1	1	g	g	g	g	g	g
+0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	g	g	g	g	g	g
 j	j	j	j	j	1	1	1	1	1	1	1	1	1	1	1	1	p	g	g	g	g	g	g
 j	j	j	j	j	j	j	j	1	1	d	d	d	d	d	1	1	1	g	g	g	g	g	g
 j	j	j	j	j	j	j	j	1	1	d	d	d	d	d	1	1	1	g	g	g	g	g	g
@@ -15,7 +15,7 @@ j	j	j	j	j	j	j	j	1	1	d	d	d	d	d	1	1	1	1	1	p	1	p	0
 j	j	j	j	j	j	j	j	1	1	d	d	d	d	d	1	1	1	b	b	b	b	b	0
 j	j	j	j	j	j	j	j	1	1	d	d	d	d	d	1	1	b	b	b	b	b	b	b
 0	1	1	1	1	1	p	1	1	1	d	d	d	d	d	1	p	b	b	b	b	b	b	b
-1	1	1	1	1	1	1	1	1	1	1	p	p	1	1	1	1	b	b	b	b	b	b	b
+1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	b	b	b	b	b	b	b
 0	1	1	1	1	1	p	1	1	e	e	e	e	e	e	1	1	1	b	b	b	b	b	0
 l	l	l	l	l	l	l	1	1	e	e	e	e	e	e	1	1	1	1	1	1	1	1	1
 l	l	l	l	l	l	l	1	1	e	e	e	e	e	e	p	1	p	1	1	1	1	1	0
