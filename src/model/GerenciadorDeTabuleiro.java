@@ -1,7 +1,7 @@
 package model;
 import java.util.*;
 
-public class GerenciadorDeTabuleiro {
+class GerenciadorDeTabuleiro {
     private Tabuleiro tabuleiro;
 
     public void iniciarTabuleiro() {

@@ -3,7 +3,7 @@ import java.util.*;
 
 import Interfaces.ICarta;
 
-public class GerenciadorDeCartas {
+class GerenciadorDeCartas {
     private Envelope envelope;
     private Baralho baralho;
     private Random random = new Random();
