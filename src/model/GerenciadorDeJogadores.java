@@ -76,4 +76,5 @@ public class GerenciadorDeJogadores {
     public List<Jogador> getJogadores(){
     	return jogadores;
     }
+    
 }

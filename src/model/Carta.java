@@ -13,6 +13,19 @@ class Carta implements ICarta {
 		this.tipo = tipo;
 	}
 	
+	@Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Carta outra = (Carta) obj;
+        return this.getNome().equals(outra.getNome());
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(getNome());
+    }
+    
 	// get 
 	public String getNome() {
 		return nome;

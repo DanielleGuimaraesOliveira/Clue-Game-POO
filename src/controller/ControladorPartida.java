@@ -102,10 +102,14 @@ public class ControladorPartida {
         gerenciador.deslocarPiao(destino);
     }
 
-    public String realizarPalpite(String suspeito, String arma, String comodo) {
+    public ICarta realizarPalpite(String suspeito, String arma, String comodo) {
         return gerenciador.realizarPalpite(suspeito, arma, comodo);
     }
 
+    public String getComodoJogadorAtual() {
+    	return gerenciador.getComodoJogadorAtual();
+    }
+    
     public void salvarPartida(String caminhoArquivo) throws IOException {
         gerenciador.salvarPartida(caminhoArquivo);
     }

@@ -17,6 +17,10 @@ abstract class Peca {
 		return posicaoAtual;
 	}
 	
+	public String getComodoAtual() {
+		return posicaoAtual.getTipo();
+	}
+	
 	public void setPosicaoAtual(Casa posicao) {
 		this.posicaoAtual = posicao;
 	}

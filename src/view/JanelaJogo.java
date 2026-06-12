@@ -189,7 +189,8 @@ public class JanelaJogo extends JFrame implements Observador {
 
                 if (controlador.usaPassagemSecreta()) {
                     painelTabuleiro.repaint();
-                    JanelaPalpite popUp = new JanelaPalpite(JanelaJogo.this, controlador);
+               
+                    JanelaPalpite popUp = new JanelaPalpite(JanelaJogo.this, controlador, controlador.getComodoJogadorAtual());
                     popUp.setVisible(true);
                     resetaDadosEPassaTurno();
                 }
