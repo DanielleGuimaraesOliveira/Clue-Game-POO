@@ -111,8 +111,15 @@ public class GerenciadorDePartida {
 	    notificarObservadores();
     }
 
-    public String realizarPalpite(String suspeito, String arma, String comodo) {
-        return gerCartas.responderPalpite(gerJogadores.getJogadorAtual(), gerJogadores.getJogadores(), suspeito, arma, comodo);
+    public ICarta realizarPalpite(String suspeito, String arma, String comodo) {
+        // puxar o suspeito para o comodo
+    	gerTabuleiro.puxarSuspeitoParaComodo(suspeito, gerJogadores.getJogadorAtual(), gerJogadores.getJogadores());
+    	
+    	// notifica view - desenhar peao no outro comodo
+    	notificarObservadores();
+    	
+    	// roda a mesa para mostrar a carta palpitada
+    	return gerCartas.responderPalpite(gerJogadores.getJogadorAtual(), gerJogadores.getJogadores(), suspeito, arma, comodo);
     }
     
     public List<ICasa> mapearCasas(int passos) {
@@ -345,6 +352,11 @@ public class GerenciadorDePartida {
     // get e set
     public IJogador getJogadorAtual() {
     	return gerJogadores.getJogadorAtual();
+    }
+    
+    public String getComodoJogadorAtual() {
+    	Jogador jogador = gerJogadores.getJogadorAtual();
+    	return gerTabuleiro.getComodoAtual(jogador);
     }
     
     public List<IJogador> getJogadores(){

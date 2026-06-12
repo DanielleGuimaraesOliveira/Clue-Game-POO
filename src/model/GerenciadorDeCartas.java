@@ -95,6 +95,8 @@ public class GerenciadorDeCartas {
         }
 
         List<ICarta> palpite = Arrays.asList(suspeito, arma, comodo);
+        
+        // roda a mesa para a esquerda
         for (int offset = 1; offset < jogadores.size(); offset++) {
             Jogador candidato = jogadores.get((indiceAtual + offset) % jogadores.size());
             for (ICarta carta : palpite) {
@@ -108,13 +110,12 @@ public class GerenciadorDeCartas {
         return null;
     }
 
-    public String responderPalpite(Jogador jogadorAtual, List<Jogador> jogadores, String suspeito, String arma, String comodo) {
+    public ICarta responderPalpite(Jogador jogadorAtual, List<Jogador> jogadores, String suspeito, String arma, String comodo) {
         ICarta cartaSuspeito = new Carta(suspeito, TipoCarta.SUSPEITO);
         ICarta cartaArma = new Carta(arma, TipoCarta.ARMA);
         ICarta cartaComodo = new Carta(comodo, TipoCarta.COMODO);
 
-        ICarta revelada = responderPalpite(jogadorAtual, jogadores, cartaSuspeito, cartaArma, cartaComodo);
-        return revelada != null ? revelada.getNome() : null;
+        return responderPalpite(jogadorAtual, jogadores, cartaSuspeito, cartaArma, cartaComodo);
     }
 
     public boolean realizarAcusacao(ICarta suspeito, ICarta arma, ICarta comodo) {
@@ -146,13 +147,14 @@ public class GerenciadorDeCartas {
             envelope.getLocal().getNome()
         };
     }
-
+    
+    
     // retorna todos os nomes de cartas do jogo (suspeitos, armas, cômodos)
     public java.util.List<String> getTodosNomesCartas() {
         java.util.List<String> nomes = new java.util.ArrayList<>();
         nomes.addAll(Arrays.asList("Sr. Verde", "Srta. Scarlet", "Coronel Mustard", "Professor Plum", "Sra. Peacock", "Sra. White"));
         nomes.addAll(Arrays.asList("Corda", "Cano de Chumbo", "Faca", "Chave Inglesa", "Castiçal", "Revólver"));
-        nomes.addAll(Arrays.asList("Cozinha", "Salão de Baile", "Sala de Jantar", "Escritório", "Biblioteca", "Sala de Estar", "Jardim de Inverno", "Hall", "Sala de Música"));
+        nomes.addAll(Arrays.asList("Cozinha", "Salão de Jogos", "Sala de Jantar", "Escritório", "Biblioteca", "Sala de Estar", "Jardim de Inverno", "Hall", "Sala de Música"));
         return nomes;
     }
 }

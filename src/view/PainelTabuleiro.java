@@ -77,10 +77,7 @@ class PainelTabuleiro extends JPanel implements Observador {
 
         int valorDados = janelaPai.getValorSimuladoDados();
 
-        if (
-            valorDados <= 0 ||
-            controlador.getJogadorAtual() == null
-        ) {
+        if (valorDados <= 0 || controlador.getJogadorAtual() == null) {
             return;
         }
 
@@ -89,35 +86,31 @@ class PainelTabuleiro extends JPanel implements Observador {
 
         for (ICasa c : casas) {
 
-            int px =
-                OFFSET_X +
-                (c.getX() * TAMANHO_CASA);
+            int px = OFFSET_X + (c.getX() * TAMANHO_CASA);
 
-            int py =
-                OFFSET_Y +
-                (c.getY() * TAMANHO_CASA);
+            int py = OFFSET_Y + (c.getY() * TAMANHO_CASA);
 
-            g2d.setColor(
-                new java.awt.Color(0, 255, 0, 100)
-            );
+            boolean isComodo = !c.getTipo().equals("1")
+            		&& !c.getTipo().equals("p") 
+            		&& !c.getTipo().equals("0");
+            
+            if (isComodo) {
+            	// COR PARA CÔMODO: Verde mais escuro
+                g2d.setColor(new java.awt.Color(0, 100, 0, 150)); // Preenchimento escuro e transparente
+                g2d.fillRect(px, py, TAMANHO_CASA, TAMANHO_CASA);
 
-            g2d.fillRect(
-                px,
-                py,
-                TAMANHO_CASA,
-                TAMANHO_CASA
-            );
+                g2d.setColor(new java.awt.Color(0, 80, 0)); // Borda mais escura
+                g2d.drawRect(px, py, TAMANHO_CASA - 1, TAMANHO_CASA - 1);
+            }
+            else {
+            	// COR PARA CORREDOR/PORTA: Verde claro original
+            	g2d.setColor(new java.awt.Color(0, 255, 0, 100));
+            	g2d.fillRect(px, py, TAMANHO_CASA, TAMANHO_CASA);
 
-            g2d.setColor(
-                new java.awt.Color(0, 200, 0)
-            );
-
-            g2d.drawRect(
-                px,
-                py,
-                TAMANHO_CASA - 1,
-                TAMANHO_CASA - 1
-            );
+                g2d.setColor(new java.awt.Color(0, 200, 0));
+                g2d.drawRect(px, py, TAMANHO_CASA - 1, TAMANHO_CASA - 1);
+            }
+            
         }
     }
 

@@ -86,7 +86,7 @@ class Tabuleiro {
 	    }
 	    
 	    // 2) se parou na porta (entra no cômodo)
-	    if (atual.getTipo().equals("p")) {
+	    if (atual.getTipo().equalsIgnoreCase("p")) {
 	    	resultado.add(atual); // adiciona a porta como opção de click
 	    	//return;
 	    }
@@ -95,11 +95,24 @@ class Tabuleiro {
 
 	    for (Casa vizinho : getVizinhos(atual)) {
 
-	    	// além de não está ocupada, precisa ser caminhvel
-	        if (!visitadas.contains(vizinho) && !vizinho.estaOcupada() && vizinho.isCaminhavel()) {
-	        	
-	        	dfs(vizinho, passos - 1, visitadas, resultado);
-	        }
+	    	// Verificamos o básico: não voltar de onde viemos e não pisar em outro jogador
+            if (!visitadas.contains(vizinho) && !vizinho.estaOcupada()) {
+                
+                // SITUAÇÃO A: O vizinho é corredor ("1") ou porta ("p")
+                if (vizinho.isCaminhavel()) {
+                    // Continua a busca gastando 1 passo
+                    dfs(vizinho, passos - 1, visitadas, resultado);
+                } 
+                // SITUAÇÃO B: Eu estou na porta e o vizinho é a letra de um cômodo!
+                else if (atual.getTipo().equalsIgnoreCase("p") && !vizinho.getTipo().equals("0")) {
+                    // O vizinho não é parede ("0") nem caminhável, logo, é o interior do cômodo!
+                    // Adicionamos a primeira casa do cômodo como opção de clique.
+                    resultado.add(vizinho);
+                    
+                    // Entrar no cômodo encerra o movimento instantaneamente.
+                    // Por isso, NÃO chamamos o dfs() de novo a partir daqui.
+                }
+            }
 	    }
 
 	    visitadas.remove(atual);

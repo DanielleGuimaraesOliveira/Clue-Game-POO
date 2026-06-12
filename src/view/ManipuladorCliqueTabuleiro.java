@@ -66,11 +66,12 @@ import controller.ControladorPartida;
         painel.repaint();
 
         if (resultado == 1) {
-
+        	
             JanelaPalpite popup =
                 new JanelaPalpite(
                     janelaPai,
-                    controlador
+                    controlador,
+                    controlador.getComodoJogadorAtual()
                 );
 
             popup.setVisible(true);
