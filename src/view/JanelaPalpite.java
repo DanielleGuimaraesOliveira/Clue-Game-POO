@@ -32,10 +32,10 @@ public class JanelaPalpite extends JDialog {
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
 		String[] suspeitos = {
-			"Sr. Verde",
+			"Rev. Green",
 			"Srta. Scarlet",
 			"Coronel Mustard",
-			"Professor Plum",
+			"Prof. Plum",
 			"Sra. Peacock",
 			"Sra. White"
 		};

@@ -348,7 +348,7 @@ public class GerenciadorDeTabuleiro {
             
             // 2. Descobre a letra do cômodo onde o palpite está acontecendo
             String letraComodo = jogadorAtual.getPersonagem().getPosicaoAtual().getTipo();
-            
+           
             // 3. Procura uma cadeira vazia naquele cômodo
             Casa destino = encontraCasaLivre(letraComodo);
             
