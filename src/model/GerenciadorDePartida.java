@@ -250,7 +250,22 @@ public class GerenciadorDePartida {
                 propriedades.setProperty(chaveJogador(i, "mao." + j + ".nome"), carta.getNome());
                 propriedades.setProperty(chaveJogador(i, "mao." + j + ".tipo"), carta.getTipo().name());
             }
+            
+            Map<String, Boolean> marcas = jogador.getBlocoDeNotasInterno().getTodasMarcas();
+
+            propriedades.setProperty(chaveJogador(i, "bloco.qtd"), String.valueOf(marcas.size()));
+            
+            int indiceMarca = 0;
+            	
+            	for (Map.Entry<String, Boolean> entry : marcas.entrySet()) {
+            	    propriedades.setProperty(chaveJogador(i, "bloco." + indiceMarca + ".carta"), entry.getKey());
+            	    propriedades.setProperty(chaveJogador(i, "bloco." + indiceMarca + ".valor"), String.valueOf(entry.getValue()));
+
+            	    indiceMarca++;
+            	}
         }
+        
+        
 
         try (Writer writer = new BufferedWriter(new FileWriter(caminhoArquivo))) {
             propriedades.store(writer, "Partida salva");
@@ -296,6 +311,14 @@ public class GerenciadorDePartida {
             jogador.setPossuiBlocoDeNotas(Boolean.parseBoolean(propriedades.getProperty(chaveJogador(i, "blocoNotas"), "false")));
 
             int quantidadeCartas = Integer.parseInt(propriedades.getProperty(chaveJogador(i, "mao.qtd"), "0"));
+            int quantidadeMarcas = Integer.parseInt( propriedades.getProperty( chaveJogador(i, "bloco.qtd"),"0"));
+
+        	for (int j = 0; j < quantidadeMarcas; j++) {
+        	    String nomeCarta = propriedades.getProperty(chaveJogador(i, "bloco." + j + ".carta"),"");
+        	    boolean valor = Boolean.parseBoolean(propriedades.getProperty( chaveJogador(i, "bloco." + j + ".valor"), "false" ));
+        	    jogador.getBlocoDeNotasInterno().marcar(nomeCarta, valor);
+        	}
+            	
             for (int j = 0; j < quantidadeCartas; j++) {
                 String nomeCarta = propriedades.getProperty(chaveJogador(i, "mao." + j + ".nome"), "");
                 String tipoCarta = propriedades.getProperty(chaveJogador(i, "mao." + j + ".tipo"), TipoCarta.SUSPEITO.name());
