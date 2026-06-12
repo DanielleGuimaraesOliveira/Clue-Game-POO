@@ -3,7 +3,7 @@ import java.util.*;
 
 import Interfaces.ICarta;
 
-public class GerenciadorDeJogadores {
+class GerenciadorDeJogadores {
     private List<Jogador> jogadores;
     private Jogador jogadorAtual;
 
