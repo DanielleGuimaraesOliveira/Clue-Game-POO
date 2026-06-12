@@ -1,1 +1,13 @@
-/bin/
+# arquivos compilados
+*.class
+out/
+bin/
+target/
+
+# IDE files
+.classpath
+.project
+.settings/
+
+# libs baixadas manualmente
+lib/
