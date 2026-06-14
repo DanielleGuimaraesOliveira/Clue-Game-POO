@@ -8,6 +8,11 @@ CHECKSTYLE = lib/checkstyle.jar
 ASSETS = $(SRC_DIR)/assets
 TEST_FILES := $(shell find $(TEST_DIR) -name '*Test.java' | sed 's|$(TEST_DIR)/||' | sed 's|\.java$$||' | sed 's|/|.|g')
 
+setup:
+	cp .github/hooks/scripts/pre-push .git/hooks/pre-push
+	chmod +x .git/hooks/pre-push
+	@echo "Git Hooks instalados com sucesso!"
+
 check_format:
 	@-java -jar $(CHECKSTYLE) -c checkstyle.xml $(SRC_DIR)/
 	@-java -jar $(CHECKSTYLE) -c checkstyle.xml -f xml -o $(OUTPUT_DIR)/checkstyle-report.xml $(SRC_DIR)/
