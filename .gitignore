@@ -4,6 +4,9 @@ out/
 bin/
 target/
 
+# arquivos de configuração
+checkstyle.xml
+
 # IDE files
 .classpath
 .project
@@ -11,3 +14,4 @@ target/
 
 # libs baixadas manualmente
 lib/
+checkstyle.jar
