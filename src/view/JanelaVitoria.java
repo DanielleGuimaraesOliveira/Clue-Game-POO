@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controller.ControladorPartida;
+
 public class JanelaVitoria extends JDialog {
 
     public JanelaVitoria(
@@ -17,7 +19,8 @@ public class JanelaVitoria extends JDialog {
         String vencedor,
         String assassino,
         String arma,
-        String local
+        String local,
+        ControladorPartida controlador
     ) {
 
         super(janelaPai, "Fim de Jogo", true);
@@ -44,16 +47,27 @@ public class JanelaVitoria extends JDialog {
             "</center></html>",
             SwingConstants.CENTER
         );
+        
+        JButton btnNovaPartida = new JButton("Nova Partida");
+        JButton btnSair = new JButton("Sair");
+        
+        btnNovaPartida.addActionListener(e -> {
 
-        JButton btnFechar = new JButton("Encerrar Jogo");
+            dispose();
+            janelaPai.dispose();
 
-        btnFechar.addActionListener(e -> {
+            new JanelaPersonagens(controlador)
+                .setVisible(true);
+        });
+        
+        btnSair.addActionListener(e -> {
             dispose();
             System.exit(0);
         });
 
         JPanel painelBotao = new JPanel();
-        painelBotao.add(btnFechar);
+        painelBotao.add(btnSair);
+        painelBotao.add(btnNovaPartida);
 
         add(titulo, BorderLayout.NORTH);
         add(resultado, BorderLayout.CENTER);

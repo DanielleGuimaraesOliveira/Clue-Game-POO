@@ -130,7 +130,8 @@ public class JanelaAcusacao extends JDialog {
 						            controlador.getJogadorAtual().getNome(),
 						            solucao[0],
 						            solucao[1],
-						            solucao[2]
+						            solucao[2],
+						            controlador
 						        );
 
 						    janelaVitoria.setVisible(true);
