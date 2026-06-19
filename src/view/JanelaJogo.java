@@ -33,7 +33,7 @@ public class JanelaJogo extends JFrame implements Observador {
     private JLabel lblImagemDado2;
     private JButton btnRolarDados;
     private JLabel lblTextoPassos;
-
+    private JButton btnSalvar;
     private JComboBox<Integer> comboDado1;
     private JComboBox<Integer> comboDado2;
     private JCheckBox checkModoTeste;
@@ -45,6 +45,7 @@ public class JanelaJogo extends JFrame implements Observador {
         setSize(860, 665);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        btnSalvar = new JButton("Salvar Partida");
 
         controlador.registrarObservador(this);
 
@@ -130,13 +131,14 @@ public class JanelaJogo extends JFrame implements Observador {
         btnRolarDados.setAlignmentX(CENTER_ALIGNMENT);
         
         painel.add(painelAreaDados);
-        JButton btnSalvar = new JButton("Salvar Partida");
+        
         
         btnRolarDados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int d1;
                 int d2;
+                btnSalvar.setEnabled(false);
 
                 if (checkModoTeste.isSelected()) {
                     d1 = (Integer) comboDado1.getSelectedItem();
@@ -150,10 +152,9 @@ public class JanelaJogo extends JFrame implements Observador {
                 
                 atualizarDadosNaTela(d1, d2);
                 atualizaInterfaceNovoTurno();
-                btnSalvar.setEnabled(false);
             }
         });
-
+        
         JButton btnAcusacao = new JButton("Fazer Acusação Final");
         JButton btnBloco = new JButton("Bloco de Anotações");
         JButton btnPassagem = new JButton("Usar Passagem Secreta");
@@ -272,20 +273,35 @@ public class JanelaJogo extends JFrame implements Observador {
     }
 
     public void resetaDadosEPassaTurno() {
+    	btnSalvar.setEnabled(true);
         controlador.zerarDadosRolados();
         atualizaInterfaceNovoTurno();
     }
 
     public void atualizaInterfaceNovoTurno() {
+
         if (controlador.getJogadorAtual() != null) {
-            lblTurno.setText("Turno de: " + controlador.getJogadorAtual().getPersonagem().getNome());
+            lblTurno.setText(
+                "Turno de: "
+                + controlador.getJogadorAtual()
+                             .getPersonagem()
+                             .getNome()
+            );
         }
 
         if (controlador.getValorDados() == 0) {
+
             btnRolarDados.setEnabled(true);
+
+            btnSalvar.setEnabled(true); // ✅ novo turno pode salvar
+
             lblTextoPassos.setText("Aguardando rolagem...");
-        } else {
+        }
+        else {
+
             btnRolarDados.setEnabled(false);
+
+            btnSalvar.setEnabled(false); // ✅ já rolou os dados
         }
     }
 
