@@ -103,6 +103,14 @@ public class JanelaPersonagens extends JFrame {
 
             return;
         }
+        
+        System.out.println("=== PERSONAGENS SELECIONADOS ===");
+
+        for (Map.Entry<JCheckBox, String> entry : personagens.entrySet()) {
+            if (entry.getKey().isSelected()) {
+                System.out.println(entry.getValue());
+            }
+        }
 
         controlador.iniciarPartida();
 

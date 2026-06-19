@@ -154,6 +154,10 @@ public class ControladorPartida {
         return gerenciador.getIdentificadorVisual(carta);
     }
     
+    public String[] revelarEnvelope() {
+        return gerenciador.revelarEnvelope();
+    }
+    
     
 }
 

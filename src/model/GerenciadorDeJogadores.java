@@ -18,26 +18,20 @@ class GerenciadorDeJogadores {
     }
 
     public void definirPrimeiroJogador() {
-    	jogadorAtual = null;
-    	
-    	for (Jogador j : jogadores) {
-    		if (j.getPersonagem().getNome().equals("Srta. Scarlet")) {
-    			jogadorAtual = j;
-    			break;
-    		}
-    	}
-    	
-    	if (jogadorAtual == null && !jogadores.isEmpty()) {
-    		jogadorAtual = jogadores.get(0);
-    	}
+        if (!jogadores.isEmpty()) {
+            jogadorAtual = jogadores.get(0);
+        }
     }
 
-    public void adicionarJogador(String nome, String nomePersonagem) {
-    	PecaSuspeito peca = new PecaSuspeito(nomePersonagem);
-    	Jogador novoJogador = new Jogador(nome, peca);
-    	
-    	jogadores.add(novoJogador);
-    }
+    public void adicionarJogador(
+    	    String nome,
+    	    PecaSuspeito peca
+    	) {
+    	    Jogador novoJogador =
+    	        new Jogador(nome, peca);
+
+    	    jogadores.add(novoJogador);
+    	}
 
     public void proximoTurno() {
     	int contagem = 0;

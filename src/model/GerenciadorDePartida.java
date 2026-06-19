@@ -70,7 +70,13 @@ public class GerenciadorDePartida {
     	
     	// Os que sobraram são NPCs, já "eliminados" para o turno ignorar
         for (String nomeNPC : todosPersonagens) {
-            gerJogadores.adicionarJogador("NPC", nomeNPC); 
+        	PecaSuspeito suspeitoNPC =
+        		    gerTabuleiro.buscarSuspeito(nomeNPC);
+
+        		gerJogadores.adicionarJogador(
+        		    "NPC",
+        		    suspeitoNPC
+        		);
             
             // Pega o último jogador adicionado e o elimina
             List<Jogador> lista = gerJogadores.getJogadores();
@@ -86,7 +92,7 @@ public class GerenciadorDePartida {
             dados.add(new Dado());
         }
         
-        gerTabuleiro.posicionarPecas(gerJogadores.getJogadores());
+        gerTabuleiro.posicionarSuspeitos();
         
         gerJogadores.distribuirBlocoDeNotas();
         gerJogadores.definirPrimeiroJogador();
@@ -95,7 +101,14 @@ public class GerenciadorDePartida {
     }
     
     public void adicionarJogador(String nome, String nomePersonagem) {
-    	gerJogadores.adicionarJogador(nome, nomePersonagem);
+
+        PecaSuspeito suspeito =
+            gerTabuleiro.buscarSuspeito(nomePersonagem);
+
+        gerJogadores.adicionarJogador(
+            nome,
+            suspeito
+        );
     }
     
     public int[] lancarDados() {
@@ -365,7 +378,13 @@ public class GerenciadorDePartida {
         for (int i = 0; i < quantidadeJogadores; i++) {
             String nome = propriedades.getProperty(chaveJogador(i, "nome"), "");
             String personagem = propriedades.getProperty(chaveJogador(i, "personagem"), "");
-            gerJogadores.adicionarJogador(nome, personagem);
+            PecaSuspeito suspeito =
+            	    gerTabuleiro.buscarSuspeito(personagem);
+
+            	gerJogadores.adicionarJogador(
+            	    nome,
+            	    suspeito
+            	);
 
             Jogador jogador = gerJogadores.getJogadores().get(i);
             jogador.setEliminado(Boolean.parseBoolean(propriedades.getProperty(chaveJogador(i, "eliminado"), "false")));
@@ -467,6 +486,10 @@ public class GerenciadorDePartida {
 
     public int getUltimoDado2() {
         return ultimoDado2;
+    }
+
+    public String[] revelarEnvelope() {
+        return gerCartas.exportarEnvelope();
     }
 }
 

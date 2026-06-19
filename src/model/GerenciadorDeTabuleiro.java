@@ -3,56 +3,56 @@ import java.util.*;
 
 class GerenciadorDeTabuleiro {
     private Tabuleiro tabuleiro;
-    private List<PecaSuspeito> todasAsPecas = new ArrayList<>();
+    private List<PecaSuspeito> suspeitos;
+    
+    public GerenciadorDeTabuleiro() {
+        suspeitos = new ArrayList<>();
+        criarSuspeitos();
+    }
 
     public void iniciarTabuleiro() {
         tabuleiro = new Tabuleiro();
-        todasAsPecas.clear();
     }
-    public void posicionarPecas(List<Jogador> jogadores) {
+    
+    public void posicionarSuspeitos()  {
     	
-        for (Jogador j : jogadores) {
+    	for (PecaSuspeito peca : suspeitos) {
 
-            String nome = j.getPersonagem().getNome();
-            
-            if(j.getNome().equals("NPC")) {
-            	this.moverParaCentroDoTabuleiro(j.getPersonagem());
-            }
-            else {
-            	Casa destino = null;
+    	    String nome = peca.getNome();
 
-                switch (nome) {
+    	    Casa destino = null;
 
-                    case "Srta. Scarlet":
-                        destino = tabuleiro.getCasa(7, 24);
-                        break;
+    	    switch (nome) {
 
-                    case "Coronel Mustard":
-                        destino = tabuleiro.getCasa(0, 17);
-                        break;
+    	        case "Srta. Scarlet":
+    	            destino = tabuleiro.getCasa(7,24);
+    	            break;
 
-                    case "Sra. White":
-                        destino = tabuleiro.getCasa(9, 0);
-                        break;
+    	        case "Coronel Mustard":
+    	            destino = tabuleiro.getCasa(0,17);
+    	            break;
 
-                    case "Rev. Green":
-                        destino = tabuleiro.getCasa(14, 0);
-                        break;
+    	        case "Sra. White":
+    	            destino = tabuleiro.getCasa(9,0);
+    	            break;
 
-                    case "Sra. Peacock":
-                        destino = tabuleiro.getCasa(23, 6);
-                        break;
+    	        case "Rev. Green":
+    	            destino = tabuleiro.getCasa(14,0);
+    	            break;
 
-                    case "Prof. Plum":
-                        destino = tabuleiro.getCasa(23, 19);
-                        break;
-                }
-                
-                if (destino != null) {
-                	tabuleiro.moverPeca(j.getPersonagem(),destino);
-                }
-            }
-        }
+    	        case "Sra. Peacock":
+    	            destino = tabuleiro.getCasa(23,6);
+    	            break;
+
+    	        case "Prof. Plum":
+    	            destino = tabuleiro.getCasa(23,19);
+    	            break;
+    	    }
+
+    	    if (destino != null) {
+    	        tabuleiro.moverPeca(peca, destino);
+    	    }
+    	}
     }
 
     public String getComodoAtual(Jogador jogadorAtual) {
@@ -387,7 +387,32 @@ class GerenciadorDeTabuleiro {
     }
     
     // Getter para interface
-    public List<PecaSuspeito> getTodasAsPecas(){
-    	return todasAsPecas;
+    public List<PecaSuspeito> getTodasAsPecas() {
+        return suspeitos;
+    }
+    
+    private void criarSuspeitos() {
+
+        suspeitos = new ArrayList<>();
+
+        suspeitos.add(new PecaSuspeito("Srta. Scarlet"));
+        suspeitos.add(new PecaSuspeito("Coronel Mustard"));
+        suspeitos.add(new PecaSuspeito("Sra. White"));
+        suspeitos.add(new PecaSuspeito("Rev. Green"));
+        suspeitos.add(new PecaSuspeito("Sra. Peacock"));
+        suspeitos.add(new PecaSuspeito("Prof. Plum"));
+    }
+    
+    
+    public PecaSuspeito buscarSuspeito(String nome) {
+
+        for (PecaSuspeito p : suspeitos) {
+
+            if (p.getNome().equals(nome)) {
+                return p;
+            }
+        }
+
+        return null;
     }
 }

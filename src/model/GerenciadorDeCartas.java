@@ -18,6 +18,12 @@ class GerenciadorDeCartas {
     	baralho = new Baralho();
     	baralho.embaralhar();
     	envelope = criaEnvelope();
+    	
+        System.out.println("=== ENVELOPE ===");
+        System.out.println("Assassino: " + envelope.getAssassino().getNome());
+        System.out.println("Arma: " + envelope.getArma().getNome());
+        System.out.println("Local: " + envelope.getLocal().getNome());
+        System.out.println("================");
     }
 
     private void inicializarIdentificadoresVisuais() {

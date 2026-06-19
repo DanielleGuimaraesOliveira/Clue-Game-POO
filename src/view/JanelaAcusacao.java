@@ -32,10 +32,10 @@ public class JanelaAcusacao extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); // Pode fechar no 'X' se desistir
 
 		String[] suspeitos = {
-			"Rev. Green",
+			"Sr. Verde",
 			"Srta. Scarlet",
 			"Coronel Mustard",
-			"Prof. Plum",
+			"Professor Plum",
 			"Sra. Peacock",
 			"Sra. White"
 		};
@@ -52,14 +52,14 @@ public class JanelaAcusacao extends JDialog {
 		// Na acusação, todos os cômodos ficam disponíveis
 		String[] comodos = {
 			"Cozinha",
-			"Sala de Musica",
+			"Salão de Música",
 			"Jardim de Inverno",
 			"Sala de Jantar",
 			"Sala de Jogos",
 			"Biblioteca",
 			"Sala de Estar",
 			"Entrada",
-			"Escritorio"
+			"Escritório"
 		};
 
 		JComboBox<String> comboSuspeito = new JComboBox<>(suspeitos);
@@ -112,25 +112,30 @@ public class JanelaAcusacao extends JDialog {
 				if (confirmacao == JOptionPane.YES_OPTION) {
 					// chama a verificação no model via controller
 					boolean venceu = controlador.realizarAcusacao(
-						(String) comboSuspeito.getSelectedItem(),
-						(String) comboArma.getSelectedItem(),
-						(String) comboComodo.getSelectedItem()
-					);
-	
-					// fecha a janela de acusação antes de mostrar o resultado
-					dispose(); 
-	
-					if (venceu) {
-						JOptionPane.showMessageDialog(
-							janelaPai, 
-							"Você desvendou o crime e VENCEU O JOGO!", 
-							"Fim de Jogo", 
-							JOptionPane.INFORMATION_MESSAGE
-					);
-					System.exit(0);		
-						
-				} 
-				else {
+						    (String) comboSuspeito.getSelectedItem(),
+						    (String) comboArma.getSelectedItem(),
+						    (String) comboComodo.getSelectedItem()
+						);
+
+						dispose();
+
+						if (venceu) {
+
+						    String[] solucao =
+						        controlador.revelarEnvelope();
+
+						    JanelaVitoria janelaVitoria =
+						        new JanelaVitoria(
+						            janelaPai,
+						            controlador.getJogadorAtual().getNome(),
+						            solucao[0],
+						            solucao[1],
+						            solucao[2]
+						        );
+
+						    janelaVitoria.setVisible(true);
+
+						} else {
 					JOptionPane.showMessageDialog(
 						janelaPai, 
 						"Acusação errada e você foi ELIMINADO!", 
