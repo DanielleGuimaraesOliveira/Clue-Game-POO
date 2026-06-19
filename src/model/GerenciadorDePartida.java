@@ -59,6 +59,24 @@ public class GerenciadorDePartida {
         // 3. Distribuir restante para jogadores
     	gerCartas.distribuiCartas(gerJogadores.getJogadores());
     	
+    	List<String> todosPersonagens = new ArrayList<>(Arrays.asList(
+			"Srta. Scarlet", "Coronel Mustard", "Sra. White", 
+            "Rev. Green", "Sra. Peacock", "Prof. Plum"
+		));
+    	
+    	for (Jogador j : gerJogadores.getJogadores()) {
+            todosPersonagens.remove(j.getPersonagem().getNome());
+        }
+    	
+    	// Os que sobraram são NPCs, já "eliminados" para o turno ignorar
+        for (String nomeNPC : todosPersonagens) {
+            gerJogadores.adicionarJogador("NPC", nomeNPC); 
+            
+            // Pega o último jogador adicionado e o elimina
+            List<Jogador> lista = gerJogadores.getJogadores();
+            lista.get(lista.size() - 1).setEliminado(true);
+        }
+    	
         // 4. Posicionar peças no tabuleiro
     	gerTabuleiro.iniciarTabuleiro();
     	
@@ -81,7 +99,11 @@ public class GerenciadorDePartida {
     }
     
     public int[] lancarDados() {
-        ultimoDado1 = dados.get(0).rolar();
+    	if (gerJogadores.getJogadorAtual().isEliminado()) {
+            return new int[]{0, 0}; 
+        }
+    	
+    	ultimoDado1 = dados.get(0).rolar();
         ultimoDado2 = dados.get(1).rolar();
 
 	    valorDados = ultimoDado1 + ultimoDado2;
@@ -142,8 +164,43 @@ public class GerenciadorDePartida {
         return gerTabuleiro.getPosicaoAtualFormatada(gerJogadores.getJogadorAtual());
     }
 
-    public boolean realizarAcusacao(ICarta suspeito, ICarta arma, ICarta comodo) {
-        return gerCartas.realizarAcusacao(suspeito, arma, comodo);
+ // No GerenciadorDePartida.java
+    public boolean realizarAcusacao(String suspeito, String arma, String comodo) {
+        boolean acertou = gerCartas.realizarAcusacao(suspeito, arma, comodo);
+        
+        //  se errou, elimina
+        if (!acertou) {
+            Jogador jogadorDaVez = gerJogadores.getJogadorAtual(); 
+            jogadorDaVez.setEliminado(true);
+            System.out.println(jogadorDaVez.getPersonagem().getNome() + " errou a acusação e foi eliminado!");
+        
+            // cemitério do jogador
+            gerTabuleiro.moverParaCentroDoTabuleiro(jogadorDaVez.getPersonagem());
+            
+            notificarObservadores();
+            
+        }
+        
+        return acertou;
+    }
+    
+    public boolean todosEliminados() {
+    	for (Jogador  j: gerJogadores.getJogadores()) {
+    		if (!j.isEliminado()) {
+    			return false; // se pelo menos um estiver vivo, continua
+    		}
+    	}
+    	return true;
+    }
+    
+    public List<Object> getTodasAsPecas(){
+    	List<Object> pecas = new ArrayList<>();
+    	
+    	for (Object peca : gerTabuleiro.getTodasAsPecas()) {
+    		pecas.add(peca);
+    	}
+    	
+    	return pecas;
     }
     
     /*______________________________________________________*/
@@ -156,6 +213,10 @@ public class GerenciadorDePartida {
         int valorDados
     ) {
 
+    	if (gerJogadores.getJogadorAtual().isEliminado()) {
+            return 0;
+        }
+    	
         int status =
             gerTabuleiro.processaClickTelaInterno(
                 gerJogadores.getJogadorAtual(),

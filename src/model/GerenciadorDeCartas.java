@@ -118,9 +118,18 @@ class GerenciadorDeCartas {
         return responderPalpite(jogadorAtual, jogadores, cartaSuspeito, cartaArma, cartaComodo);
     }
 
-    public boolean realizarAcusacao(ICarta suspeito, ICarta arma, ICarta comodo) {
-        // envelope usa Carta internamente, valida por nome
-        return envelope.verificarAcusacao(new Carta(suspeito.getNome(), TipoCarta.SUSPEITO), new Carta(arma.getNome(), TipoCarta.ARMA), new Carta(comodo.getNome(), TipoCarta.COMODO));
+    public boolean realizarAcusacao(String suspeito, String arma, String comodo) {
+        Carta cartaSuspeito = new Carta(suspeito, TipoCarta.SUSPEITO);
+        Carta cartaArma = new Carta(arma, TipoCarta.ARMA);
+        Carta cartaComodo = new Carta(comodo, TipoCarta.COMODO);
+
+        // Repassa os objetos instanciados para a lógica principal
+        return realizarAcusacao(cartaSuspeito, cartaArma, cartaComodo);
+    }
+    
+    public boolean realizarAcusacao(Carta suspeito, Carta arma, Carta comodo) {
+        // Agora sim, o envelope compara os objetos Carta perfeitamente!
+        return envelope.verificarAcusacao(suspeito, arma, comodo);
     }
 
 	public void definirEnvelope(String assassino, String arma, String local) {

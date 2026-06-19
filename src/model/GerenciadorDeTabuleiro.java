@@ -3,51 +3,54 @@ import java.util.*;
 
 class GerenciadorDeTabuleiro {
     private Tabuleiro tabuleiro;
+    private List<PecaSuspeito> todasAsPecas = new ArrayList<>();
 
     public void iniciarTabuleiro() {
         tabuleiro = new Tabuleiro();
+        todasAsPecas.clear();
     }
     public void posicionarPecas(List<Jogador> jogadores) {
-
+    	
         for (Jogador j : jogadores) {
 
             String nome = j.getPersonagem().getNome();
-
-            Casa destino = null;
-
-            switch (nome) {
-
-                case "Srta. Scarlet":
-                    destino = tabuleiro.getCasa(7, 24);
-                    break;
-
-                case "Coronel Mustard":
-                    destino = tabuleiro.getCasa(0, 17);
-                    break;
-
-                case "Sra. White":
-                    destino = tabuleiro.getCasa(9, 0);
-                    break;
-
-                case "Rev. Green":
-                    destino = tabuleiro.getCasa(14, 0);
-                    break;
-
-                case "Sra. Peacock":
-                    destino = tabuleiro.getCasa(23, 6);
-                    break;
-
-                case "Prof. Plum":
-                    destino = tabuleiro.getCasa(23, 19);
-                    break;
+            
+            if(j.getNome().equals("NPC")) {
+            	this.moverParaCentroDoTabuleiro(j.getPersonagem());
             }
+            else {
+            	Casa destino = null;
 
-            if (destino != null) {
+                switch (nome) {
 
-                tabuleiro.moverPeca(
-                    j.getPersonagem(),
-                    destino
-                );
+                    case "Srta. Scarlet":
+                        destino = tabuleiro.getCasa(7, 24);
+                        break;
+
+                    case "Coronel Mustard":
+                        destino = tabuleiro.getCasa(0, 17);
+                        break;
+
+                    case "Sra. White":
+                        destino = tabuleiro.getCasa(9, 0);
+                        break;
+
+                    case "Rev. Green":
+                        destino = tabuleiro.getCasa(14, 0);
+                        break;
+
+                    case "Sra. Peacock":
+                        destino = tabuleiro.getCasa(23, 6);
+                        break;
+
+                    case "Prof. Plum":
+                        destino = tabuleiro.getCasa(23, 19);
+                        break;
+                }
+                
+                if (destino != null) {
+                	tabuleiro.moverPeca(j.getPersonagem(),destino);
+                }
             }
         }
     }
@@ -358,5 +361,33 @@ class GerenciadorDeTabuleiro {
                 System.out.println("🚨 Suspeito " + nomeSuspeito + " foi puxado para o cômodo " + letraComodo);
             }
         }
+    }
+    
+ 
+    public void moverParaCentroDoTabuleiro(Peca personagem) {
+       
+        int[][] vagasCentro = {
+            {12, 12}, {13, 12}, {14, 12}, {15, 12},
+            {12, 13}, {13, 13}, {14, 13}, {15, 13},
+            {12, 14}, {13, 14}, {14, 14}, {15, 14}
+        };
+
+        for (int[] vaga : vagasCentro) {
+            int x = vaga[0];
+            int y = vaga[1];
+            Casa casaCentro = tabuleiro.getCasa(x, y);
+
+            // Se a vaga existe e NÃO está ocupada por nenhuma peça ainda
+            if (casaCentro != null && !casaCentro.estaOcupada()) {
+                tabuleiro.moverPeca(personagem, casaCentro);
+                System.out.println("🏛️ Peão " + personagem.getNome() + " posicionado na vaga central (" + x + "," + y + ")");
+                return; // Achou uma vaga livre, moveu e encerrou o método
+            }
+        }
+    }
+    
+    // Getter para interface
+    public List<PecaSuspeito> getTodasAsPecas(){
+    	return todasAsPecas;
     }
 }

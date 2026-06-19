@@ -169,6 +169,7 @@ class PainelTabuleiro extends JPanel implements Observador {
             );
         }
     }
+    
 
     @Override
     public void atualizar() {

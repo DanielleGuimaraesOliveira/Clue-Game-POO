@@ -226,6 +226,17 @@ public class JanelaJogo extends JFrame implements Observador {
         	        }
         	    }
         	);
+        
+        btnAcusacao.addActionListener(
+        	    new ActionListener() {
+        	        @Override
+        	        public void actionPerformed(ActionEvent e) {
+        	            // Abre a janela passando a JanelaJogo como pai e o controlador
+        	            JanelaAcusacao janelaAcusacao = new JanelaAcusacao(JanelaJogo.this, controlador);
+        	            janelaAcusacao.setVisible(true);
+        	        }
+        	    }
+        	);
 
         painel.add(btnAcusacao);
         painel.add(btnSalvar);

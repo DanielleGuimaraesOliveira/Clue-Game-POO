@@ -40,8 +40,17 @@ class GerenciadorDeJogadores {
     }
 
     public void proximoTurno() {
-    	int index = jogadores.indexOf(jogadorAtual);
-    	jogadorAtual = jogadores.get((index + 1) % jogadores.size());
+    	int contagem = 0;
+    	
+    	do {
+	    	int index = jogadores.indexOf(jogadorAtual);
+	    	jogadorAtual = jogadores.get((index + 1) % jogadores.size());
+	    	contagem++;
+    	} 
+    	while (jogadorAtual.isEliminado() && contagem < jogadores.size());
+    	
+    	// se todos forem eliminados
+
     }
 
 	public void definirJogadorAtual(Jogador jogador) {

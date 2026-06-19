@@ -105,6 +105,18 @@ public class ControladorPartida {
     public ICarta realizarPalpite(String suspeito, String arma, String comodo) {
         return gerenciador.realizarPalpite(suspeito, arma, comodo);
     }
+    
+    public boolean realizarAcusacao(String suspeito, String arma, String comodo) {
+    	return gerenciador.realizarAcusacao(suspeito, arma, comodo);
+    }
+    
+    public boolean todosEliminados() {
+    	return gerenciador.todosEliminados();
+    }
+    
+    public List<Object> getTodasAsPecas(){
+    	return gerenciador.getTodasAsPecas();
+    }
 
     public String getComodoJogadorAtual() {
     	return gerenciador.getComodoJogadorAtual();
