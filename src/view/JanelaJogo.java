@@ -130,6 +130,7 @@ public class JanelaJogo extends JFrame implements Observador {
         btnRolarDados.setAlignmentX(CENTER_ALIGNMENT);
         
         painel.add(painelAreaDados);
+        JButton btnSalvar = new JButton("Salvar Partida");
         
         btnRolarDados.addActionListener(new ActionListener() {
             @Override
@@ -146,14 +147,14 @@ public class JanelaJogo extends JFrame implements Observador {
                     d1 = resultadoDados[0];
                     d2 = resultadoDados[1];
                 }
-
+                
                 atualizarDadosNaTela(d1, d2);
                 atualizaInterfaceNovoTurno();
+                btnSalvar.setEnabled(false);
             }
         });
 
         JButton btnAcusacao = new JButton("Fazer Acusação Final");
-        JButton btnSalvar = new JButton("Salvar Partida");
         JButton btnBloco = new JButton("Bloco de Anotações");
         JButton btnPassagem = new JButton("Usar Passagem Secreta");
         JButton btnMostrarCartas = new JButton("Mostrar Cartas");
