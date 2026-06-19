@@ -68,7 +68,6 @@ class GerenciadorDeCartas {
     	return new Envelope(assassino, arma, local);
     }
 
-    // O Acoplamento baixo acontece aqui: ele recebe os jogadores por parâmetro
     public void distribuiCartas(List<Jogador> jogadores) {
          if (jogadores.isEmpty()) {
             throw new IllegalStateException("Nenhum jogador para distribuir cartas.");
@@ -86,9 +85,6 @@ class GerenciadorDeCartas {
     	List<Carta> lista = baralho.filtrarPorTipo(tipo);
     	return lista.get(random.nextInt(lista.size()));
     }
-
-    // Nota: a lógica de resposta ao palpite está em `responderPalpite(...)`.
-    // O método `realizarPalpite(Carta...)` anterior foi removido por ser redundante.
 
     public ICarta responderPalpite(Jogador jogadorAtual, List<Jogador> jogadores, ICarta suspeito, ICarta arma, ICarta comodo) {
         if (jogadorAtual == null || jogadores == null || jogadores.isEmpty()) {
@@ -129,12 +125,11 @@ class GerenciadorDeCartas {
         Carta cartaArma = new Carta(arma, TipoCarta.ARMA);
         Carta cartaComodo = new Carta(comodo, TipoCarta.COMODO);
 
-        // Repassa os objetos instanciados para a lógica principal
         return realizarAcusacao(cartaSuspeito, cartaArma, cartaComodo);
     }
     
     public boolean realizarAcusacao(Carta suspeito, Carta arma, Carta comodo) {
-        // Agora sim, o envelope compara os objetos Carta perfeitamente!
+
         return envelope.verificarAcusacao(suspeito, arma, comodo);
     }
 

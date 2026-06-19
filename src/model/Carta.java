@@ -2,7 +2,6 @@ package model;
 
 import Interfaces.ICarta;
 
-// Classe Carta agora é package-private e implementa ICarta
 class Carta implements ICarta {
 	
 	private String nome;
@@ -26,7 +25,7 @@ class Carta implements ICarta {
         return java.util.Objects.hash(getNome());
     }
     
-	// get 
+
 	public String getNome() {
 		return nome;
 	}

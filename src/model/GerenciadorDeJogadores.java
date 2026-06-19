@@ -42,8 +42,6 @@ class GerenciadorDeJogadores {
 	    	contagem++;
     	} 
     	while (jogadorAtual.isEliminado() && contagem < jogadores.size());
-    	
-    	// se todos forem eliminados
 
     }
 
@@ -71,7 +69,6 @@ class GerenciadorDeJogadores {
 	    return jogadorAtual.getMao();
 	}
 
-    // get e set
     public Jogador getJogadorAtual() {
     	return jogadorAtual;
     }

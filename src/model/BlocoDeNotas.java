@@ -2,7 +2,6 @@ package model;
 
 import java.util.*;
 
-// Package-private notebook model storing boolean marks per card name
 class BlocoDeNotas {
     private Map<String, Boolean> marcado = new HashMap<>();
 

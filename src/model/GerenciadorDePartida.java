@@ -85,8 +85,7 @@ public class GerenciadorDePartida {
     	
         // 4. Posicionar peças no tabuleiro
     	gerTabuleiro.iniciarTabuleiro();
-    	
-        // evita duplicar dados se iniciarPartida() for chamado várias vezes
+
         if (dados.isEmpty()) {
             dados.add(new Dado());
             dados.add(new Dado());
@@ -123,7 +122,6 @@ public class GerenciadorDePartida {
 
 	    notificarObservadores();
     	
-        // devolve os dois valores separados para a View poder desenhar as imagens dos dados
         return new int[]{ultimoDado1, ultimoDado2}; 
     }
 
@@ -147,7 +145,6 @@ public class GerenciadorDePartida {
     }
 
     public ICarta realizarPalpite(String suspeito, String arma, String comodo) {
-        // puxar o suspeito para o comodo
     	gerTabuleiro.puxarSuspeitoParaComodo(suspeito, gerJogadores.getJogadorAtual(), gerJogadores.getJogadores());
     	
     	// notifica view - desenhar peao no outro comodo
@@ -216,10 +213,6 @@ public class GerenciadorDePartida {
     	return pecas;
     }
     
-    /*______________________________________________________*/
-    
-    // método chamado pela interface gráfica
- // método chamado pela interface gráfica
     public int processaClickTela(
         int xLogico,
         int yLogico,
@@ -261,8 +254,7 @@ public class GerenciadorDePartida {
 
         return 0; // inválido
     }
-    
-    // Passagem secreta
+
     public boolean usaPassagemSecreta() {
 	    boolean sucesso = gerTabuleiro.usaPassagemSecreta(gerJogadores.getJogadorAtual());
 	    if (sucesso) {

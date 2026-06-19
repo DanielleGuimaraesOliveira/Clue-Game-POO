@@ -57,22 +57,9 @@ class GerenciadorDeTabuleiro {
 
     public String getComodoAtual(Jogador jogadorAtual) {
     	String letraComodo =  jogadorAtual.getPosicaoAtual().getTipo();
-    	// ADICIONE ESTA LINHA PARA DESCOBRIR A LETRA:
         System.out.println("DEBUG - Letra lida do mapa: [" + letraComodo + "]");
     	switch (letraComodo) {
-    	/*
-		String[] comodos = {
-			"Cozinha",
-			"Salão de Baile", -> de jogos
-			"Sala de Jantar",
-			"Escritório",
-			"Biblioteca",
-			"Sala de Estar",
-			"Jardim de Inverno",
-			"Hall",
-			"Sala de Música"
-		};*/
-    	
+
     		case "c":
     			return "Cozinha";
     		case "m":
@@ -107,13 +94,11 @@ class GerenciadorDeTabuleiro {
     	// se a origem NÃO é corredor ("1") e NÃO é porta ("p"), então ele está DENTRO de algum cômodo!
     	if ( !origem.getTipo().equals("1") && !origem.getTipo().equals("p") && !origem.getTipo().equals("0")) {
     		
-    		// acha todas as portas do comodo
     		List<Casa> portas = encontraTodasPortasComodo(origem.getTipo());
     		
     		Set<Casa> caminhosTotais = new HashSet<>();
     		
     		for (Casa porta : portas) {
-    			// REGRA OFICIAL: Só pode sair por essa porta se ela NÃO estiver bloqueada por alguém!
                 if (!porta.estaOcupada()) {
                     // O DFS calcula a partir desta porta (gastando 1 passo)
                     List<model.Casa> caminhosDestaPorta = tabuleiro.calculaCaminhosValidos(porta, passos - 1);
@@ -125,7 +110,6 @@ class GerenciadorDeTabuleiro {
     		caminhosTotais.removeIf(casa -> casa.getTipo().equalsIgnoreCase(origem.getTipo()));
     		
     		if (caminhosTotais.isEmpty()) {
-    			// jogador preço, propria casa atual como opção
     			caminhosTotais.add(origem);
     		}
     		return new ArrayList<> (caminhosTotais);
@@ -163,7 +147,7 @@ class GerenciadorDeTabuleiro {
 
 
     public String getPosicaoAtualFormatada(Jogador jogadorAtual) {
-        // acessa o jogador e a peça
+    
         Casa atual = jogadorAtual.getPersonagem().getPosicaoAtual();
         
         // retorna apenas a String formatada para main
@@ -198,7 +182,6 @@ class GerenciadorDeTabuleiro {
     	// chama o DFS para saber as casas que pode ir
     	List<Casa> casasPossiveis = mapearCasas(jogadorAtual, valorDados);
     	
-    	// valida se o destino está na lista das casas permitidas 
     	if (casasPossiveis.contains(destino)) {
    
     		// Verifica se o destino é um cômodo (não é "1", nem "p", nem "0")
@@ -206,7 +189,6 @@ class GerenciadorDeTabuleiro {
                                !destino.getTipo().equalsIgnoreCase("p") && 
                                !destino.getTipo().equals("0");
             
-			// move a peça para o destino
 			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
 			System.out.println("Movimento para: " + xLogico + ", " + yLogico + " - tipo: " + destino.getTipo());
 			    		
@@ -218,12 +200,11 @@ class GerenciadorDeTabuleiro {
                     tabuleiro.moverPeca(jogadorAtual.getPersonagem(), lugarLivre);
                     System.out.println("Movimento automático para o fundo do cômodo: " + destino.getTipo());
                 } else {
-                    // Fallback: Se o cômodo estiver incrivelmente lotado (raro), fica onde clicou
                     tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
                 }
                 
                 System.out.println("🚪 " + jogadorAtual.getPersonagem().getNome() + " entrou no cômodo!");
-                return 1; // Mantém o turno para a Janela de Palpite
+                return 1; 
 			                
             } else {
                 // Se for "1" ou "p", apenas andou ou parou na porta. Passa o turno.
@@ -385,8 +366,7 @@ class GerenciadorDeTabuleiro {
             }
         }
     }
-    
-    // Getter para interface
+
     public List<PecaSuspeito> getTodasAsPecas() {
         return suspeitos;
     }

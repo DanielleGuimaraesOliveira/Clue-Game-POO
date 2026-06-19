@@ -7,7 +7,7 @@ class Casa implements ICasa {
 	private int x;
 	private int y;
 	
-	private String tipo; // rcebe o caracter do arquivo txt
+	private String tipo; 
 	private Peca ocupante;
 	
 	public Casa( int x, int y,String tipo) {
@@ -16,7 +16,6 @@ class Casa implements ICasa {
 		this.tipo = tipo;
 	}
 	
-	// Get e Set
 	public String getTipo() {
 		return this.tipo;
 	}
@@ -41,9 +40,9 @@ class Casa implements ICasa {
 		this.ocupante = peca;
 	}
 	
-	// Regra de negócio
+	
 	public boolean isCaminhavel() {
-		// a peca só pode andar nos corredores ("1") e portas ("p")
+		
 		return tipo.equals("1") || tipo.equals("p");
 	}
 	
