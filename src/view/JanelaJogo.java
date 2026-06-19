@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -16,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -129,29 +131,78 @@ public class JanelaJogo extends JFrame implements Observador {
         btnRolarDados.setPreferredSize(tamanhoBotao);
         btnRolarDados.setMaximumSize(tamanhoBotao);
         btnRolarDados.setAlignmentX(CENTER_ALIGNMENT);
-        
-        painel.add(painelAreaDados);
-        
-        
         btnRolarDados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 int d1;
                 int d2;
+
                 btnSalvar.setEnabled(false);
 
                 if (checkModoTeste.isSelected()) {
+
                     d1 = (Integer) comboDado1.getSelectedItem();
                     d2 = (Integer) comboDado2.getSelectedItem();
+
                     controlador.definirResultadoDados(d1, d2);
+
                 } else {
-                    int[] resultadoDados = controlador.lancarDados();
+
+                    int[] resultadoDados =
+                        controlador.lancarDados();
+
                     d1 = resultadoDados[0];
                     d2 = resultadoDados[1];
                 }
-                
+
                 atualizarDadosNaTela(d1, d2);
+
                 atualizaInterfaceNovoTurno();
+            }
+        });
+        painel.add(painelAreaDados);
+        
+        
+        btnSalvar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	
+
+                JFileChooser chooser = new JFileChooser();
+
+                chooser.setDialogTitle("Salvar partida");
+
+                int resultado =
+                    chooser.showSaveDialog(JanelaJogo.this);
+
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+
+                    File arquivo =
+                        chooser.getSelectedFile();
+
+                    if (!arquivo.getName()
+                                .toLowerCase()
+                                .endsWith(".txt")) {
+
+                        arquivo =
+                            new File(
+                                arquivo.getAbsolutePath()
+                                + ".txt"
+                            );
+                    }
+
+                    try {
+
+                        controlador.salvarPartida(
+                            arquivo.getAbsolutePath()
+                        );
+
+                    } catch (IOException ex) {
+
+                        ex.printStackTrace();
+                    }
+                }
             }
         });
         
@@ -196,18 +247,6 @@ public class JanelaJogo extends JFrame implements Observador {
                     popUp.setVisible(true);
                     resetaDadosEPassaTurno();
                 }
-            }
-        });
-
-        btnSalvar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-					controlador.salvarPartida("src/salvamentos/jogo_anterior");
-				} catch (IOException e1) {
-					
-					e1.printStackTrace();
-				}
             }
         });
 
