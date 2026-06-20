@@ -65,10 +65,13 @@ public class GerenciadorTest {
     
     @Test
     public void testeIniciarPartida() {
+    	
+    	
+    	
 
-        gerenciador.adicionarJogador("Ana", "Srta. Rosa");
+        gerenciador.adicionarJogador("Ana","Srta. Scarlet");
 
-        gerenciador.adicionarJogador("Carlos", "Coronel Mostarda");
+        gerenciador.adicionarJogador("Carlos", "Coronel Mustard");
 
         gerenciador.iniciarPartida();
 
@@ -78,7 +81,7 @@ public class GerenciadorTest {
     @Test
     public void testeLancarDados() {
 
-        gerenciador.adicionarJogador("Ana", "Srta. Rosa");
+    	gerenciador.adicionarJogador("Danielle", "Srta. Scarlet");
 
         gerenciador.iniciarPartida();
 
@@ -107,10 +110,11 @@ public class GerenciadorTest {
     
     @Test
     public void testeProximoTurno() {
+    	
 
-        gerenciador.adicionarJogador("Ana", "Srta. Rosa");
+        gerenciador.adicionarJogador("Ana", "Srta. Scarlet");
 
-        gerenciador.adicionarJogador("Carlos", "Coronel Mostarda");
+        gerenciador.adicionarJogador("Carlos","Coronel Mustard");
 
         gerenciador.iniciarPartida();
 
@@ -126,7 +130,7 @@ public class GerenciadorTest {
     @Test
     public void testeGarantirBlocoNotas() {
 
-        gerenciador.adicionarJogador("Ana", "Srta. Rosa");
+        gerenciador.adicionarJogador("Ana", "Srta. Scarlet");
 
         gerenciador.iniciarPartida();
 
