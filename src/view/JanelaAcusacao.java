@@ -18,19 +18,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import controller.ControladorPartida;
-
-public class JanelaAcusacao extends JDialog {
+class JanelaAcusacao extends JDialog {
 
 	public JanelaAcusacao(JFrame janelaPai, ControladorPartida controlador) {
 		super(janelaPai, "Fazer Acusação Final", true);
 
-		// Um pouco mais alta para acomodar o aviso de 2 linhas
 		setSize(520, 260); 
 		setLocationRelativeTo(janelaPai);
 		
 		setLayout(new BorderLayout());
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); // Pode fechar no 'X' se desistir
-
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); 
 		String[] suspeitos = {
 			"Sr. Verde",
 			"Srta. Scarlet",
@@ -48,8 +45,7 @@ public class JanelaAcusacao extends JDialog {
 			"Castiçal",
 			"Revólver"
 		};
-
-		// Na acusação, todos os cômodos ficam disponíveis
+		
 		String[] comodos = {
 			"Cozinha",
 			"Salão de Música",
@@ -71,7 +67,7 @@ public class JanelaAcusacao extends JDialog {
 		painelTopo.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 		
 		JLabel lblAviso = new JLabel("<html><center><b>CUIDADO!</b> Esta é a Acusação Final.<br>Se você errar, será <b>ELIMINADO</b> do jogo!</center></html>");
-		lblAviso.setForeground(Color.RED); // Deixa o alerta vermelho
+		lblAviso.setForeground(Color.RED); 
 		painelTopo.add(lblAviso);
 		
 		// --- PAINEL CENTRAL ---
@@ -87,7 +83,6 @@ public class JanelaAcusacao extends JDialog {
 		painelForm.add(new JLabel("Local:", SwingConstants.RIGHT));
 		painelForm.add(comboComodo);
 		
-		// --- PAINEL DE BAIXO ---
 		JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		JButton btnAcusar = new JButton("Confirmar Acusação!");
 		JButton btnCancelar = new JButton("Cancelar");
@@ -95,12 +90,10 @@ public class JanelaAcusacao extends JDialog {
 		painelBotoes.add(btnAcusar);
 		painelBotoes.add(btnCancelar);
 
-		// LÓGICA DOS BOTÕES 
 		btnAcusar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				//  confirmação extra antes de validar
 				int confirmacao = JOptionPane.showConfirmDialog(
 					janelaPai, 
 					"Tem CERTEZA da acusação?", 
@@ -115,14 +108,12 @@ public class JanelaAcusacao extends JDialog {
 						    (String) comboSuspeito.getSelectedItem(),
 						    (String) comboArma.getSelectedItem(),
 						    (String) comboComodo.getSelectedItem()
-						);
+					);
 
-						dispose();
+					dispose();
 
 						if (venceu) {
-
-						    String[] solucao =
-						        controlador.revelarEnvelope();
+						    String[] solucao = controlador.revelarEnvelope();
 
 						    JanelaVitoria janelaVitoria =
 						        new JanelaVitoria(

@@ -167,14 +167,10 @@ public class JanelaJogo extends JFrame implements Observador {
         btnSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	
-
                 JFileChooser chooser = new JFileChooser();
-
                 chooser.setDialogTitle("Salvar partida");
 
-                int resultado =
-                    chooser.showSaveDialog(JanelaJogo.this);
+                int resultado = chooser.showSaveDialog(JanelaJogo.this);
 
                 if (resultado == JFileChooser.APPROVE_OPTION) {
 
@@ -332,7 +328,7 @@ public class JanelaJogo extends JFrame implements Observador {
 
             btnRolarDados.setEnabled(true);
 
-            btnSalvar.setEnabled(true); // ✅ novo turno pode salvar
+            btnSalvar.setEnabled(true); 
 
             lblTextoPassos.setText("Aguardando rolagem...");
         }
@@ -340,7 +336,7 @@ public class JanelaJogo extends JFrame implements Observador {
 
             btnRolarDados.setEnabled(false);
 
-            btnSalvar.setEnabled(false); // ✅ já rolou os dados
+            btnSalvar.setEnabled(false); 
         }
     }
 

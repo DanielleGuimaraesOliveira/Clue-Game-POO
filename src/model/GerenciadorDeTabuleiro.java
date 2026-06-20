@@ -15,35 +15,26 @@ class GerenciadorDeTabuleiro {
     }
     
     public void posicionarSuspeitos()  {
-    	
     	for (PecaSuspeito peca : suspeitos) {
-
     	    String nome = peca.getNome();
-
     	    Casa destino = null;
 
     	    switch (nome) {
-
     	        case "Srta. Scarlet":
     	            destino = tabuleiro.getCasa(7,24);
     	            break;
-
     	        case "Coronel Mustard":
     	            destino = tabuleiro.getCasa(0,17);
     	            break;
-
     	        case "Sra. White":
     	            destino = tabuleiro.getCasa(9,0);
     	            break;
-
     	        case "Rev. Green":
     	            destino = tabuleiro.getCasa(14,0);
     	            break;
-
     	        case "Sra. Peacock":
     	            destino = tabuleiro.getCasa(23,6);
     	            break;
-
     	        case "Prof. Plum":
     	            destino = tabuleiro.getCasa(23,19);
     	            break;
@@ -143,11 +134,8 @@ class GerenciadorDeTabuleiro {
 			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
 		}
 	}
-	
-
 
     public String getPosicaoAtualFormatada(Jogador jogadorAtual) {
-    
         Casa atual = jogadorAtual.getPersonagem().getPosicaoAtual();
         
         // retorna apenas a String formatada para main
@@ -216,7 +204,6 @@ class GerenciadorDeTabuleiro {
     	return 0; // click inválido
     }
 
-    // Passagem secreta
     public boolean usaPassagemSecreta(Jogador jogadorAtual) {
     	if (jogadorAtual == null) {
     		return false;
@@ -232,8 +219,6 @@ class GerenciadorDeTabuleiro {
     	}
     	
     	model.Casa destino = null;
-    	
-    	// faz a ligação entre os cômodos
     	
     	// cozinha (c) <-> escritorio (o)
     	if (comodoAtual.equals("c")) {
@@ -262,11 +247,9 @@ class GerenciadorDeTabuleiro {
     	return false;
     }
 
-    // métodos auxiliares - passagem secreta
     private Casa encontraLugarComodoPorPorta(Casa porta) {
     	// olha para os vizinhos da porta para descobrir qual é a letra do comodo
     	for (Casa vizinho : tabuleiro.getVizinhos(porta)) {
-            
     		String tipo = vizinho.getTipo();
             
     		if (!tipo.equals("1") && !tipo.equals("0") && !tipo.equalsIgnoreCase("P")) {
@@ -276,8 +259,6 @@ class GerenciadorDeTabuleiro {
         return null;
     }
     
-    
-
     private Casa encontraCasaLivre(String tipoSala) {
         for (int y = 0; y < 25; y++) {
             for (int x = 0; x < 24; x++) {
@@ -293,7 +274,6 @@ class GerenciadorDeTabuleiro {
     }
 
     private List<Casa> encontraTodasPortasComodo(String letraComodo) {
-    	
     	List<Casa> portas = new ArrayList<>();
     	
     	for (int y = 0; y < 25; y++) {
@@ -346,7 +326,6 @@ class GerenciadorDeTabuleiro {
     
  
     public void moverParaCentroDoTabuleiro(Peca personagem) {
-       
         int[][] vagasCentro = {
             {12, 12}, {13, 12}, {14, 12}, {15, 12},
             {12, 13}, {13, 13}, {14, 13}, {15, 13},
@@ -372,7 +351,6 @@ class GerenciadorDeTabuleiro {
     }
     
     private void criarSuspeitos() {
-
         suspeitos = new ArrayList<>();
 
         suspeitos.add(new PecaSuspeito("Srta. Scarlet"));
@@ -383,11 +361,8 @@ class GerenciadorDeTabuleiro {
         suspeitos.add(new PecaSuspeito("Prof. Plum"));
     }
     
-    
     public PecaSuspeito buscarSuspeito(String nome) {
-
         for (PecaSuspeito p : suspeitos) {
-
             if (p.getNome().equals(nome)) {
                 return p;
             }

@@ -52,7 +52,6 @@ public class JanelaVitoria extends JDialog {
         JButton btnSair = new JButton("Sair");
         
         btnNovaPartida.addActionListener(e -> {
-
             dispose();
             janelaPai.dispose();
 

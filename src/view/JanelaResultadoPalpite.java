@@ -68,7 +68,7 @@ public class JanelaResultadoPalpite extends JDialog {
         btnOk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Fecha esta janela
+                dispose(); 
             }
         });
 

@@ -48,19 +48,6 @@ public class JanelaPalpite extends JDialog {
 			"Castiçal",
 			"Revólver"
 		};
-
-		/*
-		String[] comodos = {
-			"Cozinha",
-			"Salão de Baile",
-			"Sala de Jantar",
-			"Escritório",
-			"Biblioteca",
-			"Sala de Estar",
-			"Jardim de Inverno",
-			"Hall",
-			"Sala de Música"
-		};*/
 		
 		String[] comodos = { comodoAtual };
 
@@ -100,7 +87,7 @@ public class JanelaPalpite extends JDialog {
 		painelBotoes.add(btnResolver);
         painelBotoes.add(btnSair);
 
-        // lógica botões
+        
 		btnResolver.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -111,14 +98,6 @@ public class JanelaPalpite extends JDialog {
 				);
 				
 				String nomeDono = "Ninguem";
-				
-				/*
-				if (resultado == null) {
-					lblResultado.setText("Nenhum jogador mostrou carta.");
-				} else {
-					lblResultado.setText("Carta mostrada: " + resultado);
-				}
-				*/
 				
 				if (resultado != null) {
 					for (Interfaces.IJogador jogador : controlador.getJogadores()) {
@@ -131,20 +110,16 @@ public class JanelaPalpite extends JDialog {
 				}
 				
 				JanelaResultadoPalpite popup = new JanelaResultadoPalpite(
-						(JFrame) janelaPai, // passa a janela pai,
+						(JFrame) janelaPai,
 						controlador,
 						resultado,
 						nomeDono
 				);
-				popup.setVisible(true);
 				
+				popup.setVisible(true);
 				comboSuspeito.setEnabled(false);
 				comboArma.setEnabled(false);
-				//comboComodo.setEnabled(false);
-				
 		        btnResolver.setEnabled(false);
-
-
 		        btnSair.setEnabled(true);
 			}
 		});
@@ -158,7 +133,6 @@ public class JanelaPalpite extends JDialog {
 			}
 		});
 
-		// adicionando tudo a janela principal
         add(painelTopo, BorderLayout.NORTH);
         add(painelForm, BorderLayout.CENTER);
         add(painelBotoes, BorderLayout.SOUTH);
