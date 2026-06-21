@@ -2,7 +2,7 @@ Projeto: Clue Tabuleiro
 
 Integrantes:
 Danielle Guimarães - 2320336
-Judy Faria - 
+Judy Faria - 2312668
 
 Classe que contém o método main:
 Main.java

@@ -161,6 +161,8 @@ class GerenciadorDeTabuleiro {
     		return 0;
     	}
     	
+    	Casa origem = jogadorAtual.getPersonagem().getPosicaoAtual();
+    	
     	// pega a casa do click 
     	Casa destino = tabuleiro.getCasa(xLogico, yLogico);
     	if (destino == null) {
@@ -177,10 +179,12 @@ class GerenciadorDeTabuleiro {
                                !destino.getTipo().equalsIgnoreCase("p") && 
                                !destino.getTipo().equals("0");
             
+            boolean jaEstavaNoComodo = isComodo && origem.getTipo().equals(destino.getTipo());
+            
 			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
 			System.out.println("Movimento para: " + xLogico + ", " + yLogico + " - tipo: " + destino.getTipo());
 			    		
-			if (isComodo) {
+			if (isComodo && !jaEstavaNoComodo) {
 				
 				Casa lugarLivre = encontraCasaLivre(destino.getTipo());
                 
@@ -195,8 +199,9 @@ class GerenciadorDeTabuleiro {
                 return 1; 
 			                
             } else {
-                // Se for "1" ou "p", apenas andou ou parou na porta. Passa o turno.
-                return 2; 
+                // Se for "1" ou "p", ou mesmo comodo; Passa o turno.
+             
+            	return 2; 
             }
 			
     	}
