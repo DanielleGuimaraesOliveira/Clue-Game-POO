@@ -1,57 +1,80 @@
 package model;
 import java.util.*;
 
-public class GerenciadorDeTabuleiro {
+class GerenciadorDeTabuleiro {
     private Tabuleiro tabuleiro;
+    private List<PecaSuspeito> suspeitos;
+    
+    public GerenciadorDeTabuleiro() {
+        suspeitos = new ArrayList<>();
+        criarSuspeitos();
+    }
 
     public void iniciarTabuleiro() {
         tabuleiro = new Tabuleiro();
     }
-    public void posicionarPecas(List<Jogador> jogadores) {
+    
+    public void posicionarSuspeitos()  {
+    	for (PecaSuspeito peca : suspeitos) {
+    	    String nome = peca.getNome();
+    	    Casa destino = null;
 
-        for (Jogador j : jogadores) {
+    	    switch (nome) {
+    	        case "Srta. Scarlet":
+    	            destino = tabuleiro.getCasa(7,24);
+    	            break;
+    	        case "Coronel Mustard":
+    	            destino = tabuleiro.getCasa(0,17);
+    	            break;
+    	        case "Sra. White":
+    	            destino = tabuleiro.getCasa(9,0);
+    	            break;
+    	        case "Rev. Green":
+    	            destino = tabuleiro.getCasa(14,0);
+    	            break;
+    	        case "Sra. Peacock":
+    	            destino = tabuleiro.getCasa(23,6);
+    	            break;
+    	        case "Prof. Plum":
+    	            destino = tabuleiro.getCasa(23,19);
+    	            break;
+    	    }
 
-            String nome = j.getPersonagem().getNome();
-
-            Casa destino = null;
-
-            switch (nome) {
-
-                case "Srta. Scarlet":
-                    destino = tabuleiro.getCasa(7, 24);
-                    break;
-
-                case "Coronel Mustard":
-                    destino = tabuleiro.getCasa(0, 17);
-                    break;
-
-                case "Sra. White":
-                    destino = tabuleiro.getCasa(9, 0);
-                    break;
-
-                case "Rev. Green":
-                    destino = tabuleiro.getCasa(14, 0);
-                    break;
-
-                case "Sra. Peacock":
-                    destino = tabuleiro.getCasa(23, 6);
-                    break;
-
-                case "Prof. Plum":
-                    destino = tabuleiro.getCasa(23, 19);
-                    break;
-            }
-
-            if (destino != null) {
-
-                tabuleiro.moverPeca(
-                    j.getPersonagem(),
-                    destino
-                );
-            }
-        }
+    	    if (destino != null) {
+    	        tabuleiro.moverPeca(peca, destino);
+    	    }
+    	}
     }
 
+    public String getComodoAtual(Jogador jogadorAtual) {
+    	String letraComodo =  jogadorAtual.getPosicaoAtual().getTipo();
+        System.out.println("DEBUG - Letra lida do mapa: [" + letraComodo + "]");
+    	switch (letraComodo) {
+
+    		case "c":
+    			return "Cozinha";
+    		case "m":
+    			return "Sala de Musica";
+    		case "w":
+    			return "Jardim de Inverno";
+    		case "j":
+    			return "Sala de Jantar";
+    		case "g":
+    			return "Sala de Jogos";
+    		case "b":
+    			return "Biblioteca";
+    		case "l":
+    			return "Sala de Estar";
+    		case "e":
+    			return "Entrada";
+    		case "o":
+    			return "Escritorio";
+    			
+    		default:
+    			return "Corredor";
+    	}
+    }
+    
     public List<Casa> mapearCasas(Jogador jogadorAtual, int passos) {
     	if (jogadorAtual == null) {
     		return new ArrayList<>();
@@ -60,15 +83,13 @@ public class GerenciadorDeTabuleiro {
     	Casa origem = jogadorAtual.getPersonagem().getPosicaoAtual();
     	
     	// se a origem NÃO é corredor ("1") e NÃO é porta ("p"), então ele está DENTRO de algum cômodo!
-    	if ( !origem.getTipo().equals("1") && !origem.getTipo().equals("p")) {
+    	if ( !origem.getTipo().equals("1") && !origem.getTipo().equals("p") && !origem.getTipo().equals("0")) {
     		
-    		// acha todas as portas do comodo
     		List<Casa> portas = encontraTodasPortasComodo(origem.getTipo());
     		
     		Set<Casa> caminhosTotais = new HashSet<>();
     		
     		for (Casa porta : portas) {
-    			// REGRA OFICIAL: Só pode sair por essa porta se ela NÃO estiver bloqueada por alguém!
                 if (!porta.estaOcupada()) {
                     // O DFS calcula a partir desta porta (gastando 1 passo)
                     List<model.Casa> caminhosDestaPorta = tabuleiro.calculaCaminhosValidos(porta, passos - 1);
@@ -76,6 +97,12 @@ public class GerenciadorDeTabuleiro {
                 }
     		}
     		
+    		// Remove da lista todas as casas que pertençam ao mesmo cômodo que o jogador iniciou o turno
+    		caminhosTotais.removeIf(casa -> casa.getTipo().equalsIgnoreCase(origem.getTipo()));
+    		
+    		if (caminhosTotais.isEmpty()) {
+    			caminhosTotais.add(origem);
+    		}
     		return new ArrayList<> (caminhosTotais);
     	}
     	
@@ -107,11 +134,8 @@ public class GerenciadorDeTabuleiro {
 			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
 		}
 	}
-	
-
 
     public String getPosicaoAtualFormatada(Jogador jogadorAtual) {
-        // acessa o jogador e a peça
         Casa atual = jogadorAtual.getPersonagem().getPosicaoAtual();
         
         // retorna apenas a String formatada para main
@@ -137,6 +161,8 @@ public class GerenciadorDeTabuleiro {
     		return 0;
     	}
     	
+    	Casa origem = jogadorAtual.getPersonagem().getPosicaoAtual();
+    	
     	// pega a casa do click 
     	Casa destino = tabuleiro.getCasa(xLogico, yLogico);
     	if (destino == null) {
@@ -146,39 +172,43 @@ public class GerenciadorDeTabuleiro {
     	// chama o DFS para saber as casas que pode ir
     	List<Casa> casasPossiveis = mapearCasas(jogadorAtual, valorDados);
     	
-    	// valida se o destino está na lista das casas permitidas 
-    	if (casasPossiveis.contains(destino) && destino.isCaminhavel()) {
+    	if (casasPossiveis.contains(destino)) {
    
-			// move a peça para  corredor ou porta	
+    		// Verifica se o destino é um cômodo (não é "1", nem "p", nem "0")
+            boolean isComodo = !destino.getTipo().equals("1") && 
+                               !destino.getTipo().equalsIgnoreCase("p") && 
+                               !destino.getTipo().equals("0");
+            
+            boolean jaEstavaNoComodo = isComodo && origem.getTipo().equals(destino.getTipo());
+            
 			tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
 			System.out.println("Movimento para: " + xLogico + ", " + yLogico + " - tipo: " + destino.getTipo());
-    		
-			if (destino.getTipo().equals("p")){
-				// em vez de parar na porta, entra no comodo
-				Casa lugarNoComodo = encontraLugarComodoPorPorta(destino);
+			    		
+			if (isComodo && !jaEstavaNoComodo) {
 				
-				if (lugarNoComodo != null) {
-					tabuleiro.moverPeca(jogadorAtual.getPersonagem(), lugarNoComodo);
-				}
-				else {
-					tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino); // Fica na porta só se a sala lotar
-				}
-				
-				System.out.println("🚪 " + jogadorAtual.getPersonagem().getNome() + " entrou no cômodo!");
+				Casa lugarLivre = encontraCasaLivre(destino.getTipo());
                 
-				// o turno só passa quando fecha a janela de palpite
-				return 1;
-			}
-			else {
-				// Tabuleiro não muda o turno, apenas avisa a fachada que moveu
-				return 2;
-			}
+                if (lugarLivre != null) {
+                    tabuleiro.moverPeca(jogadorAtual.getPersonagem(), lugarLivre);
+                    System.out.println("Movimento automático para o fundo do cômodo: " + destino.getTipo());
+                } else {
+                    tabuleiro.moverPeca(jogadorAtual.getPersonagem(), destino);
+                }
+                
+                System.out.println("🚪 " + jogadorAtual.getPersonagem().getNome() + " entrou no cômodo!");
+                return 1; 
+			                
+            } else {
+                // Se for "1" ou "p", ou mesmo comodo; Passa o turno.
+             
+            	return 2; 
+            }
+			
     	}
     	
     	return 0; // click inválido
     }
 
-    // Passagem secreta
     public boolean usaPassagemSecreta(Jogador jogadorAtual) {
     	if (jogadorAtual == null) {
     		return false;
@@ -194,8 +224,6 @@ public class GerenciadorDeTabuleiro {
     	}
     	
     	model.Casa destino = null;
-    	
-    	// faz a ligação entre os cômodos
     	
     	// cozinha (c) <-> escritorio (o)
     	if (comodoAtual.equals("c")) {
@@ -224,11 +252,9 @@ public class GerenciadorDeTabuleiro {
     	return false;
     }
 
-    // métodos auxiliares - passagem secreta
     private Casa encontraLugarComodoPorPorta(Casa porta) {
     	// olha para os vizinhos da porta para descobrir qual é a letra do comodo
     	for (Casa vizinho : tabuleiro.getVizinhos(porta)) {
-            
     		String tipo = vizinho.getTipo();
             
     		if (!tipo.equals("1") && !tipo.equals("0") && !tipo.equalsIgnoreCase("P")) {
@@ -238,31 +264,6 @@ public class GerenciadorDeTabuleiro {
         return null;
     }
     
-    /*
-    private String descobreComodo(model.Casa casa) {
-        
-    	// se está na porta, olhamos os vizinhos dessa porta para ver a letra do comodo
-        if (casa.getTipo().equalsIgnoreCase("p")) {
-            
-        	for (model.Casa vizinho : tabuleiro.getVizinhos(casa)) {
-                String c = vizinho.getTipo();
-               
-                if (c.equals("c") || c.equals("o") || c.equals("w") || c.equals("l")) {
-                    return c; //acho o cômodo que a porta entra!
-                }
-            }
-        } 
-        else {
-             // se já está dentro do cômodo
-             String c = casa.getTipo();
-             if (c.equals("c") || c.equals("o") || c.equals("w") || c.equals("l")) {
-                 return c;
-             }
-        }
-        return "Nenhum";
-    }
-    */
-
     private Casa encontraCasaLivre(String tipoSala) {
         for (int y = 0; y < 25; y++) {
             for (int x = 0; x < 24; x++) {
@@ -278,7 +279,6 @@ public class GerenciadorDeTabuleiro {
     }
 
     private List<Casa> encontraTodasPortasComodo(String letraComodo) {
-    	
     	List<Casa> portas = new ArrayList<>();
     	
     	for (int y = 0; y < 25; y++) {
@@ -300,5 +300,79 @@ public class GerenciadorDeTabuleiro {
     	}
     	
     	return portas;
+    }
+    
+    public void puxarSuspeitoParaComodo(String nomeSuspeito, Jogador jogadorAtual, List<Jogador> todosJogadores) {
+        // 1. Procurar quem é o jogador/peão correspondente ao suspeito do palpite
+        Jogador jogadorAlvo = null;
+        for (Jogador j : todosJogadores) {
+            if (j.getPersonagem().getNome().equals(nomeSuspeito)) {
+                jogadorAlvo = j;
+                break;
+            }
+        }
+
+        // Se encontrou o suspeito e ele não é o próprio jogador que está palpitando
+        if (jogadorAlvo != null && !jogadorAlvo.equals(jogadorAtual)) {
+            
+            // 2. Descobre a letra do cômodo onde o palpite está acontecendo
+            String letraComodo = jogadorAtual.getPersonagem().getPosicaoAtual().getTipo();
+           
+            // 3. Procura uma cadeira vazia naquele cômodo
+            Casa destino = encontraCasaLivre(letraComodo);
+            
+            // 4. Se tiver espaço, puxa o suspeito para lá!
+            if (destino != null) {
+                tabuleiro.moverPeca(jogadorAlvo.getPersonagem(), destino);
+                System.out.println("🚨 Suspeito " + nomeSuspeito + " foi puxado para o cômodo " + letraComodo);
+            }
+        }
+    }
+    
+ 
+    public void moverParaCentroDoTabuleiro(Peca personagem) {
+        int[][] vagasCentro = {
+            {12, 12}, {13, 12}, {14, 12}, {15, 12},
+            {12, 13}, {13, 13}, {14, 13}, {15, 13},
+            {12, 14}, {13, 14}, {14, 14}, {15, 14}
+        };
+
+        for (int[] vaga : vagasCentro) {
+            int x = vaga[0];
+            int y = vaga[1];
+            Casa casaCentro = tabuleiro.getCasa(x, y);
+
+            // Se a vaga existe e NÃO está ocupada por nenhuma peça ainda
+            if (casaCentro != null && !casaCentro.estaOcupada()) {
+                tabuleiro.moverPeca(personagem, casaCentro);
+                System.out.println("🏛️ Peão " + personagem.getNome() + " posicionado na vaga central (" + x + "," + y + ")");
+                return; // Achou uma vaga livre, moveu e encerrou o método
+            }
+        }
+    }
+
+    public List<PecaSuspeito> getTodasAsPecas() {
+        return suspeitos;
+    }
+    
+    private void criarSuspeitos() {
+        suspeitos = new ArrayList<>();
+
+        suspeitos.add(new PecaSuspeito("Srta. Scarlet"));
+        suspeitos.add(new PecaSuspeito("Coronel Mustard"));
+        suspeitos.add(new PecaSuspeito("Sra. White"));
+        suspeitos.add(new PecaSuspeito("Rev. Green"));
+        suspeitos.add(new PecaSuspeito("Sra. Peacock"));
+        suspeitos.add(new PecaSuspeito("Prof. Plum"));
+    }
+    
+    public PecaSuspeito buscarSuspeito(String nome) {
+        for (PecaSuspeito p : suspeitos) {
+            if (p.getNome().equals(nome)) {
+                return p;
+            }
+        }
+
+        return null;
     }
 }

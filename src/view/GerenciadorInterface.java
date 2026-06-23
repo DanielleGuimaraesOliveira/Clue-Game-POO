@@ -2,6 +2,10 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import controller.ControladorPartida;
 
@@ -27,29 +31,43 @@ public class GerenciadorInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                try {
+                JFileChooser chooser = new JFileChooser();
 
-                    controlador.carregarPartida("src/salvamentos/jogo_anterior");
+                chooser.setDialogTitle("Carregar partida");
 
-                    JanelaJogo jogo =
-                        new JanelaJogo(controlador);
+                int resultado =
+                    chooser.showOpenDialog(inicial);
 
-                    jogo.setVisible(true);
+                if (resultado == JFileChooser.APPROVE_OPTION) {
 
-                    inicial.dispose();
+                    File arquivo =
+                        chooser.getSelectedFile();
 
-                } catch (Exception ex) {
+                    try {
 
-                    ex.printStackTrace();
+                        controlador.carregarPartida(
+                            arquivo.getAbsolutePath()
+                        );
 
-                    javax.swing.JOptionPane.showMessageDialog(
-                        null,
-                        "Erro ao carregar partida!"
-                    );
+                        JanelaJogo jogo =
+                            new JanelaJogo(controlador);
+
+                        jogo.setVisible(true);
+
+                        inicial.dispose();
+
+                    } catch (Exception ex) {
+
+                        ex.printStackTrace();
+
+                        JOptionPane.showMessageDialog(
+                            null,
+                            "Erro ao carregar partida!"
+                        );
+                    }
                 }
             }
         });
-
         inicial.setVisible(true);
     }
 }

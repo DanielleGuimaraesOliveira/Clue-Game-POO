@@ -1,0 +1,110 @@
+Projeto: Clue Tabuleiro
+
+Integrantes:
+Danielle Guimarães - 2320336
+Judy Faria - 2312668
+
+Classe que contém o método main:
+Main.java
+
+Formato do arquivo de salvamento:
+
+O sistema salva a partida utilizando o formato chave=valor.
+Cada linha representa uma informação específica do estado do jogo.
+	Exemplo:
+		jogadorAtual=Sra. White
+		ultimoDado1=3
+		ultimoDado2=4
+	
+Dados dos dados:
+	valorDados=<soma dos dados>
+	ultimoDado1=<valor do primeiro dado>
+	ultimoDado2=<valor do segundo dado>
+	Exemplo:
+		valorDados=7
+		ultimoDado1=3
+		ultimoDado2=4
+
+Jogador da vez:
+	jogadorAtual=<nome do personagem>
+	Exemplo:
+		jogadorAtual=Sra. White
+		
+Envelope da solução:
+	envelope.assassino=<suspeito>
+	envelope.arma=<arma>
+	envelope.local=<cômodo>
+	Exemplo:
+		envelope.assassino=Professor Plum
+		envelope.arma=Faca
+		envelope.local=Sala de Jantar
+		
+		
+Quantidade de jogadores:
+	jogadores.qtd=<quantidade>
+	Exemplo:
+		jogadores.qtd=6
+
+Informações de um jogador
+	Formato:
+		jogadores.<indice>.nome=<nome>
+		jogadores.<indice>.personagem=<personagem>
+		jogadores.<indice>.eliminado=<true|false>
+		jogadores.<indice>.blocoNotas=<true|false>
+		jogadores.<indice>.posicao=<x,y>
+
+	Exemplo:
+		jogadores.1.nome=Jogador 2
+		jogadores.1.personagem=Sra. White
+		jogadores.1.eliminado=false
+		jogadores.1.blocoNotas=true
+		jogadores.1.posicao=10,1
+		
+Cartas na mão do jogador:
+	Quantidade:
+		jogadores.<indice>.mao.qtd=<quantidade>
+		
+	Cada carta:
+		jogadores.<indice>.mao.<numero>.nome=<nome da carta>
+		jogadores.<indice>.mao.<numero>.tipo=<tipo>
+
+Tipos possíveis:
+	SUSPEITO
+	ARMA
+	COMODO
+	
+	Exemplo:
+		jogadores.1.mao.0.nome=Salão de Música
+		jogadores.1.mao.0.tipo=COMODO
+		
+Bloco de notas:
+	Quantidade de marcações:
+		jogadores.<indice>.bloco.qtd=<quantidade>
+
+	Cada marcação:
+		jogadores.<indice>.bloco.<numero>.carta=<nome>
+		jogadores.<indice>.bloco.<numero>.valor=<true|false>
+
+	Onde:
+		true  = carta marcada
+		false = carta não marcada
+
+	Exemplo:
+		jogadores.0.bloco.17.carta=Sra. White
+		jogadores.0.bloco.17.valor=true
+		Jogadores NPC
+
+Os jogadores não utilizados pelos participantes são armazenados como NPCs.
+
+	Exemplo:
+		jogadores.3.nome=NPC
+		jogadores.3.personagem=Srta. Scarlet
+		jogadores.3.eliminado=true
+
+Esses personagens permanecem no tabuleiro apenas para manter a lógica original do jogo.
+
+Observações:
+	- O arquivo pode ser editado manualmente para testes.
+	- Coordenadas de posição são armazenadas como x,y.
+	- Valores booleanos utilizam true e false.
+	- Alterações incorretas podem impedir o carregamento da partida.

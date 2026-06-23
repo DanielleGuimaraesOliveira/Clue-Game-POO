@@ -3,7 +3,7 @@ import java.util.*;
 
 import Interfaces.ICarta;
 
-public class GerenciadorDeJogadores {
+class GerenciadorDeJogadores {
     private List<Jogador> jogadores;
     private Jogador jogadorAtual;
 
@@ -18,30 +18,64 @@ public class GerenciadorDeJogadores {
     }
 
     public void definirPrimeiroJogador() {
-    	jogadorAtual = null;
-    	
-    	for (Jogador j : jogadores) {
-    		if (j.getPersonagem().getNome().equals("Srta. Scarlet")) {
-    			jogadorAtual = j;
-    			break;
-    		}
-    	}
-    	
-    	if (jogadorAtual == null && !jogadores.isEmpty()) {
-    		jogadorAtual = jogadores.get(0);
-    	}
+        if (!jogadores.isEmpty()) {
+            jogadorAtual = jogadores.get(0);
+        }
+    }
+    
+    public void adicionarNPC(PecaSuspeito peca) {
+        Jogador npc = new Jogador("NPC", peca);
+        npc.setEliminado(true);
+
+        jogadores.add(npc);
+    }
+    
+    public void adicionarNPCsAusentes(GerenciadorDeTabuleiro gerTabuleiro) {
+
+        List<String> todosPersonagens = new ArrayList<>(Arrays.asList(
+            "Srta. Scarlet",
+            "Coronel Mustard",
+            "Sra. White",
+            "Rev. Green",
+            "Sra. Peacock",
+            "Prof. Plum"
+        ));
+
+        for (Jogador jogador : jogadores) {
+            todosPersonagens.remove(
+                jogador.getPersonagem().getNome()
+            );
+        }
+
+        for (String nomePersonagem : todosPersonagens) {
+
+            PecaSuspeito suspeito =
+                gerTabuleiro.buscarSuspeito(nomePersonagem);
+
+            adicionarNPC(suspeito);
+        }
     }
 
-    public void adicionarJogador(String nome, String nomePersonagem) {
-    	PecaSuspeito peca = new PecaSuspeito(nomePersonagem);
-    	Jogador novoJogador = new Jogador(nome, peca);
-    	
-    	jogadores.add(novoJogador);
-    }
+    public void adicionarJogador(
+    	    String nome,
+    	    PecaSuspeito peca
+    	) {
+    	    Jogador novoJogador =
+    	        new Jogador(nome, peca);
+
+    	    jogadores.add(novoJogador);
+    	}
 
     public void proximoTurno() {
-    	int index = jogadores.indexOf(jogadorAtual);
-    	jogadorAtual = jogadores.get((index + 1) % jogadores.size());
+    	int contagem = 0;
+    	
+    	do {
+	    	int index = jogadores.indexOf(jogadorAtual);
+	    	jogadorAtual = jogadores.get((index + 1) % jogadores.size());
+	    	contagem++;
+    	} 
+    	while (jogadorAtual.isEliminado() && contagem < jogadores.size());
+
     }
 
 	public void definirJogadorAtual(Jogador jogador) {
@@ -68,7 +102,6 @@ public class GerenciadorDeJogadores {
 	    return jogadorAtual.getMao();
 	}
 
-    // get e set
     public Jogador getJogadorAtual() {
     	return jogadorAtual;
     }
@@ -76,4 +109,38 @@ public class GerenciadorDeJogadores {
     public List<Jogador> getJogadores(){
     	return jogadores;
     }
+    
+    public Map<String, Boolean> obterBlocoJogadorAtual() {
+
+        if (jogadorAtual == null) {
+            return new HashMap<>();
+        }
+
+        return jogadorAtual
+            .getBlocoDeNotasInterno()
+            .getTodasMarcas();
+    }
+    
+    public void marcarCartaNoBlocoJogadorAtual(
+            String nomeCarta,
+            boolean valor) {
+
+        if (jogadorAtual == null) {
+            return;
+        }
+
+        jogadorAtual
+            .getBlocoDeNotasInterno()
+            .marcar(nomeCarta, valor);
+    }
+    
+    public void garantirBlocoParaJogadorAtual() {
+
+        if (jogadorAtual == null) {
+            return;
+        }
+
+        jogadorAtual.receberBlocoDeNotas();
+    }
+    
 }

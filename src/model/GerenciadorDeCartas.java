@@ -3,7 +3,7 @@ import java.util.*;
 
 import Interfaces.ICarta;
 
-public class GerenciadorDeCartas {
+class GerenciadorDeCartas {
     private Envelope envelope;
     private Baralho baralho;
     private Random random = new Random();
@@ -18,6 +18,12 @@ public class GerenciadorDeCartas {
     	baralho = new Baralho();
     	baralho.embaralhar();
     	envelope = criaEnvelope();
+    	
+        System.out.println("=== ENVELOPE ===");
+        System.out.println("Assassino: " + envelope.getAssassino().getNome());
+        System.out.println("Arma: " + envelope.getArma().getNome());
+        System.out.println("Local: " + envelope.getLocal().getNome());
+        System.out.println("================");
     }
 
     private void inicializarIdentificadoresVisuais() {
@@ -62,7 +68,6 @@ public class GerenciadorDeCartas {
     	return new Envelope(assassino, arma, local);
     }
 
-    // O Acoplamento baixo acontece aqui: ele recebe os jogadores por parâmetro
     public void distribuiCartas(List<Jogador> jogadores) {
          if (jogadores.isEmpty()) {
             throw new IllegalStateException("Nenhum jogador para distribuir cartas.");
@@ -81,9 +86,6 @@ public class GerenciadorDeCartas {
     	return lista.get(random.nextInt(lista.size()));
     }
 
-    // Nota: a lógica de resposta ao palpite está em `responderPalpite(...)`.
-    // O método `realizarPalpite(Carta...)` anterior foi removido por ser redundante.
-
     public ICarta responderPalpite(Jogador jogadorAtual, List<Jogador> jogadores, ICarta suspeito, ICarta arma, ICarta comodo) {
         if (jogadorAtual == null || jogadores == null || jogadores.isEmpty()) {
             return null;
@@ -95,6 +97,8 @@ public class GerenciadorDeCartas {
         }
 
         List<ICarta> palpite = Arrays.asList(suspeito, arma, comodo);
+        
+        // roda a mesa para a esquerda
         for (int offset = 1; offset < jogadores.size(); offset++) {
             Jogador candidato = jogadores.get((indiceAtual + offset) % jogadores.size());
             for (ICarta carta : palpite) {
@@ -108,18 +112,25 @@ public class GerenciadorDeCartas {
         return null;
     }
 
-    public String responderPalpite(Jogador jogadorAtual, List<Jogador> jogadores, String suspeito, String arma, String comodo) {
+    public ICarta responderPalpite(Jogador jogadorAtual, List<Jogador> jogadores, String suspeito, String arma, String comodo) {
         ICarta cartaSuspeito = new Carta(suspeito, TipoCarta.SUSPEITO);
         ICarta cartaArma = new Carta(arma, TipoCarta.ARMA);
         ICarta cartaComodo = new Carta(comodo, TipoCarta.COMODO);
 
-        ICarta revelada = responderPalpite(jogadorAtual, jogadores, cartaSuspeito, cartaArma, cartaComodo);
-        return revelada != null ? revelada.getNome() : null;
+        return responderPalpite(jogadorAtual, jogadores, cartaSuspeito, cartaArma, cartaComodo);
     }
 
-    public boolean realizarAcusacao(ICarta suspeito, ICarta arma, ICarta comodo) {
-        // envelope usa Carta internamente, valida por nome
-        return envelope.verificarAcusacao(new Carta(suspeito.getNome(), TipoCarta.SUSPEITO), new Carta(arma.getNome(), TipoCarta.ARMA), new Carta(comodo.getNome(), TipoCarta.COMODO));
+    public boolean realizarAcusacao(String suspeito, String arma, String comodo) {
+        Carta cartaSuspeito = new Carta(suspeito, TipoCarta.SUSPEITO);
+        Carta cartaArma = new Carta(arma, TipoCarta.ARMA);
+        Carta cartaComodo = new Carta(comodo, TipoCarta.COMODO);
+
+        return realizarAcusacao(cartaSuspeito, cartaArma, cartaComodo);
+    }
+    
+    public boolean realizarAcusacao(Carta suspeito, Carta arma, Carta comodo) {
+
+        return envelope.verificarAcusacao(suspeito, arma, comodo);
     }
 
 	public void definirEnvelope(String assassino, String arma, String local) {
@@ -146,13 +157,14 @@ public class GerenciadorDeCartas {
             envelope.getLocal().getNome()
         };
     }
-
+    
+    
     // retorna todos os nomes de cartas do jogo (suspeitos, armas, cômodos)
     public java.util.List<String> getTodosNomesCartas() {
         java.util.List<String> nomes = new java.util.ArrayList<>();
         nomes.addAll(Arrays.asList("Sr. Verde", "Srta. Scarlet", "Coronel Mustard", "Professor Plum", "Sra. Peacock", "Sra. White"));
         nomes.addAll(Arrays.asList("Corda", "Cano de Chumbo", "Faca", "Chave Inglesa", "Castiçal", "Revólver"));
-        nomes.addAll(Arrays.asList("Cozinha", "Salão de Baile", "Sala de Jantar", "Escritório", "Biblioteca", "Sala de Estar", "Jardim de Inverno", "Hall", "Sala de Música"));
+        nomes.addAll(Arrays.asList("Cozinha", "Salão de Jogos", "Sala de Jantar", "Escritório", "Biblioteca", "Sala de Estar", "Jardim de Inverno", "Hall", "Sala de Música"));
         return nomes;
     }
 }

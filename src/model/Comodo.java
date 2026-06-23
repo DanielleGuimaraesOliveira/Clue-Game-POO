@@ -5,7 +5,7 @@ class Comodo {
 
 	private String nome;
 	private List<Casa> portas;
-	private Comodo passagemSecreta; // se não tiver, é null
+	private Comodo passagemSecreta; 
 	private List<Peca> pecasAcomodadas;
 	
 	public Comodo(String nome) {

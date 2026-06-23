@@ -28,68 +28,39 @@ import controller.ControladorPartida;
 
         int OFFSET_X = 14;
         int OFFSET_Y = 12;
-
         int TAMANHO_CASA = 24;
+        
+        int xLogico = (e.getX() - OFFSET_X) / TAMANHO_CASA;
+        int yLogico = (e.getY() - OFFSET_Y) / TAMANHO_CASA;
 
-        int xLogico =
-            (e.getX() - OFFSET_X) / TAMANHO_CASA;
+        System.out.println("CLICK -> pixel(" + e.getX() + "," + e.getY() + ") lógico(" + xLogico + "," + yLogico + ")");
 
-        int yLogico =
-            (e.getY() - OFFSET_Y) / TAMANHO_CASA;
-
-        System.out.println(
-            "CLICK -> pixel(" +
-            e.getX() + "," + e.getY() +
-            ") lógico(" +
-            xLogico + "," + yLogico + ")"
-        );
-
-        int valorDados =
-            controlador.getValorDados();
+        int valorDados = controlador.getValorDados();
 
         if (valorDados == 0) {
-
-            System.out.println(
-                "Role os dados primeiro!"
-            );
+            System.out.println( "Role os dados primeiro!");
 
             return;
         }
 
-        int resultado =
-            controlador.processaClickTela(
-                xLogico,
-                yLogico,
-                valorDados
-            );
+        int resultado = controlador.processaClickTela(xLogico, yLogico, valorDados);
 
         painel.repaint();
 
         if (resultado == 1) {
-
-            JanelaPalpite popup =
-                new JanelaPalpite(
-                    janelaPai,
-                    controlador
-                );
-
+            JanelaPalpite popup = new JanelaPalpite(janelaPai, controlador, controlador.getComodoJogadorAtual());
             popup.setVisible(true);
 
             janelaPai.resetaDadosEPassaTurno();
-
             painel.repaint();
         }
 
         else if (resultado == 2) {
-
             janelaPai.resetaDadosEPassaTurno();
         }
 
         else {
-
-            System.out.println(
-                "Casa inválida."
-            );
+            System.out.println("Casa inválida.");
         }
     }
  }
